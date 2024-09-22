@@ -1,0 +1,41 @@
+.tile {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: top;
+   // width: 200px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #f9f9f9;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      border: 1px solid black;
+    }
+  
+    &--selected {
+      transform: scale(1.05);
+      border-color: #007bff;
+      box-shadow: 0 15px 25px rgba(0, 123, 255, 0.3);
+    }
+  
+    &__image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  
+    &__title {
+      font-size: 18px;
+      margin: 12px 0;
+    }
+  
+    &__description {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+  

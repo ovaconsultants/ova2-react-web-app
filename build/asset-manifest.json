@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.97e7a2c2.css",
+    "main.js": "/static/js/main.8e56e2e8.js",
+    "static/js/453.fc186cbb.chunk.js": "/static/js/453.fc186cbb.chunk.js",
+    "static/media/ionicons.svg?v=2.0.0": "/static/media/ionicons.b45d332f6829d6813600.svg",
+    "static/media/ionicons.ttf?v=2.0.0": "/static/media/ionicons.1fa6a1e8581aaedf7344.ttf",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/call-to-action-bg.jpg": "/static/media/call-to-action-bg.393ece8b0c270898de03.jpg",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "static/media/featue-bg.jpg": "/static/media/featue-bg.a12597142b31d587ad38.jpg",
+    "static/media/ionicons.eot?v=2.0.0": "/static/media/ionicons.68e3a4f9a8d8c679b4ae.eot",
+    "static/media/slider-bg.jpg": "/static/media/slider-bg.b582d84d45c6ef8e32a9.jpg",
+    "static/media/ova2_logo.jpg": "/static/media/ova2_logo.ee20916a00174665ddc8.jpg",
+    "static/media/ionicons.woff?v=2.0.0": "/static/media/ionicons.0b4ad6170d93c4aa91ee.woff",
+    "static/media/coming-soon.jpg": "/static/media/coming-soon.827744b4db12e7f52df2.jpg",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.97e7a2c2.css.map": "/static/css/main.97e7a2c2.css.map",
+    "main.8e56e2e8.js.map": "/static/js/main.8e56e2e8.js.map",
+    "453.fc186cbb.chunk.js.map": "/static/js/453.fc186cbb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.97e7a2c2.css",
+    "static/js/main.8e56e2e8.js"
+  ]
+}
