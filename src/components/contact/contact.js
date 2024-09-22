@@ -63,7 +63,7 @@ const Contact = () => {
                     <h4>USA Office</h4>
                 <ul className="address-block">
                   <li>
-                    <i className="ion-ios-location-outline"></i> 15 S Harrison ave Iselin, NJ.
+                    <i className="ion-ios-location-outline"></i> 15 S Harrison Ave Iselin, NJ.
                   </li>
                   <li>
                     <i className="ion-ios-email-outline"></i> Email: hr@ova2consultancy.com
