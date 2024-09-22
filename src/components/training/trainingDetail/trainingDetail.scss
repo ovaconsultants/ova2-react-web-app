@@ -1,0 +1,21 @@
+.flat-tabs .nav-link {
+  border: none;
+  background-color: transparent;
+  color: #333;
+  font-weight: bold;
+  padding-bottom: 10px;
+  transition: color 0.3s ease-in-out;
+}
+
+.flat-tabs .nav-link.active {
+  border-bottom: 3px solid #007bff;  // Blue bottom border for the active tab
+  color: #007bff;  // Text color change on active tab
+}
+
+.flat-tabs .nav-link:hover {
+  color: #007bff;  // Text color change on hover
+}
+
+.flat-tabs .nav-item {
+  margin-bottom: -1px;  // Remove gap between tab and content
+}
