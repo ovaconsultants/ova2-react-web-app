@@ -53,7 +53,7 @@ const Header = () => {
                                 ) : (
                                     <Link className="nav-link d-flex align-items-center" to="/login" title="Login" onClick={() => setExpanded(false)}>
                                    <i className="bi bi-box-arrow-in-right me-2"></i> 
-                                    <span>Login/signUp</span>
+                                    <span>Login/Sign-up</span>
                                      </Link>
 
                                 )}
