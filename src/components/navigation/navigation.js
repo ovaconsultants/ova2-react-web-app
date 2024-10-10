@@ -17,6 +17,9 @@ import JobDetails from '../admin/jobDetails/jobDetails';
 import Job from '../job/job';
 import TrainingProgram from '../training/trainingPrograms/trainingPrograms';
 import TrainingDetail from '../training/trainingDetail/trainingDetail';
+import SignUp from '../signUp/signUp';
+import Users from '../users/users';
+import UserSearch from '../userSearch/userSearch';
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -60,6 +63,8 @@ const Navigation = () => {
         </ProtectedRoute>
       } />
       <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<SignUp />}/>
+      <Route path="/search" element={<UserSearch />}/>
       <Route path="/admin/job-posting" element={
         <ProtectedRoute>
           <JobPosting />
@@ -73,6 +78,11 @@ const Navigation = () => {
       <Route path="/admin/job-details" element={
         <ProtectedRoute>
           <JobDetails />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/users"  element={
+        <ProtectedRoute>
+          <Users/>
         </ProtectedRoute>
       } />
       <Route path="*" element={<Navigate to="/" />} />

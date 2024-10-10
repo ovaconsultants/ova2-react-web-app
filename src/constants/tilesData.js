@@ -5,20 +5,36 @@ export const jobTilesData = [
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-details',
+        roleId: '2',
     },
     {
         title: 'Job Applicants',
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-applicants',
+        roleId: '2',
     },
     {
         title: 'Consultant Details',
         description: 'Click Me!.',
         image: '',
         route: '/admin/contact-details',
+        role : 'admin'
     },
-
+    {
+        title: 'User Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/users',
+        role : 'admin'
+    },
+    {
+        title: 'profile',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/profile',
+        roleId: 'admin ,subadm,3,4,5',
+    },
     // Add more tiles as needed
 ];
 export const trainingTilesData = [
