@@ -5,35 +5,42 @@ export const jobTilesData = [
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-details',
-        roleId: '2',
+        roleName: 'admin',
     },
     {
         title: 'Job Applicants',
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-applicants',
-        roleId: '2',
+        roleName: 'admin',
     },
     {
         title: 'Consultant Details',
         description: 'Click Me!.',
         image: '',
         route: '/admin/contact-details',
-        role : 'admin'
+        roleName : 'admin',
     },
     {
         title: 'User Details',
         description: 'Click Me!.',
         image: '',
         route: '/admin/users',
-        role : 'admin'
+        roleName : 'admin',
     },
     {
         title: 'profile',
         description: 'Click Me!.',
         image: '',
         route: '/admin/profile',
-        roleId: 'admin ,subadm,3,4,5',
+        roleName: 'user,admin,sub-admin,manager,sales_team',
+    },
+    {
+        title: 'Vendor Managemnet',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/vendor',
+        roleName: 'admin',
     },
     // Add more tiles as needed
 ];
@@ -73,6 +80,13 @@ export const trainingTilesData = [
         route: '/training/sql',
         data:trainingData?.sqlTraining,
     },
+     {
+     title: 'Power BI',
+     description: 'Click Me!.',
+     image: '',
+     route: '/training/power-bi',
+     data:trainingData?.powerBiTraining,
+ },   
    
    
 

@@ -1,0 +1,18 @@
+/* Apply border color only in edit mode */
+.edit-input {
+    border-color: #ff8800 !important; /* Custom border color */
+  }
+  
+  /* Maintain height of input fields to avoid shifting */
+  .table-hover tr {
+    height: 55px; /* Ensure rows have consistent height */
+  }
+  
+  .form-control-sm {
+    height: calc(1.5em + 0.5rem + 2px); /* Adjust for a consistent input height */
+  }
+  
+  /* Center buttons and prevent content from shifting */
+  .d-flex {
+    justify-content: center;
+  }

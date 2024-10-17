@@ -2,15 +2,24 @@ import React, { useEffect, useState } from "react";
 import { fetchUsers, updateUser } from "../../api/adminUserService";
 import { fetchRegistrationTypes } from "../../api/registerService";
 import { fetchRoles } from "../../api/adminUserService";
-// Ensure updateUser is defined in your service
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [editingUserId, setEditingUserId] = useState(null); // State to track the user being edited
+  const [editingUserId, setEditingUserId] = useState(null);
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [registrationTypeMap, setRegistrationTypeMap] = useState({});
   const [roleMap, setRoleMap] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredUsers = users.filter((user) =>
+    user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.phone.includes(searchQuery) ||
+    user.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.address.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -25,12 +34,9 @@ const Users = () => {
     loadUsers();
   }, [updateTrigger]);
 
-  useEffect(() => {}, []);
   const loadRegistrationTypes = async () => {
     try {
       const registrationTypes = await fetchRegistrationTypes();
-      console.log(registrationTypes);
-      // Transform to map
       const map = registrationTypes.reduce((acc, type) => {
         acc[type.registration_type_id] = type.registration_type_name;
         return acc;
@@ -40,11 +46,10 @@ const Users = () => {
       console.error("Failed to fetch registration types:", error);
     }
   };
+
   const loadRolesTypes = async () => {
     try {
       const rolesType = await fetchRoles();
-      // Transform to map
-      console.log(rolesType);
       const map = rolesType.reduce((acc, type) => {
         acc[type.role_id] = type.role_name;
         return acc;
@@ -54,13 +59,14 @@ const Users = () => {
       console.error("Failed to fetch registration types:", error);
     }
   };
+
   useEffect(() => {
     loadRegistrationTypes();
     loadRolesTypes();
   }, []);
 
   const handleEditClick = (userId) => {
-    setEditingUserId(userId); // Set the user ID being edited
+    setEditingUserId(userId);
   };
 
   const handleChange = (e, userId) => {
@@ -70,34 +76,39 @@ const Users = () => {
       users.map((user) =>
         user.registration_id === userId ? { ...user, [name]: newValue } : user
       )
-    ); // Update the specific user field
+    );
   };
 
   const handleSubmit = async (e, userId) => {
     e.preventDefault();
     const userToUpdate = users.find((user) => user.registration_id === userId);
     try {
-      await updateUser(userId, userToUpdate); // Update user in the backend
-      setUpdateTrigger((prev) => !prev); // Clear the editing user ID
-      setEditingUserId(null); // Set the user ID being edited
+      await updateUser(userId, userToUpdate);
+      setUpdateTrigger((prev) => !prev);
+      setEditingUserId(null);
     } catch (error) {
-      setError("Failed to update user"); // Handle error
+      setError("Failed to update user");
     }
   };
-
-  // Mapping for r
 
   return (
     <div className="container mt-5">
       <h2 className="mb-4">User List</h2>
+      <input
+        type="text"
+        className="form-control mb-3"
+        placeholder="Search for users..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       {error ? (
         <div className="alert alert-danger" role="alert">
           {error}
         </div>
       ) : (
         <div className="table-responsive">
-          <table className="table table-bordered table-striped">
-            <thead className="thead-light">
+          <table className="table table-hover table-bordered table-striped">
+            <thead className="thead-dark">
               <tr>
                 <th>#</th>
                 <th>First Name</th>
@@ -105,16 +116,15 @@ const Users = () => {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
-                <th>Role</th> {/* Changed header to Role */}
-                <th>Registration Type</th>{" "}
-                {/* Changed header to Registration Type */}
+                <th>Role</th>
+                <th>Registration Type</th>
                 <th>Created Date</th>
                 <th>Active</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {filteredUsers.map((user, index) => (
                 <tr key={user.registration_id}>
                   <td>{index + 1}</td>
                   {editingUserId === user.registration_id ? (
@@ -124,9 +134,7 @@ const Users = () => {
                           type="text"
                           name="first_name"
                           value={user.first_name}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         />
                       </td>
@@ -135,9 +143,7 @@ const Users = () => {
                           type="text"
                           name="last_name"
                           value={user.last_name}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         />
                       </td>
@@ -146,9 +152,7 @@ const Users = () => {
                           type="email"
                           name="email"
                           value={user.email}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         />
                       </td>
@@ -157,9 +161,7 @@ const Users = () => {
                           type="text"
                           name="phone"
                           value={user.phone}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         />
                       </td>
@@ -168,9 +170,7 @@ const Users = () => {
                           type="text"
                           name="address"
                           value={user.address}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         />
                       </td>
@@ -178,9 +178,7 @@ const Users = () => {
                         <select
                           name="role_id"
                           value={user.role_id}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         >
                           <option value="" disabled>
@@ -197,9 +195,7 @@ const Users = () => {
                         <select
                           name="registration_type_id"
                           value={user.registration_type_id}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         >
                           <option value="" disabled>
@@ -217,16 +213,13 @@ const Users = () => {
                         <select
                           name="is_active"
                           value={user.is_active ? "true" : "false"}
-                          onChange={(e) =>
-                            handleChange(e, user.registration_id)
-                          }
+                          onChange={(e) => handleChange(e, user.registration_id)}
                           className="form-control"
                         >
                           <option value="true">Yes</option>
                           <option value="false">No</option>
                         </select>
                       </td>
-
                       <td>
                         <button
                           className="btn btn-success"
@@ -236,7 +229,7 @@ const Users = () => {
                         </button>
                         <button
                           className="btn btn-secondary"
-                          onClick={() => setEditingUserId(null)} // Cancel editing
+                          onClick={() => setEditingUserId(null)}
                         >
                           <i className="fas fa-times"></i>
                         </button>

@@ -1,25 +1,28 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from '../home/home';
-import Service from '../service/service';
-import Contact from '../contact/contact';
-import PortfolioSingle from '../portfolio/portfolioSingle/portfolioSingle';
-import ContactDetails from '../admin/contactDetails/contactDetails';
-import Projects from '../projects/projects';
-import Login from '../login/login';
-import { AuthProvider } from '../../AuthContext';
-import ProtectedRoute from '../../ProtectedRoute';
-import JobPosting from '../admin/jobPosting/jobPosting';
-import Jobs from '../jobs/jobs';
-import JobApplicants from '../admin/jobApplicants/jobApplicants';
-import AdminPanel from '../admin/adminPanel/adminPanel';
-import JobDetails from '../admin/jobDetails/jobDetails';
-import Job from '../job/job';
-import TrainingProgram from '../training/trainingPrograms/trainingPrograms';
-import TrainingDetail from '../training/trainingDetail/trainingDetail';
-import SignUp from '../signUp/signUp';
-import Users from '../users/users';
-import UserSearch from '../userSearch/userSearch';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "../home/home";
+import Service from "../service/service";
+import Contact from "../contact/contact";
+import PortfolioSingle from "../portfolio/portfolioSingle/portfolioSingle";
+import ContactDetails from "../admin/contactDetails/contactDetails";
+import Projects from "../projects/projects";
+import Login from "../login/login";
+import { AuthProvider } from "../../AuthContext";
+import ProtectedRoute from "../../ProtectedRoute";
+import JobPosting from "../admin/jobPosting/jobPosting";
+import Jobs from "../jobs/jobs";
+import JobApplicants from "../admin/jobApplicants/jobApplicants";
+import AdminPanel from "../admin/adminPanel/adminPanel";
+import JobDetails from "../admin/jobDetails/jobDetails";
+import Job from "../job/job";
+import TrainingProgram from "../training/trainingPrograms/trainingPrograms";
+import TrainingDetail from "../training/trainingDetail/trainingDetail";
+import SignUp from "../signUp/signUp";
+import Users from "../users/users";
+import UserSearch from "../userSearch/userSearch";
+import Profile from "../admin/profile/profile";
+import VendorSignUp from "../admin/vendorSignUp/vendorSignUp";
+import Vendor from "../admin/vendor/vendor";
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -57,34 +60,60 @@ const Navigation = () => {
       <Route path="/in/jobs" element={<Jobs country="India" />} />
       <Route path="/us/jobs" element={<Jobs country="USA" />} />
       <Route path="/job/:jobId" element={<Job />} />
-      <Route path="/admin" element={
-        <ProtectedRoute>
-          <AdminPanel />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/login" element={<Login />} />
-      <Route path="/sign-up" element={<SignUp />}/>
-      <Route path="/search" element={<UserSearch />}/>
-      <Route path="/admin/job-posting" element={
-        <ProtectedRoute>
-          <JobPosting />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/job-applicants" element={
-        <ProtectedRoute>
-          <JobApplicants />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/job-details" element={
-        <ProtectedRoute>
-          <JobDetails />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin/users"  element={
-        <ProtectedRoute>
-          <Users/>
-        </ProtectedRoute>
-      } />
+      <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/search" element={<UserSearch />} />
+      <Route
+        path="/admin/job-posting"
+        element={
+          <ProtectedRoute>
+            <JobPosting />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/job-applicants"
+        element={
+          <ProtectedRoute>
+            <JobApplicants />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/job-details"
+        element={
+          <ProtectedRoute>
+            <JobDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/admin/vendorSignUp" element = {<VendorSignUp/>}/>
+      <Route path="/admin/vendor"  element={<Vendor/>}/>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

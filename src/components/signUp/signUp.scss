@@ -6,6 +6,11 @@
     color: #fff;
     font-size: 18px;
 }
+.btn-default:hover{
+    background: #584f61;
+    color: #fff;
+
+}
 
 .error-space {
     height: 20px;
@@ -17,3 +22,20 @@
     opacity: 1; /* Initially hidden but space is reserved */
     transition: opacity 0.3s ease; 
 }
+
+.form-control {
+    border: 1px solid #ccc;
+    padding: 10px;
+    transition: border-color 0.3s ease;
+  
+    &.input-has-value {
+      border-color: #007bff ; // color when input has a value
+    }
+
+    &:focus {
+      border-color: #007bff !important; // color on focus
+      outline: none; // optional: to remove default outline on focus
+    }
+}
+
+

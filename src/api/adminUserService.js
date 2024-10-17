@@ -1,5 +1,7 @@
 import axios from 'axios';
 import environment from '../config/environment';
+import { companyName } from '../constants/commonConstant';
+
 
 const apiClient = axios.create({
     baseURL: environment.nodeApiUrl,
@@ -32,8 +34,6 @@ export const fetchUsers = async () => {
     }
   };
   
-
-  
   // update user function  
   export const updateUser = async (id , userNewData) => {
    try {
@@ -47,7 +47,6 @@ export const fetchUsers = async () => {
   }
 
   // fetching all the roles from the databse 
-
   export const fetchRoles = async()=>{
     try {
       const response = await apiClient.get('users/fetchRoles');
@@ -58,4 +57,38 @@ export const fetchUsers = async () => {
        console.error("failed to fetch users : " , error);
        throw error ;
     }
+  }
+
+  // fetching all the company Types from databse 
+  export const fetchCompanyTypes  = async ()=>{
+    try {
+      const response = await apiClient.get('users/fetchCompayTypes');
+      return response.data ;
+    } catch (error) {
+      console.log("error from fetching company types from the server ");
+      throw error ;
+    }
+  }
+
+  // fetching all the companies from the databse 
+  export  const getCompanies = async ()=>{
+    try {
+          const response = await apiClient.get('users/fetchCompanies');
+          console.log("response :" + response);
+          return response.data ;
+    }catch(error){
+      console.log("error from fetching companies from the server ");
+      throw error ;
+    }
+  }
+
+  // posting the compnay details to server 
+ export const postCompanyDetails = async (companyData) => {
+try {
+   const response = await apiClient.post('users/postCompanyData' , companyData);
+   return response ;
+} catch (error) {
+  console.log("error occured during the posting the company data");
+  throw error ;
+}
   }
