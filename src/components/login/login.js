@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 import './login.scss';
 import { authenticateUser } from '../../api/authenticateService';
+import { Link } from 'react-router-dom';
+import { authenticate_user } from '../../api/adminUserService';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -23,10 +25,11 @@ const Login = () => {
     };
 
     try {
-      const response = await authenticateUser(payload);
+      const response = await authenticate_user(payload);
     //  console.log('response', response);
 
-      const username = response?.data?.employeeName;
+      const username = response?.user?._full_name;
+      const role_id = response?.user?._role_id;
       const userImage = 'https://example.com/user-image.jpg'; // Example user image URL
 
       if (username) {
@@ -76,8 +79,11 @@ const Login = () => {
                 </div>
                 <button className="btn btn-default" type="button" onClick={handleLogin}>Login</button>
               </div>
-            </div>
+               </div>
           </form>
+          <div className='ps-5 m-3 text-start'>
+          <Link to="/sign-up" className="fs-5">Not a member? Register here</Link>
+          </div>
         </div>      
       </section>
     </div>

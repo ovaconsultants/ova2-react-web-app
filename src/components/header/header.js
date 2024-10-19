@@ -24,7 +24,7 @@ const Header = () => {
                         <Link className="navbar-brand text-left" to="/home">
                             <img src={logo} alt={constants.companyName} className="header-logo" />
                         </Link>
-                        <Navbar.Toggle aria-controls="navbar-nav" onClick={handleToggle} />
+                        <Navbar.Toggle aria-controls="navbar-nav" className='toggle-size' onClick={handleToggle} />
                         <Navbar.Collapse id="navbar-nav">
                             <Nav className="ml-auto">
                                 <Link className="nav-link" to="/home" onClick={() => setExpanded(false)}>Home</Link>
@@ -33,9 +33,10 @@ const Header = () => {
                                 <Link className="nav-link" to="/service" onClick={() => setExpanded(false)}>Service</Link>
                                 <Link className="nav-link" to="/contact" onClick={() => setExpanded(false)}>Contact</Link>
                                 <NavDropdown title="Jobs" id="jobs-dropdown">
-                                    <NavDropdown.Item as={Link} to="/in/jobs" onClick={() => setExpanded(false)}>India</NavDropdown.Item>
-                                    <NavDropdown.Item as={Link} to="/us/jobs" onClick={() => setExpanded(false)}>USA</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/in/jobs" onClick={() => setExpanded(false)} className="capitalize-first">India</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/us/jobs" onClick={() => setExpanded(false)}>USA</NavDropdown.Item>
                                 </NavDropdown>
+
                                 {isAuthenticated ? (
                                     <>
                                         <Link className="nav-link" to="/admin" onClick={() => setExpanded(false)}>Admin</Link>
@@ -50,9 +51,11 @@ const Header = () => {
 
                                     </>
                                 ) : (
-                                    <Link className="nav-link" to="/login" title='Login' onClick={() => setExpanded(false)}>
-                                         <i className="bi bi-box-arrow-in-right"></i> 
-                                    </Link>
+                                    <Link className="nav-link d-flex align-items-center" to="/login" title="Login" onClick={() => setExpanded(false)}>
+                                   <i className="bi bi-box-arrow-in-right me-2"></i> 
+                                    <span>Login/Sign-up</span>
+                                     </Link>
+
                                 )}
                             </Nav>
                         </Navbar.Collapse>
