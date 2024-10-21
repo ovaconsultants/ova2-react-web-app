@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCompanies } from "../../../api/adminUserService";
-
+import "./vendor.scss";
 const Vendor = () => {
   const navigate = useNavigate();
   const [companies, setCompanies] = useState([]);
@@ -9,7 +9,7 @@ const Vendor = () => {
   const [error, setError] = useState(null);
   const [expandedRow, setExpandedRow] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const pageSizeRef = useRef(10);  // Use ref to avoid re-render on pageSize update
+  const pageSizeRef = useRef(10); // Use ref to avoid re-render on pageSize update
   const observer = useRef();
 
   // Fetch companies on component mount
@@ -24,8 +24,11 @@ const Vendor = () => {
           if (response && Array.isArray(response)) {
             setCompanies(response);
             setFilteredCompanies(response.slice(0, pageSizeRef.current));
-            console.log("Filtered Companies after set:", response.slice(0, pageSizeRef.current)); // Log filtered companies
-        //   } else {
+            console.log(
+              "Filtered Companies after set:",
+              response.slice(0, pageSizeRef.current)
+            ); // Log filtered companies
+            //   } else {
             // setCompanies([]);
             // setFilteredCompanies([]);
           }
@@ -40,6 +43,8 @@ const Vendor = () => {
       isMounted = false;
     };
   }, []);
+
+  // Handle Data Change Here
 
   // Handle search and filter logic
   useEffect(() => {
@@ -64,8 +69,8 @@ const Vendor = () => {
   // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    pageSizeRef.current = 10;  // Reset pageSize when search term changes
-    setFilteredCompanies(companies.slice(0, 10));  // Reset filtered companies
+    pageSizeRef.current = 10; // Reset pageSize when search term changes
+    setFilteredCompanies(companies.slice(0, 10)); // Reset filtered companies
   };
 
   // Handle lazy loading of data on scroll
@@ -80,7 +85,7 @@ const Vendor = () => {
         Array.isArray(companies) &&
         filteredCompanies.length < companies.length
       ) {
-        pageSizeRef.current += 10;  // Increment page size
+        pageSizeRef.current += 10; // Increment page size
         setFilteredCompanies(companies.slice(0, pageSizeRef.current));
       }
     });
@@ -92,7 +97,7 @@ const Vendor = () => {
 
   // Navigate to company details page
   const handleCompanyClick = (companyId) => {
-    navigate(`/company/${companyId}`);
+    navigate(`/admin/vendor/${companyId}`);
   };
 
   // Render error message if there's any error
@@ -121,7 +126,7 @@ const Vendor = () => {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() => navigate("/admin/vendorSignUp")}
+            onClick={() => navigate("/admin/sign-up-client")}
           >
             <i className="bi bi-plus"></i> Client
           </button>
@@ -141,7 +146,6 @@ const Vendor = () => {
               <th scope="col">Email</th>
               <th scope="col">Location</th>
               <th scope="col">Contact Person Name</th>
-              <th scope="col">Established Year</th>
             </tr>
           </thead>
           <tbody>
@@ -167,7 +171,6 @@ const Vendor = () => {
                     <td>{company.email_address}</td>
                     <td>{company.location}</td>
                     <td>{company.contact_person_name}</td>
-                    <td>{company.established_year}</td>
                   </tr>
                   {expandedRow === index && (
                     <tr>
@@ -175,27 +178,62 @@ const Vendor = () => {
                         <div className="row">
                           <div className="expanded-content text-start col">
                             <div>
-                              <strong>Industry Sector:</strong> {company.industry_sector}
+                              <strong>Industry Sector :</strong>{" "}
+                              {company.industry_sector}
                             </div>
                             <div>
-                              <strong>Contact Person Designation:</strong> {company.contact_person_designation}
+                              <strong>Contact Person Designation :</strong>{" "}
+                              {company.contact_person_designation}
+                            </div>
+                            <div>
+                              <div>
+                                <strong>FollowUpStatus :</strong>{" "}
+                                {company.followup}
+                              </div>
+                            </div>
+                            <div>
+                              <div>
+                                <strong>Opt For Position :</strong>{" "}
+                                {company.currentposition}
+                              </div>
+                            </div>
+                            <div>
+                              <div>
+                                <strong>Communication Medium :</strong>{" "}
+                                {company.communicationThrough}
+                              </div>
                             </div>
                           </div>
                           <div className="expanded-content text-start col">
                             <div>
-                              <strong>Website URL:</strong> {company.website_url}
+                              <strong>Website URL :</strong>{" "}
+                              {company.website_url}
                             </div>
                             <div>
-                              <strong>Contact Person Phone:</strong> {company.contact_person_phone}
+                              <strong>Contact Person Phone :</strong>{" "}
+                              {company.contact_person_phone}
                             </div>
                             <div>
-                              <strong>Contact Person Email:</strong> {company.contact_person_email}
+                              <strong>Contact Person Email :</strong>{" "}
+                              {company.contact_person_email}
                             </div>
                             <div>
-                              <strong>Description:</strong>
+                              <div>
+                                <div>
+                                  <strong>Recruiter :</strong>{" "}
+                                  {company.employee}
+                                </div>
+                              </div>
+                              <strong>Description :</strong>
                               <div
                                 dangerouslySetInnerHTML={{
                                   __html: company.description,
+                                }}
+                              />
+                              <strong>Comment If Any :</strong>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: company.comment,
                                 }}
                               />
                             </div>

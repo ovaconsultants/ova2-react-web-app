@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import styles
 import { useNavigate } from "react-router-dom";
 import { workAuthorizationOptions } from "../../../constants/workAuthorizationOptions";
-import "../../admin/vendorSignUp/vendorSignUp.scss";
+import '../../admin/vendorSignUp/vendorSignUp.scss'
 import {
   fetchCompanyTypes,
   postCompanyDetails,
@@ -13,18 +13,25 @@ const VendorSignUp = () => {
   const navigate = useNavigate();
   const [companyData, setcompanyData] = useState({
     company_name: "",
+    contact_no: "",
     email_address: "",
-    company_type_id: "",
-    description: "",
+    company_type_id: "1",
+    website_url: "",
     location: "",
     industry_sector: "",
     contact_person_name: "",
-    contact_person_phone: "",
-    website_url: "",
-    established_year: "",
     contact_person_designation: "",
+    contact_person_phone: "",
     contact_person_email: "",
-    additional_info: "",
+    is_active: true,
+    is_deleted: false,
+    description: "",
+    employee: "",
+    followup: "",
+    followupdate: "",
+    communicatethrough: "",
+    currentposition: "",
+    comment: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -36,13 +43,13 @@ const VendorSignUp = () => {
         const companyTypes = await fetchCompanyTypes();
         setCompanyTypes(companyTypes);
       } catch (error) {
-        console.error("Error fetching registration");
+        console.error("Error fetching company types");
       }
     };
     fetchData();
   }, []);
 
-  const handlecompanyDataChange = (e) => {
+  const handleCompanyDataChange = (e) => {
     const { name, value } = e.target;
     setcompanyData({ ...companyData, [name]: value });
     setFormErrors({ ...formErrors, [name]: "" }); // Clear errors when user starts typing
@@ -50,48 +57,54 @@ const VendorSignUp = () => {
 
   const validateForm = () => {
     let errors = {};
-    
-    if (!companyData.company_name) errors.company_name = "Company Name is required";
-    if (!companyData.email_address) errors.email_address = "Email is required";
-    if (!companyData.company_type_id) errors.company_type_id = "Company Type is required";
-    if (!companyData.location) errors.location = "Location is required";
-    if (!companyData.industry_sector) errors.industry_sector = "Industry Sector is required";
-    if (!companyData.contact_person_name) errors.contact_person_name = "Contact Person Name is required";
-    if (!companyData.contact_person_phone) errors.contact_person_phone = "Contact Person Phone is required";
-    if (!companyData.established_year) errors.established_year = "Established Year is required";
-    if (!companyData.description) errors.description = "Description is required";
-    
+
+    // if (!companyData.company_name) errors.company_name = "Company Name is required";
+    // if (!companyData.contact_no) errors.contact_no = "Contact Number is required";
+    // if (!companyData.email_address) errors.email_address = "Email is required";
+    // if (!companyData.company_type_id) errors.company_type_id = "Company Type is required";
+    // if (!companyData.location) errors.location = "Location is required";
+    // if (!companyData.industry_sector) errors.industry_sector = "Industry Sector is required";
+    // if (!companyData.contact_person_name) errors.contact_person_name = "Contact Person Name is required";
+    // if (!companyData.contact_person_phone) errors.contact_person_phone = "Contact Person Phone is required";
+    // if (!companyData.description) errors.description = "Description is required";
+    // if (!companyData.employee) errors.employee = "Employee count is required";
+    // if (!companyData.followup) errors.followup = "Follow-up details are required";
+    // if (!companyData.followupdate) errors.followupdate = "Follow-up date is required";
+    // if (!companyData.communicatethrough) errors.communicatethrough = "Communication method is required";
+    // if (!companyData.currentposition) errors.currentposition = "Current position is required";
+    // if (!companyData.comment) errors.comment = "Comment is required";
+
     return errors;
   };
 
-  const handlecompanyDataSubmit = async (e) => {
+  const handleCompanyDataSubmit = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateForm();
-    
+      
     if (Object.keys(errors).length === 0) {
       try {
         const response = await postCompanyDetails(companyData);
-        console.log("companyData Posted:", response);
+        console.log("Company Data Posted:", response);
         navigate("/admin/vendor");
       } catch (error) {
         console.log("Error occurred while posting the company data");
       }
     } else {
-      setFormErrors(errors); 
+      setFormErrors(errors);
     }
   };
 
   const handleDescriptionChange = (value) => {
     setcompanyData({ ...companyData, description: value });
-    setFormErrors({ ...formErrors, description: "" }); 
+    setFormErrors({ ...formErrors, description: "" });
   };
 
   return (
     <div className="CompanyData-posting-form">
       <section className="contact-form">
         <div className="container mt-4">
-          <form className="row block" onSubmit={handlecompanyDataSubmit}>
+          <form className="row block" onSubmit={handleCompanyDataSubmit}>
             <h4 className="text-center">Company Data Posting</h4>
 
             <div className="col-md-4 col-sm-12">
@@ -101,7 +114,7 @@ const VendorSignUp = () => {
                   name="company_name"
                   className="form-control"
                   value={companyData.company_name}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                   placeholder="Company Name"
                 />
                 {formErrors.company_name && <p className="error">{formErrors.company_name}</p>}
@@ -115,7 +128,7 @@ const VendorSignUp = () => {
                   name="email_address"
                   className="form-control"
                   value={companyData.email_address}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                   placeholder="Company Email"
                 />
                 {formErrors.email_address && <p className="error">{formErrors.email_address}</p>}
@@ -128,7 +141,7 @@ const VendorSignUp = () => {
                   name="company_type_id"
                   className="form-control"
                   value={companyData.company_type_id}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                 >
                   <option value="">Select Company Type</option>
                   {companyTypes.map((type) => (
@@ -147,7 +160,7 @@ const VendorSignUp = () => {
                   name="location"
                   className="form-control"
                   value={companyData.location}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                   placeholder="Location"
                 />
                 {formErrors.location && <p className="error">{formErrors.location}</p>}
@@ -160,7 +173,7 @@ const VendorSignUp = () => {
                   name="industry_sector"
                   className="form-control"
                   value={companyData.industry_sector}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                 >
                   <option value="">Select Industry Sector</option>
                   <option value="IT industry">IT Industry</option>
@@ -178,7 +191,7 @@ const VendorSignUp = () => {
                   name="contact_person_name"
                   className="form-control"
                   value={companyData.contact_person_name}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                   placeholder="Contact Person Name"
                 />
                 {formErrors.contact_person_name && <p className="error">{formErrors.contact_person_name}</p>}
@@ -192,7 +205,7 @@ const VendorSignUp = () => {
                   name="contact_person_phone"
                   className="form-control"
                   value={companyData.contact_person_phone}
-                  onChange={handlecompanyDataChange}
+                  onChange={handleCompanyDataChange}
                   placeholder="Contact Person Phone Number"
                 />
                 {formErrors.contact_person_phone && <p className="error">{formErrors.contact_person_phone}</p>}
@@ -203,16 +216,86 @@ const VendorSignUp = () => {
               <div className="form-group">
                 <input
                   type="text"
-                  name="established_year"
+                  name="employee"
                   className="form-control"
-                  value={companyData.established_year}
-                  onChange={handlecompanyDataChange}
-                  placeholder="Established Year"
+                  value={companyData.employee}
+                  onChange={handleCompanyDataChange}
+                  placeholder="Number of Employees"
                 />
-                {formErrors.established_year && <p className="error">{formErrors.established_year}</p>}
+                {formErrors.employee && <p className="error">{formErrors.employee}</p>}
               </div>
             </div>
 
+            <div className="col-md-4 col-sm-12">
+              <div className="form-group">
+                <input
+                  type="text"
+                  name="followup"
+                  className="form-control"
+                  value={companyData.followup}
+                  onChange={handleCompanyDataChange}
+                  placeholder="Follow-up Details"
+                />
+                {formErrors.followup && <p className="error">{formErrors.followup}</p>}
+              </div>
+            </div>
+
+            <div className="col-md-4 col-sm-12">
+              <div className="form-group">
+                <input
+                  type="date"
+                  name="followupdate"
+                  className="form-control"
+                  value={companyData.followupdate}
+                  onChange={handleCompanyDataChange}
+                />
+                {formErrors.followupdate && <p className="error">{formErrors.followupdate}</p>}
+              </div>
+            </div>
+
+            <div className="col-md-4 col-sm-12">
+              <div className="form-group">
+                <select
+                  name="communicatethrough"
+                  className="form-control"
+                  value={companyData.communicatethrough}
+                  onChange={handleCompanyDataChange}
+                >
+                  <option value="">Select Communication Method</option>
+                  <option value="email">Email</option>
+                  <option value="phone">Phone</option>
+                  <option value="video">Video</option>
+                </select>
+                {formErrors.communicatethrough && <p className="error">{formErrors.communicatethrough}</p>}
+              </div>
+            </div>
+
+            <div className="col-md-4 col-sm-12">
+              <div className="form-group">
+                <input
+                  type="text"
+                  name="currentposition"
+                  className="form-control"
+                  value={companyData.currentposition}
+                  onChange={handleCompanyDataChange}
+                  placeholder="Current Position"
+                />
+                {formErrors.currentposition && <p className="error">{formErrors.currentposition}</p>}
+              </div>
+            </div>
+
+            <div className="col-12">
+              <div className="form-group">
+                <textarea
+                  name="comment"
+                  className="form-control"
+                  value={companyData.comment}
+                  onChange={handleCompanyDataChange}
+                  placeholder="Comments"
+                />
+                {formErrors.comment && <p className="error">{formErrors.comment}</p>}
+              </div>
+            </div>
             <div className="col-12">
               <div className="form-group">
                 <ReactQuill
