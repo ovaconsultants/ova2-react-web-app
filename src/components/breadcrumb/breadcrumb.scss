@@ -1,118 +1,142 @@
 .breadcrumb {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .home-icon {
-    color: #000;
-    font-size: 20px;
-    vertical-align: middle;
-    margin-bottom: 2.3px2;
-  }
-  
+  color: #000;
+  font-size: 20px;
+  vertical-align: middle;
+  margin-bottom: 2.3px2;
+}
 
 .breadcrumb-item {
-    display: flex;
-    align-items: center;
-    background-color: #e4e7ea;
-    padding: 0 1rem;
-    position: relative;
-    text-transform: lowercase;
-    font-size: 14px;
-    border-radius: 2px;
-    margin-bottom: 5px;
-    height: 36px;
-    color: #fff;
-   
+  display: flex;
+  align-items: center;
+  background-color: #e4e7ea;
+  padding: 0 1rem;
+  position: relative;
+  text-transform: lowercase;
+  font-size: 14px;
+  border-radius: 2px;
+  margin-bottom: 5px;
+  height: 36px;
+  color: #fff;
 }
 
 .breadcrumb-item::after {
-    content: "";
-    position: absolute;
-    right: -12px;
-    top: 0;
-    border-top: 19px solid transparent; 
-    border-bottom: 18px solid transparent; 
-    border-left: 14px solid #e4e7ea;
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 0;
+  border-top: 19px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 13px solid #e4e7ea;
 }
 
 .breadcrumb-item:nth-child(2)::after {
-    border-left-color: #47424C;
+  border-left-color: #47424c;
 }
 
 .breadcrumb-item:nth-child(2)::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -25px;
-    border: 0 solid #47424C;
-    border-width: 18.5px 11px 18px 14px; 
-    width: 0;
-    height: 36px; 
-    border-left-color: transparent;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -25px;
+  border: 0 solid #47424c;
+  border-width: 18.5px 11px 18px 14px;
+  width: 0;
+  height: 36px;
+  border-left-color: transparent;
 }
 
 .breadcrumb-item.active {
-    background-color: #47424C;
-    color: white;
+  background-color: #47424c;
+  color: white;
 }
 
-
-
-
 .breadcrumb-item a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 .breadcrumb-item a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .breadcrumb-item:first-child {
-    border-radius: 4px 0 0 4px;
-    background-color: #e4e7ea;
-    margin-right: 31px;
-    min-width: 50px;
+  border-radius: 4px 0 0 4px;
+  background-color: #e4e7ea;
+  margin-right: 31px;
+  min-width: 50px;
 }
 
 .breadcrumb-item:nth-child(2) {
-    border-radius: 4px 0 0 4px;
-    margin-right: 32px;
-    background-color: #47424C;
-    
+  border-radius: 4px 0 0 4px;
+  margin-right: 32px;
+  background-color: #47424c;
 }
 
-.breadcrumb-item:last-child {
-    border-radius: 0 4px 4px 0;
+.breadcrumb-item:nth-child(3){
+  border-radius: 0 4px 4px 0;
+  background-color: #47424c;
+}
+
+.breadcrumb-item:nth-child(4) {
+  border-radius: 0 1px 2px 0;
+  background-color: #47424c;
+  margin-left: 36px;
 }
 
 .breadcrumb-item:nth-child(3)::after {
-    content: "";
-    position: absolute;
-    right: -13px;
-    top: 0;
-    border-width: 18px 0; 
-    border-top: 18px solid transparent;
-    border-bottom: 18px solid transparent;
-    border-left: 15px solid #47424C;
+  content: "";
+  position: absolute;
+  right: -13px;
+  top: 0;
+  border-width: 18px 0;
+  border-top: 17px solid transparent;
+  border-bottom: 19px solid transparent;
+  border-left: 15.8px solid #47424c;
 }
 
 .breadcrumb-item:nth-child(3)::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 93%;
-    border: 0 solid #47424C;
-    border-width: 18.5px 11px 18px 14px; 
-    width: 0;
-    height: 36px; 
-    border-left-color: transparent;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 93%;
+  border: 0 solid #47424c;
+  border-width: 18.5px 11px 18px 14px;
+  width: 0;
+  height: 36px;
+  border-left-color: transparent;
+}
+
+.breadcrumb-item:nth-child(4)::after {
+  position: absolute;
+  right: -15px;
+  top: 0;
+  border-width: 18px 0;
+  border-top: 18px solid transparent;
+  border-bottom: 19px solid transparent;
+  border-left: 15.8px solid #47424c;
+}
+
+
+.breadcrumb-item:nth-child(4)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 96%;
+  border: 0 solid #47424c;
+  border-width: 18.5px 11px 18px 14px;
+  width: 0;
+  height: 36px;
+  border-left-color: transparent;
 }
 
 .breadcrumb-item:last-child a:before {
-    left: -19px;
-    border-left-color: transparent;
+  left: -19px;
+  border-left-color: transparent;
 }

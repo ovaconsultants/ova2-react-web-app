@@ -23,6 +23,7 @@ import UserSearch from "../userSearch/userSearch";
 import Profile from "../admin/profile/profile";
 import VendorSignUp from "../admin/vendorSignUp/vendorSignUp";
 import Vendor from "../admin/vendor/vendor";
+import  CompanyEditableDetails  from "../admin/companyEditableDetails/companyEditableDetails";
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -112,8 +113,9 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/admin/vendorSignUp" element = {<VendorSignUp/>}/>
+      <Route path="/admin/sign-up-client" element = {<VendorSignUp/>}/>
       <Route path="/admin/vendor"  element={<Vendor/>}/>
+      <Route path="/admin/vendor/:companyId" element={<CompanyEditableDetails />}/>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

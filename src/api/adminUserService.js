@@ -14,7 +14,6 @@ const apiClient = axios.create({
 export const authenticate_user = async (payload) => {
     try {
         const response = await apiClient.post('/users/authenticateAdminUser' , payload);
-        console.log(response);
         return response.data ;
        
     } catch (error) {
@@ -50,7 +49,6 @@ export const fetchUsers = async () => {
   export const fetchRoles = async()=>{
     try {
       const response = await apiClient.get('users/fetchRoles');
-      console.log(response);
        return response.data ;
       
     } catch (error) {
@@ -74,7 +72,6 @@ export const fetchUsers = async () => {
   export  const getCompanies = async ()=>{
     try {
           const response = await apiClient.get('users/fetchCompanies');
-          console.log("response :" + response);
           return response.data ;
     }catch(error){
       console.log("error from fetching companies from the server ");
@@ -82,6 +79,18 @@ export const fetchUsers = async () => {
     }
   }
 
+  // fecthing compnay with the companyID 
+  export const getCompanyDetails = async (companyId) => {
+    try {
+      const response = await apiClient.get(`/users/getCompanyDetails/${companyId}`);
+      return response.data; // Return the company details
+    } catch (error) {
+      console.log("Error from fetching companies from the server:", error);
+      throw error;
+    }
+  };
+  
+  
   // posting the compnay details to server 
  export const postCompanyDetails = async (companyData) => {
 try {
@@ -92,3 +101,16 @@ try {
   throw error ;
 }
   }
+
+
+// updating company data to server 
+export const updateCompanyDetails = async(companyId , companyData) => {
+ try {
+  const response = await apiClient.put('/users/updateCompanyData' , {companyId , companyData});
+  return response.data ;
+ } catch (error) {
+  console.log("error ocuured during updating a company ");
+    throw error ;
+  
+ }
+}
