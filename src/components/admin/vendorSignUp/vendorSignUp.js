@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchCompanyTypes, postCompanyDetails } from "../../../api/companyServices";
 import ToastMessage from "../../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
-import { TextInput } from "../../../constants/formComponents/textInput";
+import { TextInput } from "../../common/formComponents/textInput";
 import {getCompanyDataInitialState , getFormFields} from "./companyDataState";
 import '../../admin/vendorSignUp/vendorSignUp.scss';
 

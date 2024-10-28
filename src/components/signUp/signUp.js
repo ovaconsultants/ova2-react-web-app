@@ -7,10 +7,9 @@ import {
 import ToastMessage from "../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { TextInput } from "../../constants/formComponents/textInput";
-import { Dropdown } from "../../constants/formComponents/selectDropDown";
-import { validateField } from "../../constants/formComponents/validateFields";
-
+import { TextInput } from "../common/formComponents/textInput";
+import { Dropdown } from "../common/formComponents/selectDropDown";
+import { validateField } from "../common/formComponents/validateFields";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     FirstName: "",
