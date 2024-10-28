@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCompanies } from "../../../api/adminUserService";
+import { getCompanies } from "../../../api/companyServices";
+
 import "./vendor.scss";
 const Vendor = () => {
   const navigate = useNavigate();
@@ -20,17 +21,13 @@ const Vendor = () => {
         if (isMounted) {
           const response = await getCompanies();
           console.log("API Response:", response);
-          // Check if response is defined and is an array
           if (response && Array.isArray(response)) {
             setCompanies(response);
             setFilteredCompanies(response.slice(0, pageSizeRef.current));
             console.log(
               "Filtered Companies after set:",
               response.slice(0, pageSizeRef.current)
-            ); // Log filtered companies
-            //   } else {
-            // setCompanies([]);
-            // setFilteredCompanies([]);
+            ); 
           }
         }
       } catch (err) {
@@ -210,7 +207,7 @@ const Vendor = () => {
                               {company.website_url}
                             </div>
                             <div>
-                              <strong>Contact Person Phone :</strong>{" "}
+                              <strong>Contact Person :</strong>{" "}
                               {company.contact_person_phone}
                             </div>
                             <div>

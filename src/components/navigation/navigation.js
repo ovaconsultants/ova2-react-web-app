@@ -19,6 +19,7 @@ import TrainingProgram from "../training/trainingPrograms/trainingPrograms";
 import TrainingDetail from "../training/trainingDetail/trainingDetail";
 import SignUp from "../signUp/signUp";
 import Users from "../users/users";
+import UserEdit from "../userEdit/userEdit";
 import UserSearch from "../userSearch/userSearch";
 import Profile from "../admin/profile/profile";
 import VendorSignUp from "../admin/vendorSignUp/vendorSignUp";
@@ -104,9 +105,10 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+     <Route path="/admin/users/:userId" element={<UserEdit />} />
 
-      <Route
-        path="/profile"
+      
+        < Route path="/profile"
         element={
           <ProtectedRoute>
             <Profile />

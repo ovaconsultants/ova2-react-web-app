@@ -5,7 +5,7 @@ import {
   getCompanyDetails,
   updateCompanyDetails,
   fetchCompanyTypes,
-} from "../../../api/adminUserService";
+} from "../../../api/companyServices";
 
 const CompanyEditableDetails = () => {
   const { companyId } = useParams(); // Get company ID from URL params

@@ -93,12 +93,12 @@
 .breadcrumb-item:nth-child(3)::after {
   content: "";
   position: absolute;
-  right: -13px;
+  right: -10px;
   top: 0;
   border-width: 18px 0;
-  border-top: 17px solid transparent;
-  border-bottom: 19px solid transparent;
-  border-left: 15.8px solid #47424c;
+  border-top: 19px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 13px solid #47424c;
 }
 
 .breadcrumb-item:nth-child(3)::before {
@@ -115,12 +115,12 @@
 
 .breadcrumb-item:nth-child(4)::after {
   position: absolute;
-  right: -15px;
+  right: -12px;
   top: 0;
   border-width: 18px 0;
-  border-top: 18px solid transparent;
-  border-bottom: 19px solid transparent;
-  border-left: 15.8px solid #47424c;
+  border-top: 19px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 13px solid #47424c;
 }
 
 

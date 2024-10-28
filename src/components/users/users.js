@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { fetchUsers, updateUser } from "../../api/adminUserService";
+import { fetchUsers, fetchRoles } from "../../api/adminUserService";
 import { fetchRegistrationTypes } from "../../api/registerService";
-import { fetchRoles } from "../../api/adminUserService";
-
+import { useNavigate } from "react-router-dom";
+import "./users.scss";
 const Users = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [updateTrigger, setUpdateTrigger] = useState(false);
   const [registrationTypeMap, setRegistrationTypeMap] = useState({});
   const [roleMap, setRoleMap] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredUsers = users.filter((user) =>
-    user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.phone.includes(searchQuery) ||
-    user.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.address.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.phone.includes(searchQuery) ||
+      user.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {
@@ -32,7 +31,12 @@ const Users = () => {
     };
 
     loadUsers();
-  }, [updateTrigger]);
+  }, []);
+
+  const handleCompanyNameClicked = (userId) => {
+    navigate(`/admin/users/${userId}`);
+  };
+  
 
   const loadRegistrationTypes = async () => {
     try {
@@ -56,7 +60,7 @@ const Users = () => {
       }, {});
       setRoleMap(map);
     } catch (error) {
-      console.error("Failed to fetch registration types:", error);
+      console.error("Failed to fetch roles:", error);
     }
   };
 
@@ -64,32 +68,6 @@ const Users = () => {
     loadRegistrationTypes();
     loadRolesTypes();
   }, []);
-
-  const handleEditClick = (userId) => {
-    setEditingUserId(userId);
-  };
-
-  const handleChange = (e, userId) => {
-    const { name, value } = e.target;
-    const newValue = name === "is_active" ? value === "true" : value;
-    setUsers(
-      users.map((user) =>
-        user.registration_id === userId ? { ...user, [name]: newValue } : user
-      )
-    );
-  };
-
-  const handleSubmit = async (e, userId) => {
-    e.preventDefault();
-    const userToUpdate = users.find((user) => user.registration_id === userId);
-    try {
-      await updateUser(userId, userToUpdate);
-      setUpdateTrigger((prev) => !prev);
-      setEditingUserId(null);
-    } catch (error) {
-      setError("Failed to update user");
-    }
-  };
 
   return (
     <div className="container mt-5">
@@ -120,145 +98,33 @@ const Users = () => {
                 <th>Registration Type</th>
                 <th>Created Date</th>
                 <th>Active</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.map((user, index) => (
                 <tr key={user.registration_id}>
                   <td>{index + 1}</td>
-                  {editingUserId === user.registration_id ? (
-                    <>
-                      <td>
-                        <input
-                          type="text"
-                          name="first_name"
-                          value={user.first_name}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="last_name"
-                          value={user.last_name}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="email"
-                          name="email"
-                          value={user.email}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="phone"
-                          value={user.phone}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="address"
-                          value={user.address}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        />
-                      </td>
-                      <td>
-                        <select
-                          name="role_id"
-                          value={user.role_id}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        >
-                          <option value="" disabled>
-                            Select a role
-                          </option>
-                          <option value="1">User</option>
-                          <option value="2">Admin</option>
-                          <option value="3">Sub-admin</option>
-                          <option value="4">Manager</option>
-                          <option value="5">Sales Team</option>
-                        </select>
-                      </td>
-                      <td>
-                        <select
-                          name="registration_type_id"
-                          value={user.registration_type_id}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        >
-                          <option value="" disabled>
-                            Select a registration type
-                          </option>
-                          <option value="1">Employee</option>
-                          <option value="2">Vendor</option>
-                          <option value="3">Client</option>
-                          <option value="4">Trainee</option>
-                          <option value="5">Educator</option>
-                        </select>
-                      </td>
-                      <td>{new Date(user.created_date).toLocaleString()}</td>
-                      <td>
-                        <select
-                          name="is_active"
-                          value={user.is_active ? "true" : "false"}
-                          onChange={(e) => handleChange(e, user.registration_id)}
-                          className="form-control"
-                        >
-                          <option value="true">Yes</option>
-                          <option value="false">No</option>
-                        </select>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={(e) => handleSubmit(e, user.registration_id)}
-                        >
-                          <i className="bi bi-save fs-6"></i>
-                        </button>
-                        <button
-                          className="btn btn-secondary"
-                          onClick={() => setEditingUserId(null)}
-                        >
-                          <i className="fas fa-times"></i>
-                        </button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>{user.first_name}</td>
-                      <td>{user.last_name}</td>
-                      <td>{user.email}</td>
-                      <td>{user.phone}</td>
-                      <td>{user.address}</td>
-                      <td>{roleMap[user.role_id] || user.role_id}</td>
-                      <td>
-                        {registrationTypeMap[user.registration_type_id] ||
-                          user.registration_type_id}
-                      </td>
-                      <td>{new Date(user.created_date).toLocaleString()}</td>
-                      <td>{user.is_active ? "Yes" : "No"}</td>
-                      <td>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => handleEditClick(user.registration_id)}
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    </>
-                  )}
+                  <td
+                    id="FirstName"
+                    onClick={() =>
+                      handleCompanyNameClicked(user.registration_id)
+                    }
+                    className="firstName cursor-pointer"
+                  >
+                    {user.first_name}
+                  </td>
+
+                  <td>{user.last_name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.address}</td>
+                  <td>{roleMap[user.role_id] || user.role_id}</td>
+                  <td>
+                    {registrationTypeMap[user.registration_type_id] ||
+                      user.registration_type_id}
+                  </td>
+                  <td>{new Date(user.created_date).toLocaleString()}</td>
+                  <td>{user.is_active ? "Yes" : "No"}</td>
                 </tr>
               ))}
             </tbody>

@@ -37,6 +37,7 @@ export const fetchUsers = async () => {
   export const updateUser = async (id , userNewData) => {
    try {
       const response = await apiClient.put('users/updateUser', {id , userNewData}) ;
+      console.log("rsponse from updating the user : " , response)
       return response ;
        }
  catch (error){
@@ -45,72 +46,37 @@ export const fetchUsers = async () => {
     };
   }
 
-  // fetching all the roles from the databse 
+  // fetching all the roles from the database 
   export const fetchRoles = async()=>{
     try {
       const response = await apiClient.get('users/fetchRoles');
        return response.data ;
       
     } catch (error) {
-       console.error("failed to fetch users : " , error);
+       console.error("failed to fetch company : " , error);
        throw error ;
     }
   }
 
-  // fetching all the company Types from databse 
-  export const fetchCompanyTypes  = async ()=>{
-    try {
-      const response = await apiClient.get('users/fetchCompayTypes');
-      return response.data ;
-    } catch (error) {
-      console.log("error from fetching company types from the server ");
-      throw error ;
-    }
+// fetching user with userId 
+export const getUserDetails = async (userId) => {
+  try {
+    const response = await apiClient.get(`/users/fetchUserWithId/${userId}`); 
+    return response.data;  
+  } catch (error) {
+    console.log('An error occurred while fetching data from the server:', error);
+    throw error;
   }
+};
 
-  // fetching all the companies from the databse 
-  export  const getCompanies = async ()=>{
-    try {
-          const response = await apiClient.get('users/fetchCompanies');
-          return response.data ;
-    }catch(error){
-      console.log("error from fetching companies from the server ");
-      throw error ;
-    }
+export const deleteUser = async (registration_id)=> {
+  try {
+    const response = await apiClient.post('/users/deleteUser' , {registration_id})
+    console.log("this is response " , response);  
+    return response.data;  
+  } catch (error) {
+    console.log('An error occurred while fetching data from the server:', error);
+    throw error;
   }
-
-  // fecthing compnay with the companyID 
-  export const getCompanyDetails = async (companyId) => {
-    try {
-      const response = await apiClient.get(`/users/getCompanyDetails/${companyId}`);
-      return response.data; // Return the company details
-    } catch (error) {
-      console.log("Error from fetching companies from the server:", error);
-      throw error;
-    }
-  };
-  
-  
-  // posting the compnay details to server 
- export const postCompanyDetails = async (companyData) => {
-try {
-   const response = await apiClient.post('users/postCompanyData' , companyData);
-   return response ;
-} catch (error) {
-  console.log("error occured during the posting the company data");
-  throw error ;
 }
-  }
 
-
-// updating company data to server 
-export const updateCompanyDetails = async(companyId , companyData) => {
- try {
-  const response = await apiClient.put('/users/updateCompanyData' , {companyId , companyData});
-  return response.data ;
- } catch (error) {
-  console.log("error ocuured during updating a company ");
-    throw error ;
-  
- }
-}
