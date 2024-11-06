@@ -6,7 +6,7 @@ import '../../src/constants/toastMessage.scss';
 const ToastMessage  = (message)=> {
         toast.success(message, {
           position: "top-right",
-          autoClose: 3000, 
+          autoClose: 4000, 
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

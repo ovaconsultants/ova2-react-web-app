@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import '../../admin/companyEditableDetails/companyEditableDetails.scss';
+import "../../admin/companyEditableDetails/companyEditableDetails.scss";
+import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
+import Multiselect from "multiselect-react-dropdown";
 import {
   getCompanyDetails,
   updateCompanyDetails,
   fetchCompanyTypes,
 } from "../../../api/companyServices";
-
+import ToastMessage from "../../../constants/toastMessage";
+import { ToastContainer } from "react-toastify";
+import { validateCompanyEditingField } from "../../common/formComponents/validateFields";
 const CompanyEditableDetails = () => {
-  const { companyId } = useParams(); // Get company ID from URL params
+  const location = useLocation();
+  const companyId =
+    location.state?.companyId || localStorage.getItem("companyId");
   const navigate = useNavigate();
 
   const [companyDetails, setCompanyDetails] = useState({
@@ -35,11 +43,22 @@ const CompanyEditableDetails = () => {
     comment: "",
   });
 
+  const [selectedCommunicationMedium, setSelectedCommunicationMedium] =
+    useState([]);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const optionsForCommunication = [
+    { name: "Email", id: 1 },
+    { name: "Phone Number", id: 2 },
+    { name: "Chat", id: 3 },
+  ];
+
   const [companyTypes, setCompanyTypes] = useState([]);
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [originalDetails, setOriginalDetails] = useState({});
+  const [formErrors, setFormErrors] = useState({});
 
   // Fetch company details based on companyId
   useEffect(() => {
@@ -59,35 +78,42 @@ const CompanyEditableDetails = () => {
 
   // Fetch company types for the dropdown
   useEffect(() => {
-    async function fetchCompany_Types() {
+    async function fetchCompanyTypes() {
       try {
         const response = await fetchCompanyTypes(); // API call for fetching company types
-        console.log("response from API for fetch company Types ", response);
         setCompanyTypes(response);
       } catch (err) {
         setError("Error fetching company types");
       }
     }
-    fetchCompany_Types();
+    fetchCompanyTypes();
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setCompanyDetails({
       ...companyDetails,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     });
+
+    const updatedErrors = validateCompanyEditingField(name, value, formErrors);
+    setFormErrors(updatedErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      ToastMessage("User registered successfully.");
       const data = await updateCompanyDetails(companyId, companyDetails); // API call for updating company
-      if (data.message == "Company updated successfully.") {
+      if (data.message === "Company updated successfully.") {
         setIsEditing(false);
-        alert("user updated successfully");
-        navigate(`/admin/vendor/${companyId}`);
+        // Persist companyId in localStorage
+        if (companyId) {
+          localStorage.setItem("companyId", companyId);
+        }
+
+        navigate("/admin/vendor/vendor-details");
       } else {
         setError("Error updating company details");
       }
@@ -106,7 +132,26 @@ const CompanyEditableDetails = () => {
     setIsEditing(false);
   };
 
-  // Conditional rendering to display loading state
+  // Update companyDetails.communicatethrough when selectedCommunicationMedium changes
+  useEffect(() => {
+    setCompanyDetails((prevDetails) => ({
+      ...prevDetails,
+      communicatethrough: selectedCommunicationMedium
+        .map((item) => item.name)
+        .join(", "),
+    }));
+  }, [selectedCommunicationMedium]);
+
+  const onSelect = (selectedList) => {
+    setSelectedCommunicationMedium(selectedList);
+    setIsAllSelected(selectedList.length === optionsForCommunication.length);
+  };
+
+  const onRemove = (selectedList) => {
+    setSelectedCommunicationMedium(selectedList);
+    setIsAllSelected(selectedList.length === optionsForCommunication.length);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -120,16 +165,30 @@ const CompanyEditableDetails = () => {
         <div className="col-4 text-end">
           {isEditing ? (
             <>
-              <button className="btn btn-success" onClick={handleSubmit}>
-                Save
+              <button
+                className="btn btn-primary"
+                onClick={handleSubmit}
+                title="Save"
+              >
+                <FontAwesomeIcon icon={faSave} />
               </button>
-              <button className="btn btn-secondary ms-2" onClick={handleCancel}>
-                Cancel
+              <button
+                className="btn btn-danger ms-2"
+                onClick={handleCancel}
+                data-bs-toggle="tooltip"
+                title="Cancel"
+              >
+                <FontAwesomeIcon icon={faTimes} />
               </button>
             </>
           ) : (
-            <button className="btn btn-primary" onClick={toggleEditMode}>
-              Edit
+            <button
+              className="btn btn-primary"
+              onClick={() => setIsEditing(true)}
+              data-bs-toggle="tooltip"
+              title="Edit"
+            >
+              <i className="bi bi-pencil"></i>
             </button>
           )}
         </div>
@@ -139,7 +198,6 @@ const CompanyEditableDetails = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="row">
-              {/* Left Column */}
               <div className="col-md-6">
                 <div className="mb-3">
                   <label>
@@ -155,6 +213,11 @@ const CompanyEditableDetails = () => {
                     />
                   ) : (
                     <p>{companyDetails.company_name}</p>
+                  )}
+                  {formErrors.company_name && (
+                    <small className="text-danger">
+                      {formErrors.company_name}
+                    </small>
                   )}
                 </div>
 
@@ -173,6 +236,11 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.contact_no}</p>
                   )}
+                  {formErrors.contact_no && (
+                    <small className="text-danger">
+                      {formErrors.contact_no}
+                    </small>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -190,8 +258,12 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.email_address}</p>
                   )}
+                  {formErrors.email_address && (
+                    <small className="text-danger">
+                      {formErrors.email_address}
+                    </small>
+                  )}
                 </div>
-
                 <div className="mb-3">
                   <label>
                     <strong>Company Type:</strong>
@@ -204,7 +276,7 @@ const CompanyEditableDetails = () => {
                       onChange={handleInputChange}
                     >
                       <option value="">Select Company Type</option>
-                      {companyTypes.map((cmpy) => (
+                      {companyTypes?.map((cmpy) => (
                         <option key={cmpy.id} value={cmpy.id}>
                           {cmpy.type_name}
                         </option>
@@ -212,13 +284,14 @@ const CompanyEditableDetails = () => {
                     </select>
                   ) : (
                     <p>
-                      {companyTypes.find(
-                        (type) => type.id === companyDetails.company_type_id
-                      )?.name || "N/A"}
+                      <p>
+                        {companyTypes?.find(
+                          (type) => type.id === companyDetails.company_type_id
+                        ).type_name || "N/A"}  
+                      </p>
                     </p>
                   )}
                 </div>
-
                 <div className="mb-3">
                   <label>
                     <strong>Website:</strong>
@@ -233,6 +306,11 @@ const CompanyEditableDetails = () => {
                     />
                   ) : (
                     <p>{companyDetails.website_url}</p>
+                  )}
+                  {formErrors.website_url && (
+                    <small className="text-danger">
+                      {formErrors.website_url}
+                    </small>
                   )}
                 </div>
 
@@ -251,7 +329,11 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.location}</p>
                   )}
+                  {formErrors.location && (
+                    <small className="text-danger">{formErrors.location}</small>
+                  )}
                 </div>
+
                 <div className="mb-3">
                   <label>
                     <strong>Industry Sector:</strong>
@@ -267,7 +349,13 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.industry_sector}</p>
                   )}
+                  {formErrors.industry_sector && (
+                    <small className="text-danger">
+                      {formErrors.industry_sector}
+                    </small>
+                  )}
                 </div>
+
                 <div className="mb-3">
                   <label>
                     <strong>Comment:</strong>
@@ -282,10 +370,12 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.comment}</p>
                   )}
+                  {formErrors.comment && (
+                    <small className="text-danger">{formErrors.comment}</small>
+                  )}
                 </div>
               </div>
 
-              {/* Right Column */}
               <div className="col-md-6">
                 <div className="mb-3">
                   <label>
@@ -301,6 +391,11 @@ const CompanyEditableDetails = () => {
                     />
                   ) : (
                     <p>{companyDetails.contact_person_name}</p>
+                  )}
+                  {formErrors.contact_person_name && (
+                    <small className="text-danger">
+                      {formErrors.contact_person_name}
+                    </small>
                   )}
                 </div>
 
@@ -319,6 +414,11 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.contact_person_designation}</p>
                   )}
+                  {formErrors.contact_person_designation && (
+                    <small className="text-danger">
+                      {formErrors.contact_person_designation}
+                    </small>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -335,6 +435,11 @@ const CompanyEditableDetails = () => {
                     />
                   ) : (
                     <p>{companyDetails.contact_person_phone}</p>
+                  )}
+                  {formErrors.contact_person_phone && (
+                    <small className="text-danger">
+                      {formErrors.contact_person_phone}
+                    </small>
                   )}
                 </div>
 
@@ -353,6 +458,11 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.contact_person_email}</p>
                   )}
+                  {formErrors.contact_person_email && (
+                    <small className="text-danger">
+                      {formErrors.contact_person_email}
+                    </small>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -370,11 +480,16 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.currentposition}</p>
                   )}
+                  {formErrors.currentposition && (
+                    <small className="text-danger">
+                      {formErrors.currentposition}
+                    </small>
+                  )}
                 </div>
 
                 <div className="mb-3">
                   <label>
-                    <strong>Responder :</strong>
+                    <strong>Responder:</strong>
                   </label>
                   {isEditing ? (
                     <input
@@ -387,6 +502,9 @@ const CompanyEditableDetails = () => {
                   ) : (
                     <p>{companyDetails.employee}</p>
                   )}
+                  {formErrors.employee && (
+                    <small className="text-danger">{formErrors.employee}</small>
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -394,20 +512,39 @@ const CompanyEditableDetails = () => {
                     <strong>Communication Through:</strong>
                   </label>
                   {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="communicatethrough"
-                      value={companyDetails.communicatethrough}
-                      onChange={handleInputChange}
+                    <Multiselect
+                      options={optionsForCommunication}
+                      selectedValues={selectedCommunicationMedium}
+                      onSelect={onSelect}
+                      onRemove={onRemove}
+                      displayValue="name"
+                      showCheckbox={true}
+                      hidePlaceholder={isAllSelected ? true : false}
+                      closeIcon="cancel"
+                      avoidHighlightFirstOption
+                      placeholder={
+                        selectedCommunicationMedium.length ===
+                        optionsForCommunication.length
+                          ? ""
+                          : "Select"
+                      }
+                      style={{
+                        optionContainer: {
+                          display: isAllSelected ? "none" : "block",
+                        },
+                      }}
                     />
                   ) : (
                     <p>{companyDetails.communicatethrough}</p>
                   )}
+                  {formErrors.communicatethrough && (
+                    <small className="text-danger">
+                      {formErrors.communicatethrough}
+                    </small>
+                  )}
                 </div>
               </div>
 
-              {/* Description */}
               <div className="col-12">
                 <div className="mb-3">
                   <label>
@@ -415,7 +552,6 @@ const CompanyEditableDetails = () => {
                   </label>
                   {isEditing ? (
                     <textarea
-                      id="text_area"
                       className="form-control"
                       name="description"
                       value={companyDetails.description}
@@ -429,12 +565,18 @@ const CompanyEditableDetails = () => {
                       }}
                     />
                   )}
+                  {formErrors.description && (
+                    <small className="text-danger">
+                      {formErrors.description}
+                    </small>
+                  )}
                 </div>
               </div>
             </div>
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

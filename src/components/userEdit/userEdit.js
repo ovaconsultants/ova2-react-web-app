@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
-import { IconName } from "react-icons/fa"
-
+import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import {
   updateUser,
   fetchRoles,
@@ -13,26 +15,32 @@ import {
 import { fetchRegistrationTypes } from "../../api/registerService";
 import ToastMessage from "../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
+import { validateEditingField } from "../common/formComponents/validateFields";
+import { TextInput } from "../common/formComponents/textInput";
+import { Dropdown } from "../common/formComponents/selectDropDown";
 import "./userEdit.scss";
 
 const UserEdit = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUserDetails, setEditedUserDetails] = useState({});
-  const [registrationTypeMap, setRegistrationTypeMap] = useState({});
-  const [roleMap, setRoleMap] = useState({});
-  const { userId } = useParams();
+  const [registrationTypeMap, setRegistrationTypeMap] = useState([]);
+  const [roleMap, setRoleMap] = useState([]);
+  const [formErrors, setFormErrors] = useState({}); // State to store validation errors
+
+  const location = useLocation();
+  const userId = location.state?.userId;
+  console.log("passed userid :", userId);
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const handleShowDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const handleConfirmDelete = async () => {
     try {
-      ToastMessage("user deleted successfully");
+      ToastMessage("User deleted successfully");
       await deleteUser(userId);
-      setTimeout(() => {
-        navigate("/admin/users");
-      }, 3000);
+      setTimeout(() => navigate("/admin/users"), 3000);
     } catch (error) {
       console.error("Error deleting user:", error);
       alert("Failed to delete user");
@@ -41,33 +49,23 @@ const UserEdit = () => {
     }
   };
 
-  // Fetch user details
   useEffect(() => {
     const loadUserDetails = async () => {
       try {
         const data = await getUserDetails(userId);
-        console.log("Data for user:", data);
         setEditedUserDetails(data);
       } catch (error) {
         console.error("Failed to fetch user details", error);
       }
     };
-
-    if (userId) {
-      loadUserDetails();
-    }
+    if (userId) loadUserDetails();
   }, [userId]);
 
-  // Fetch registration types and roles
   useEffect(() => {
     const loadRegistrationTypes = async () => {
       try {
         const registrationTypes = await fetchRegistrationTypes();
-        const map = registrationTypes.reduce((acc, type) => {
-          acc[type.registration_type_id] = type.registration_type_name;
-          return acc;
-        }, {});
-        setRegistrationTypeMap(map);
+        setRegistrationTypeMap(registrationTypes);
       } catch (error) {
         console.error("Failed to fetch registration types:", error);
       }
@@ -76,11 +74,7 @@ const UserEdit = () => {
     const loadRolesTypes = async () => {
       try {
         const rolesType = await fetchRoles();
-        const map = rolesType.reduce((acc, type) => {
-          acc[type.role_id] = type.role_name;
-          return acc;
-        }, {});
-        setRoleMap(map);
+        setRoleMap(rolesType);
       } catch (error) {
         console.error("Failed to fetch roles:", error);
       }
@@ -90,35 +84,27 @@ const UserEdit = () => {
     loadRolesTypes();
   }, []);
 
-  // Input change handler for text inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedUserDetails((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const updatedErrors = validateEditingField(name, value, formErrors);
+    setFormErrors(updatedErrors); // Update errors state
+    setEditedUserDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Input change handler for dropdowns (Role, Registration Type)
   const handleDropdownChange = (e) => {
     const { name, value } = e.target;
-    setEditedUserDetails((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const updatedErrors = validateEditingField(name, value, formErrors);
+    setFormErrors(updatedErrors);
+    setEditedUserDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Active status change handler
-  const handleActiveChange = (e) => {
-    const value = e.target.value === "Yes";
-    setEditedUserDetails((prevState) => ({
-      ...prevState,
-      is_active: value,
-    }));
-  };
-
-  // Save updated user details
   const handleSave = async () => {
+    const hasErrors = Object.values(formErrors).some((error) => error);
+    if (hasErrors) {
+      alert("Please fix the errors before saving.");
+      return;
+    }
+
     try {
       await updateUser(userId, editedUserDetails);
       alert("User details updated successfully!");
@@ -129,6 +115,31 @@ const UserEdit = () => {
     }
   };
 
+  const textFields1 = [
+    { name: "first_name", label: "First Name" },
+    { name: "last_name", label: "Last Name" },
+    { name: "email", label: "Email", type: "email" },
+  ];
+  const textFields2 = [
+    { name: "address", label: "Address" },
+    { name: "phone", label: "Phone", type: "tel" },
+  ];
+
+  const dropdownFields = [
+    {
+      name: "role_id",
+      label: "Role",
+      options: roleMap,
+      visibleSelectorString: "Select Role",
+    },
+    {
+      name: "registration_type_id",
+      label: "Registration Type",
+      options: registrationTypeMap,
+      visibleSelectorString: "Select Registration Type",
+    },
+  ];
+
   return (
     <div className="container mt-5">
       <div className="row mb-4">
@@ -138,30 +149,40 @@ const UserEdit = () => {
         <div className="col-4 text-end">
           {isEditing ? (
             <>
-              <button className="btn btn-success" onClick={handleSave}>
-                Save
+              <button
+                className="btn btn-primary"
+                onClick={handleSave}
+                data-bs-toggle="tooltip"
+                title="Save"
+              >
+                 <FontAwesomeIcon icon={faSave} />
               </button>
               <button
-                className="btn btn-secondary ms-2"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
+      className="btn btn-danger ms-2"
+      onClick={() => setIsEditing(false)}
+      data-bs-toggle="tooltip"
+      title="Cancel"
+    >
+      <FontAwesomeIcon icon={faTimes} />
+    </button>
             </>
           ) : (
             <>
               <button
                 className="btn btn-primary"
                 onClick={() => setIsEditing(true)}
+                data-bs-toggle="tooltip"
+                title="Edit"
               >
-               <FaEdit /> 
+                <i className="bi bi-pencil"></i>
               </button>
-
               <button
                 className="btn btn-danger ms-2"
                 onClick={handleShowDeleteModal}
+                data-bs-toggle="tooltip"
+                title="Delete"
               >
-                Delete
+                <i className="bi bi-trash"></i>
               </button>
             </>
           )}
@@ -173,48 +194,24 @@ const UserEdit = () => {
           <form onSubmit={handleSave}>
             <div className="row">
               <div className="col-md-6">
-                <div className="mb-3">
-                  <label>
-                    <strong>First Name:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="first_name"
-                      value={editedUserDetails.first_name || ""}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{editedUserDetails.first_name}</p>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Role:</strong>
-                  </label>
-                  {isEditing ? (
-                    <select
-                      className="form-control"
-                      name="role_id"
-                      value={editedUserDetails.role_id || ""}
-                      onChange={handleDropdownChange}
-                    >
-                      {Object.entries(roleMap).map(([id, name]) => (
-                        <option key={id} value={id}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <p>
-                      {roleMap[editedUserDetails.role_id] ||
-                        editedUserDetails.role_id}
-                    </p>
-                  )}
-                </div>
-
+                {textFields1.map(({ name, label, type }) => (
+                  <div key={name} className="mb-3">
+                    <label>
+                      <strong>{label}:</strong>
+                    </label>
+                    {isEditing ? (
+                      <TextInput
+                        name={name}
+                        value={editedUserDetails[name] || ""}
+                        onChange={handleInputChange}
+                        type={type || "text"}
+                        error={formErrors[name]} // Show error message
+                      />
+                    ) : (
+                      <p>{editedUserDetails[name]}</p>
+                    )}
+                  </div>
+                ))}
                 <div className="mb-3">
                   <label>
                     <strong>Active:</strong>
@@ -223,7 +220,14 @@ const UserEdit = () => {
                     <select
                       className="form-control"
                       value={editedUserDetails.is_active ? "Yes" : "No"}
-                      onChange={handleActiveChange}
+                      onChange={(e) =>
+                        handleInputChange({
+                          target: {
+                            name: "is_active",
+                            value: e.target.value === "Yes",
+                          },
+                        })
+                      }
                     >
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
@@ -232,101 +236,57 @@ const UserEdit = () => {
                     <p>{editedUserDetails.is_active ? "Yes" : "No"}</p>
                   )}
                 </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Email:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="email"
-                      value={editedUserDetails.email || ""}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{editedUserDetails.email}</p>
-                  )}
-                </div>
               </div>
 
               <div className="col-md-6">
-                <div className="mb-3">
-                  <label>
-                    <strong>Last Name:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="last_name"
-                      value={editedUserDetails.last_name || ""}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{editedUserDetails.last_name}</p>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Registration Type:</strong>
-                  </label>
-                  {isEditing ? (
-                    <select
-                      className="form-control"
-                      name="registration_type_id"
-                      value={editedUserDetails.registration_type_id || ""}
-                      onChange={handleDropdownChange}
-                    >
-                      {Object.entries(registrationTypeMap).map(([id, name]) => (
-                        <option key={id} value={id}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <p>
-                      {registrationTypeMap[
-                        editedUserDetails.registration_type_id
-                      ] || editedUserDetails.registration_type_id}
-                    </p>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Address:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="address"
-                      value={editedUserDetails.address || ""}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{editedUserDetails.address}</p>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label>
-                    <strong>Phone:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="phone"
-                      value={editedUserDetails.phone || ""}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{editedUserDetails.phone}</p>
-                  )}
-                </div>
+                {textFields2.map(({ name, label, type }) => (
+                  <div key={name} className="mb-3">
+                    <label>
+                      <strong>{label}:</strong>
+                    </label>
+                    {isEditing ? (
+                      <TextInput
+                        name={name}
+                        value={editedUserDetails[name] || ""}
+                        onChange={handleInputChange}
+                        type={type || "text"}
+                        error={formErrors[name]}
+                      />
+                    ) : (
+                      <p>{editedUserDetails[name]}</p>
+                    )}
+                  </div>
+                ))}
+                {dropdownFields.map(
+                  ({ name, label, options, visibleSelectorString }) => (
+                    <div key={name} className="mb-3">
+                      <label>
+                        <strong>{label}:</strong>
+                      </label>
+                      {isEditing ? (
+                        <Dropdown
+                          name={name}
+                          value={editedUserDetails[name] || ""}
+                          onChange={handleDropdownChange}
+                          options={options}
+                          visibleSelectorString={visibleSelectorString}
+                          error={formErrors[name]}
+                        />
+                      ) : (
+                        <p>
+                          {(options.find(
+                            (opt) =>
+                              opt[
+                                options[0] ? Object.keys(options[0])[0] : "id"
+                              ] === editedUserDetails[name]
+                          ) || {})[
+                            options[0] ? Object.keys(options[0])[1] : "name"
+                          ] || editedUserDetails[name]}
+                        </p>
+                      )}
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </form>
@@ -337,7 +297,7 @@ const UserEdit = () => {
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure! You want to delete this user?</Modal.Body>
+        <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
@@ -347,7 +307,7 @@ const UserEdit = () => {
             Cancel
           </Button>
           <Button variant="danger" onClick={handleConfirmDelete}>
-            ok
+            Ok
           </Button>
         </Modal.Footer>
       </Modal>

@@ -8,6 +8,7 @@ const Breadcrumb = () => {
   const paths = location.pathname
     .split("/")
     .filter((path) => path && path !== "home");
+  console.log(paths);  
 
   return (
     <div className="container">
@@ -23,7 +24,7 @@ const Breadcrumb = () => {
             const path1 = `/${paths.slice(0, index + 1).join("/")}`;
             const routeTo = path1;
             const isLast = index === paths.length - 1;
-
+        
             return isLast ? (
               <li
                 className="breadcrumb-item active"

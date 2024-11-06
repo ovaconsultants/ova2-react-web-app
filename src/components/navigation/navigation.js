@@ -105,9 +105,8 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
-     <Route path="/admin/users/:userId" element={<UserEdit />} />
+     <Route path="/admin/users/user-details" element={<UserEdit />} />
 
-      
         < Route path="/profile"
         element={
           <ProtectedRoute>
@@ -117,7 +116,7 @@ const Navigation = () => {
       />
       <Route path="/admin/sign-up-client" element = {<VendorSignUp/>}/>
       <Route path="/admin/vendor"  element={<Vendor/>}/>
-      <Route path="/admin/vendor/:companyId" element={<CompanyEditableDetails />}/>
+      <Route path="/admin/vendor/vendor-details" element={<CompanyEditableDetails />}/>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

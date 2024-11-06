@@ -94,7 +94,7 @@ const Vendor = () => {
 
   // Navigate to company details page
   const handleCompanyClick = (companyId) => {
-    navigate(`/admin/vendor/${companyId}`);
+    navigate('/admin/vendor/vendor-details', { state: { companyId } });
   };
 
   // Render error message if there's any error
