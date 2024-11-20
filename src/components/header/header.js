@@ -35,6 +35,7 @@ const Header = () => {
                                 <NavDropdown title="Jobs" id="jobs-dropdown">
                                 <NavDropdown.Item as={Link} to="/in/jobs" onClick={() => setExpanded(false)} className="capitalize-first">India</NavDropdown.Item>
                                 <NavDropdown.Item as={Link} to="/us/jobs" onClick={() => setExpanded(false)}>USA</NavDropdown.Item>
+                                
                                 </NavDropdown>
 
                                 {isAuthenticated ? (
@@ -44,6 +45,7 @@ const Header = () => {
                                         <NavDropdown title={username} id="user-dropdown">
                                             <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>Profile</NavDropdown.Item>
                                             <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>Settings</NavDropdown.Item>
+                                            <NavDropdown.Item as={Link} to="/pay-slip" onClick={() => setExpanded(false)}>Generate_Pay_Slip</NavDropdown.Item>
                                         </NavDropdown>
                                         <button className="nav-link btn btn-link" title='Logout' onClick={handleLogout}>
                                         <i className="bi bi-box-arrow-right"></i>

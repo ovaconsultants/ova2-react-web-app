@@ -29,17 +29,24 @@ export const jobTilesData = [
         roleName : 'admin',
     },
     {
-        title: 'profile',
+        title: 'Profile',
         description: 'Click Me!.',
         image: '',
         route: '/admin/profile',
         roleName: 'user,admin,sub-admin,manager,sales_team',
     },
     {
-        title: 'Vendor Managemnet',
+        title: 'Vendor Management',
         description: 'Click Me!.',
         image: '',
         route: '/admin/vendor',
+        roleName: 'admin',
+    },
+    {
+        title: 'Generate Pay Slip',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/pay-slip',
         roleName: 'admin',
     },
     // Add more tiles as needed

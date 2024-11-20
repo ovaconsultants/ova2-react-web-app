@@ -14,6 +14,7 @@ const apiClient = axios.create({
   export const fetchCompanyTypes  = async ()=>{
     try {
       const response = await apiClient.get('company/fetchCompayTypes');
+      console.log("response for company types :" , response.data);
       return response.data ;
     } catch (error) {
       console.log("error from fetching company types from the server ");
@@ -66,4 +67,42 @@ export const updateCompanyDetails = async(companyId , companyData) => {
     throw error ;
   
  }
+}
+
+// fetching communication mediums 
+export const fetchCommunicationMediums = async() => {
+  try {
+   const response = await apiClient.get('/company/fetchCommunicationMediums');
+   console.log(response);
+   return response.data ;
+  } catch (error) {
+   console.log("error ocuured during updating a company ");
+     throw error ;
+   
+  }
+ }
+
+// Client-side deleteCompany function (using POST)
+export const deleteCompany = async (companyId) => {
+  console.log("Deleting company with ID:", companyId);
+  try {
+    const response = await apiClient.post('/company/deleteCompany', { companyId });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error occurred while deleting the company");
+    throw error;
+  }
+};
+
+export const fetchAllEmployeeAllocations = async () => {
+  try {
+    const response = await apiClient.get('/company/fetchAllEmployeeAllocations');
+    console.log(response);
+    return response.data ;
+   } catch (error) {
+    console.log("error ocuured during updating a company ");
+      throw error ;
+    
+   }
 }

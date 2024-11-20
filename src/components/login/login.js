@@ -5,10 +5,19 @@ import './login.scss';
 import { authenticateUser } from '../../api/authenticateService';
 import { Link } from 'react-router-dom';
 import { authenticate_user } from '../../api/adminUserService';
+import { useAtom } from 'jotai';
+import { usernameAtom , registrationIdAtom , roleIdAtom , roleNameAtom , userImageAtom } from '../jotia/globalAtoms/userRelatedAtoms';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  // functions for setting atom value 
+  const setGlobalUsername = useAtom(usernameAtom)[1];
+  const setGlobalRoleId = useAtom(roleIdAtom)[1];
+  const setGlobalRegistrationId = useAtom(registrationIdAtom)[1];
+  const setGlobalRoleName = useAtom(roleNameAtom)[1];
+  const setGlobalUserImage = useAtom(userImageAtom)[1];
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -25,14 +34,21 @@ const Login = () => {
     };
 
     try {
+    
       const response = await authenticate_user(payload);
-    //  console.log('response', response);
-
+      console.log("response from the autheticate api " , response);
       const username = response?.user?._full_name;
-      const role_id = response?.user?._role_id;
+      const roleId = response?.user?._role_id;
+      const registrationId = response?.user?._registration_id;
+      const roleName  = response?.user?._role_name;
       const userImage = 'https://example.com/user-image.jpg'; // Example user image URL
-
+ 
       if (username) {
+        setGlobalUsername(username);
+        setGlobalRoleId(roleId);
+        setGlobalRegistrationId(registrationId);
+        setGlobalRoleName(roleName);
+        setGlobalUserImage(userImage);
         login({ username, image: userImage });
         navigate('/admin');
       } else {

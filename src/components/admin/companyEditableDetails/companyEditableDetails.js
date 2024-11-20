@@ -1,584 +1,156 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "../../admin/companyEditableDetails/companyEditableDetails.scss";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSave, faEdit, faTrash, faTimes } from "@fortawesome/free-solid-svg-icons";
 import Multiselect from "multiselect-react-dropdown";
+import { Button, Modal, Row, Col, Card, Form } from "react-bootstrap";
+import { ToastContainer } from "react-toastify";
 import {
-  getCompanyDetails,
-  updateCompanyDetails,
-  fetchCompanyTypes,
+  getCompanyDetails, updateCompanyDetails, fetchCompanyTypes, fetchCommunicationMediums,
+  deleteCompany, fetchAllEmployeeAllocations
 } from "../../../api/companyServices";
 import ToastMessage from "../../../constants/toastMessage";
-import { ToastContainer } from "react-toastify";
 import { validateCompanyEditingField } from "../../common/formComponents/validateFields";
+import { getInitialCompanyDetails } from "./compnayEditableStateData";
+import "../../admin/companyEditableDetails/companyEditableDetails.scss";
+import { fieldsData  , secondaryFieldsData , SelectField , EditableField } from "./compnayEditableStateData";
+
 const CompanyEditableDetails = () => {
-  const location = useLocation();
-  const companyId =
-    location.state?.companyId || localStorage.getItem("companyId");
   const navigate = useNavigate();
-
-  const [companyDetails, setCompanyDetails] = useState({
-    company_name: "",
-    contact_no: "",
-    email_address: "",
-    company_type_id: "",
-    website_url: "",
-    location: "",
-    established_year: "",
-    industry_sector: "",
-    contact_person_name: "",
-    contact_person_designation: "",
-    contact_person_phone: "",
-    contact_person_email: "",
-    is_active: true,
-    is_deleted: false,
-    description: "",
-    employee: "",
-    followup: "",
-    followupdate: "",
-    communicatethrough: "",
-    currentposition: "",
-    comment: "",
-  });
-
-  const [selectedCommunicationMedium, setSelectedCommunicationMedium] =
-    useState([]);
-  const [isAllSelected, setIsAllSelected] = useState(false);
-  const optionsForCommunication = [
-    { name: "Email", id: 1 },
-    { name: "Phone Number", id: 2 },
-    { name: "Chat", id: 3 },
-  ];
-
+  const location = useLocation();
+  const initialCompanyId = location.state?.companyId || localStorage.getItem("companyId");
+  const [companyDetails, setCompanyDetails] = useState(getInitialCompanyDetails());
+  const [communicationMediums, setCommunicationMediums] = useState([]);
+  const [selectedMedium, setSelectedMedium] = useState([]);
   const [companyTypes, setCompanyTypes] = useState([]);
-
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [responders, setResponders] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [originalDetails, setOriginalDetails] = useState({});
+  const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [initialData, setInitialData] = useState(getInitialCompanyDetails());
 
-  // Fetch company details based on companyId
-  useEffect(() => {
-    async function fetchCompany() {
-      try {
-        const response = await getCompanyDetails(companyId);
-        setCompanyDetails(response);
-        setOriginalDetails(response); // Save original details to reset if cancelled
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching company details");
-        setLoading(false);
-      }
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [companyResponse, typesResponse, mediumsData, employees] = await Promise.all([
+        getCompanyDetails(initialCompanyId), fetchCompanyTypes(), fetchCommunicationMediums(), fetchAllEmployeeAllocations()
+      ]);
+      setCompanyDetails({
+        ...companyResponse,
+        employee: companyResponse.employee , // Assuming `responderId` is the ID of the selected responder
+        is_active: companyResponse.is_active ? "true" : "false" // Convert boolean to string for selection
+      }); // Set the initial responder ID
+      setInitialData(companyResponse);
+      setCompanyTypes(typesResponse);
+      setCommunicationMediums(mediumsData);
+      setSelectedMedium(mediumsData.filter(m => companyResponse.communicatethrough.includes(m.id)));
+      setResponders(employees);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    fetchCompany();
-  }, [companyId]);
+  }, [initialCompanyId]);
+  
 
-  // Fetch company types for the dropdown
-  useEffect(() => {
-    async function fetchCompanyTypes() {
-      try {
-        const response = await fetchCompanyTypes(); // API call for fetching company types
-        setCompanyTypes(response);
-      } catch (err) {
-        setError("Error fetching company types");
-      }
-    }
-    fetchCompanyTypes();
-  }, []);
+  useEffect(() => { if (initialCompanyId) fetchData(); }, [fetchData, initialCompanyId]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCompanyDetails({
-      ...companyDetails,
-      [name]: value,
-    });
-
-    const updatedErrors = validateCompanyEditingField(name, value, formErrors);
-    setFormErrors(updatedErrors);
+  const handleInputChange = ({ target: { name, value } }) => {
+    setCompanyDetails({ ...companyDetails, [name]: value });
+    setFormErrors(validateCompanyEditingField(name, value, formErrors));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      ToastMessage("User registered successfully.");
-      const data = await updateCompanyDetails(companyId, companyDetails); // API call for updating company
-      if (data.message === "Company updated successfully.") {
+      const updatedDetails = { ...companyDetails, communicatethrough: selectedMedium.map(m => m.id).join(", ") };
+      const response = await updateCompanyDetails(initialCompanyId, updatedDetails);
+      if (response.message === "Company updated successfully.") {
+        ToastMessage(response.message);
         setIsEditing(false);
-        // Persist companyId in localStorage
-        if (companyId) {
-          localStorage.setItem("companyId", companyId);
-        }
-
-        navigate("/admin/vendor/vendor-details");
-      } else {
-        setError("Error updating company details");
       }
-    } catch (err) {
-      setError("Error updating company details");
+    } catch (error) {
+      console.error("Error updating company details:", error);
     }
   };
 
-  const toggleEditMode = () => {
-    setIsEditing(!isEditing); // Toggle between view and edit modes
+  const handleDelete = async () => {
+    try {
+      await deleteCompany(initialCompanyId);
+      ToastMessage("Company deleted successfully");
+      navigate("/admin/vendor", { replace: true });
+    } catch (error) {
+      console.error("Error deleting company:", error);
+      alert("Failed to delete company");
+    }
   };
-
   const handleCancel = () => {
-    // Reset company details to original state and exit edit mode
-    setCompanyDetails(originalDetails);
+    // Reset companyDetails to the initial data
+    setCompanyDetails(initialData);
     setIsEditing(false);
+    setShowDeleteModal(false); // Ensure modal is hidden when canceling
   };
 
-  // Update companyDetails.communicatethrough when selectedCommunicationMedium changes
-  useEffect(() => {
-    setCompanyDetails((prevDetails) => ({
-      ...prevDetails,
-      communicatethrough: selectedCommunicationMedium
-        .map((item) => item.name)
-        .join(", "),
-    }));
-  }, [selectedCommunicationMedium]);
-
-  const onSelect = (selectedList) => {
-    setSelectedCommunicationMedium(selectedList);
-    setIsAllSelected(selectedList.length === optionsForCommunication.length);
-  };
-
-  const onRemove = (selectedList) => {
-    setSelectedCommunicationMedium(selectedList);
-    setIsAllSelected(selectedList.length === optionsForCommunication.length);
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="container mt-5">
-      <div className="row mb-4">
-        <div className="col-8 text-start">
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
+    <div className="container mt-4">
+      <Row className="mb-4">
+        <Col xs={12} className="d-flex justify-content-between align-items-center">
           <h2>{isEditing ? "Edit Company Details" : "Company Details"}</h2>
-        </div>
-        <div className="col-4 text-end">
-          {isEditing ? (
-            <>
-              <button
-                className="btn btn-primary"
-                onClick={handleSubmit}
-                title="Save"
-              >
-                <FontAwesomeIcon icon={faSave} />
-              </button>
-              <button
-                className="btn btn-danger ms-2"
-                onClick={handleCancel}
-                data-bs-toggle="tooltip"
-                title="Cancel"
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </>
-          ) : (
-            <button
-              className="btn btn-primary"
-              onClick={() => setIsEditing(true)}
-              data-bs-toggle="tooltip"
-              title="Edit"
-            >
-              <i className="bi bi-pencil"></i>
-            </button>
-          )}
-        </div>
-      </div>
+          <div>
+            <Button variant="primary" onClick={isEditing ? handleSubmit : () => setIsEditing(true)} className="me-2">
+              <FontAwesomeIcon icon={isEditing ? faSave : faEdit} /> {isEditing ? "Save" : "Edit"}
+            </Button>
+            <Button variant="danger" onClick={handleCancel}>
+              <FontAwesomeIcon icon={isEditing ? faTimes : faTrash} /> {isEditing ? "Cancel" : "Delete"}
+            </Button>
+          </div>
+        </Col>
+      </Row>
 
-      <div className="card mb-4 text-start">
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label>
-                    <strong>Company Name:</strong>
-                  </label>
+      <Card className="mb-4">
+        <Card.Body>
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+              {fieldsData.map((field) => (
+      <EditableField  key={field.name}  label={field.label}  name={field.name} type={field.type} value={companyDetails[field.name]}  onChange={handleInputChange} error={formErrors[field.name]} isEditing={isEditing}
+      />
+    ))}
+        </Col>
+              <Col md={6}>
+                {secondaryFieldsData.map((field) => (
+        <EditableField key={field.name}  label={field.label}   name={field.name}   type={field.type}  value={companyDetails[field.name]} onChange={handleInputChange} error={formErrors[field.name]} isEditing={isEditing}
+        />
+      ))}
+                <SelectField label="Responder" name="employee" options={responders} value={companyDetails.employee} onChange={handleInputChange} isEditing={isEditing} error={formErrors.employee} />
+                <SelectField label="Status" name="is_active" options={ [ { id : "true" , sts : "active" },  { id:  "false" , sts : "Inactive" }]} value={companyDetails.is_active} onChange={handleInputChange} isEditing={isEditing} error={formErrors.employee} />
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold text-start w-100">Communication Through</Form.Label>
                   {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="company_name"
-                      value={companyDetails.company_name}
-                      onChange={handleInputChange}
-                    />
+                    <Multiselect  options={communicationMediums} selectedValues={selectedMedium} onSelect={setSelectedMedium}onRemove={setSelectedMedium} displayValue="medium"className="fw-bold text-start w-100"/>
                   ) : (
-                    <p>{companyDetails.company_name}</p>
+                    <p className="mb-0 text-start">{selectedMedium.map(m => m.medium).join(", ")}</p>
                   )}
-                  {formErrors.company_name && (
-                    <small className="text-danger">
-                      {formErrors.company_name}
-                    </small>
-                  )}
-                </div>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Form>
+        </Card.Body>
+      </Card>
 
-                <div className="mb-3">
-                  <label>
-                    <strong>Contact No:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="contact_no"
-                      value={companyDetails.contact_no}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.contact_no}</p>
-                  )}
-                  {formErrors.contact_no && (
-                    <small className="text-danger">
-                      {formErrors.contact_no}
-                    </small>
-                  )}
-                </div>
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+      <Modal.Header closeButton><Modal.Title>Confirm Deletion</Modal.Title></Modal.Header>
+    <Modal.Body>Are you sure you want to delete this company?</Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={() => setShowDeleteModal(false)}></Button>
+      <Button variant="danger" onClick={handleDelete}></Button>
+    </Modal.Footer>
+  </Modal>
 
-                <div className="mb-3">
-                  <label>
-                    <strong>Email Address:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email_address"
-                      value={companyDetails.email_address}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.email_address}</p>
-                  )}
-                  {formErrors.email_address && (
-                    <small className="text-danger">
-                      {formErrors.email_address}
-                    </small>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label>
-                    <strong>Company Type:</strong>
-                  </label>
-                  {isEditing ? (
-                    <select
-                      className="form-control"
-                      name="company_type_id"
-                      value={companyDetails.company_type_id}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Select Company Type</option>
-                      {companyTypes?.map((cmpy) => (
-                        <option key={cmpy.id} value={cmpy.id}>
-                          {cmpy.type_name}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <p>
-                      <p>
-                        {companyTypes?.find(
-                          (type) => type.id === companyDetails.company_type_id
-                        ).type_name || "N/A"}  
-                      </p>
-                    </p>
-                  )}
-                </div>
-                <div className="mb-3">
-                  <label>
-                    <strong>Website:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="website_url"
-                      value={companyDetails.website_url}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.website_url}</p>
-                  )}
-                  {formErrors.website_url && (
-                    <small className="text-danger">
-                      {formErrors.website_url}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Location:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="location"
-                      value={companyDetails.location}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.location}</p>
-                  )}
-                  {formErrors.location && (
-                    <small className="text-danger">{formErrors.location}</small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Industry Sector:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="industry_sector"
-                      value={companyDetails.industry_sector}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.industry_sector}</p>
-                  )}
-                  {formErrors.industry_sector && (
-                    <small className="text-danger">
-                      {formErrors.industry_sector}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Comment:</strong>
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      className="form-control"
-                      name="comment"
-                      value={companyDetails.comment}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.comment}</p>
-                  )}
-                  {formErrors.comment && (
-                    <small className="text-danger">{formErrors.comment}</small>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label>
-                    <strong>Contact Person Name:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="contact_person_name"
-                      value={companyDetails.contact_person_name}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.contact_person_name}</p>
-                  )}
-                  {formErrors.contact_person_name && (
-                    <small className="text-danger">
-                      {formErrors.contact_person_name}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Designation:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="contact_person_designation"
-                      value={companyDetails.contact_person_designation}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.contact_person_designation}</p>
-                  )}
-                  {formErrors.contact_person_designation && (
-                    <small className="text-danger">
-                      {formErrors.contact_person_designation}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Contact Person Phone:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="contact_person_phone"
-                      value={companyDetails.contact_person_phone}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.contact_person_phone}</p>
-                  )}
-                  {formErrors.contact_person_phone && (
-                    <small className="text-danger">
-                      {formErrors.contact_person_phone}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Contact Person Email:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="contact_person_email"
-                      value={companyDetails.contact_person_email}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.contact_person_email}</p>
-                  )}
-                  {formErrors.contact_person_email && (
-                    <small className="text-danger">
-                      {formErrors.contact_person_email}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Current Position:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="currentposition"
-                      value={companyDetails.currentposition}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.currentposition}</p>
-                  )}
-                  {formErrors.currentposition && (
-                    <small className="text-danger">
-                      {formErrors.currentposition}
-                    </small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Responder:</strong>
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="employee"
-                      value={companyDetails.employee}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <p>{companyDetails.employee}</p>
-                  )}
-                  {formErrors.employee && (
-                    <small className="text-danger">{formErrors.employee}</small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label>
-                    <strong>Communication Through:</strong>
-                  </label>
-                  {isEditing ? (
-                    <Multiselect
-                      options={optionsForCommunication}
-                      selectedValues={selectedCommunicationMedium}
-                      onSelect={onSelect}
-                      onRemove={onRemove}
-                      displayValue="name"
-                      showCheckbox={true}
-                      hidePlaceholder={isAllSelected ? true : false}
-                      closeIcon="cancel"
-                      avoidHighlightFirstOption
-                      placeholder={
-                        selectedCommunicationMedium.length ===
-                        optionsForCommunication.length
-                          ? ""
-                          : "Select"
-                      }
-                      style={{
-                        optionContainer: {
-                          display: isAllSelected ? "none" : "block",
-                        },
-                      }}
-                    />
-                  ) : (
-                    <p>{companyDetails.communicatethrough}</p>
-                  )}
-                  {formErrors.communicatethrough && (
-                    <small className="text-danger">
-                      {formErrors.communicatethrough}
-                    </small>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-12">
-                <div className="mb-3">
-                  <label>
-                    <strong>Description:</strong>
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      className="form-control"
-                      name="description"
-                      value={companyDetails.description}
-                      onChange={handleInputChange}
-                      rows="4"
-                    />
-                  ) : (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: companyDetails.description,
-                      }}
-                    />
-                  )}
-                  {formErrors.description && (
-                    <small className="text-danger">
-                      {formErrors.description}
-                    </small>
-                  )}
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <ToastContainer />
-    </div>
-  );
-};
-
-export default CompanyEditableDetails;
+  <ToastContainer />
+</div>
+); };
+export default CompanyEditableDetails ;
