@@ -9,6 +9,7 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [registrationTypeMap, setRegistrationTypeMap] = useState({});
+  const [roleMap, setRoleMap] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegistrationType, setSelectedRegistrationType] = useState(null);
   const [selectedActiveStatus, setSelectedActiveStatus] = useState(null); // State for active status filter
@@ -65,8 +66,22 @@ const Users = () => {
     }
   };
 
+  const loadRolesTypes = async () => {
+    try {
+      const rolesType = await fetchRoles();
+      const map = rolesType.reduce((acc, type) => {
+        acc[type.role_id] = type.role_name;
+        return acc;
+      }, {});
+      setRoleMap(map);
+    } catch (error) {
+      console.error("Failed to fetch roles:", error);
+    }
+  };
+
   useEffect(() => {
     loadRegistrationTypes();
+    loadRolesTypes();
   }, []);
 
   // Handlers for filtering dropdowns
@@ -111,6 +126,7 @@ const Users = () => {
             ))}
           </select>
         </div>
+        
         
         {/* Active Status Dropdown */}
         <div className="ml-2">
@@ -172,10 +188,10 @@ const Users = () => {
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
                   <td>{user.address}</td>
-                  <td>{user.role_id}</td>
+                  <td>{roleMap[user.role_id] || user.role_id}</td>
                   <td>
                     {registrationTypeMap[user.registration_type_id] ||
-                      user.registration_type_id}
+                      user.registration_type_i}
                   </td>
                   <td>{user.is_active ? "Yes" : "No"}</td>
                 </tr>

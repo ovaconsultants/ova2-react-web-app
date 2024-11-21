@@ -1,14 +1,4 @@
-import axios from 'axios';
-import environment from '../config/environment';
-import { companyName } from '../constants/commonConstant';
-
-const apiClient = axios.create({
-    baseURL: environment.nodeApiUrl,
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
-  
+import apiClient from '../apiClient/apiClient';
   
   // fetching all the company Types from databse 
   export const fetchCompanyTypes  = async ()=>{

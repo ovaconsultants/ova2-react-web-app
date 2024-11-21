@@ -1,13 +1,4 @@
-import axios from 'axios';
-import environment from '../config/environment';
-
-
-const apiClient = axios.create({
-    baseURL: environment.nodeApiUrl,
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
+import apiClient from '../apiClient/apiClient';
 
 // fetching Employee Names 
 export const fecthingEmployeeNames = async ()=>{

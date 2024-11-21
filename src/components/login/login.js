@@ -5,18 +5,18 @@ import './login.scss';
 import { authenticateUser } from '../../api/authenticateService';
 import { Link } from 'react-router-dom';
 import { authenticate_user } from '../../api/adminUserService';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { usernameAtom , registrationIdAtom , roleIdAtom , roleNameAtom , userImageAtom } from '../jotia/globalAtoms/userRelatedAtoms';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // functions for setting atom value 
-  const setGlobalUsername = useAtom(usernameAtom)[1];
-  const setGlobalRoleId = useAtom(roleIdAtom)[1];
-  const setGlobalRegistrationId = useAtom(registrationIdAtom)[1];
-  const setGlobalRoleName = useAtom(roleNameAtom)[1];
-  const setGlobalUserImage = useAtom(userImageAtom)[1];
+  const setGlobalUsername = useSetAtom(usernameAtom);
+  const setGlobalRoleId = useSetAtom(roleIdAtom);
+  const setGlobalRegistrationId = useSetAtom(registrationIdAtom);
+  const setGlobalRoleName = useSetAtom(roleNameAtom);
+  const setGlobalUserImage = useSetAtom(userImageAtom);
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -42,10 +42,13 @@ const Login = () => {
       const registrationId = response?.user?._registration_id;
       const roleName  = response?.user?._role_name;
       const userImage = 'https://example.com/user-image.jpg'; // Example user image URL
+      const token = response?.token ;
+      localStorage.setItem('jwtToken', token);
  
       if (username) {
         setGlobalUsername(username);
         setGlobalRoleId(roleId);
+        console.log("from login :" , registrationId);
         setGlobalRegistrationId(registrationId);
         setGlobalRoleName(roleName);
         setGlobalUserImage(userImage);

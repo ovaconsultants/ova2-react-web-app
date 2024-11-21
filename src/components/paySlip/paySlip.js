@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useAtom , atom  } from "jotai";
+import {  useAtomValue } from "jotai";
 import { registrationIdAtom } from "../jotia/globalAtoms/userRelatedAtoms";
 import { fetchSalaryData } from "../../api/employeeService";
 import { useNavigate } from "react-router-dom";
 
 const PaySlip = () => {
-  const [registrationId] = useAtom(registrationIdAtom);
+  const registrationId  = useAtomValue(registrationIdAtom);
   const [paySlipData, setPaySlipData] = useState([]);
   const navigate = useNavigate();
 

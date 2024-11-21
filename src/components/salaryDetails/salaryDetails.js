@@ -2,12 +2,15 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import { useAtom } from "jotai";
-import { usernameAtom } from "../jotia/globalAtoms/userRelatedAtoms";
+import { useAtomValue } from "jotai";
+import { usernameAtom  } from "../jotia/globalAtoms/userRelatedAtoms";
+
 
 const SalaryDetails = () => {
+
   const location = useLocation();
-  const [userName] = useAtom(usernameAtom);
+  const userName = useAtomValue(usernameAtom);
+
   const { salaryDetails } = location.state || {}; // Retrieve passed state
 
   const downloadPdf = async () => {
@@ -20,20 +23,34 @@ const SalaryDetails = () => {
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`salary-details-${salaryDetails.pay_month}.pdf`);
+    console.log("pay month in text " , salaryDetails.pay_month);
+    const payMonthText = new Date(salaryDetails.pay_month).toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    });
+    pdf.save(`${ userName.replace(" ","_")}_ova2_paySlip_${payMonthText.replace(/\s+/g, "")}.pdf`);
   };
 
   const printDetails = () => {
-    const printContent = document.getElementById("salary-details").outerHTML;
-    const printWindow = window.open("", "_blank", "width=600,height=800");
+    const printContent = document.getElementById("salary-details");
+  
+    // Open a new print window
+    const printWindow = window.open("", "_blank", "width=800,height=600");
+  
+    // Write content and link to stylesheets
     printWindow.document.write(`
       <html>
         <head>
-          <title>Salary Slip</title>
+          <title>Print Salary Slip</title>
+          <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+          <!-- Optional Custom Styling -->
           <style>
             body {
-              margin: 0;
               font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              -webkit-print-color-adjust: exact; /* Preserve colors in print */
             }
             #salary-details {
               padding: 20px;
@@ -42,25 +59,87 @@ const SalaryDetails = () => {
               border-radius: 10px;
               box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-            h2, p {
-              margin: 5px 0;
+            h1, h2, h5 {
+              margin-bottom: 10px;
             }
-            .print-only {
-              display: none;
+            .card {
+              margin-bottom: 20px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            /* Ensure 2-column layout */
+            .salary-row {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+            }
+            .salary-row p {
+              margin: 0;
             }
           </style>
         </head>
         <body>
-          ${printContent}
+          <div class="container mt-4">
+            <div id="salary-details">
+              <!-- Start of Content -->
+              <h1 class="text-center">Salary Details for ${new Date(salaryDetails.pay_month).toLocaleDateString('default', { month: 'long', year: 'numeric' })}</h1>
+              <h2 class="text-center">${userName}</h2>
+              
+              <!-- Bank Details Card -->
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title border-bottom pb-2">Bank Details</h5>
+                  <div class="salary-row">
+                    <p><strong>Bank Name:</strong> ${salaryDetails.bank_name}</p>
+                    <p><strong>Bank Transaction ID:</strong> ${salaryDetails.bank_transaction}</p>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Salary Breakdown Card -->
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title border-bottom pb-2">Salary Breakdown</h5>
+                  <div class="salary-row">
+                    <p><strong>Basic Salary:</strong> ${salaryDetails.basic_salary}</p>
+                    <p><strong>DA:</strong> ${salaryDetails.da}</p>
+                    <p><strong>TA:</strong> ${salaryDetails.ta}</p>
+                    <p><strong>HRA:</strong> ${salaryDetails.hra}</p>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Summary Card -->
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title border-bottom pb-2">Summary</h5>
+                  <div class="salary-row">
+                    <p><strong>Gross Salary:</strong> ${salaryDetails.gross_salary}</p>
+                    <p><strong>Total Deductions:</strong> ${salaryDetails.total_deduction}</p>
+                    <p><strong>Net Salary:</strong> ${salaryDetails.net_salary}</p>
+                    <p><strong>Pay Month:</strong> ${new Date(salaryDetails.pay_month).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End of Content -->
+          </div>
         </body>
       </html>
     `);
+  
+    // Close the document to trigger rendering
     printWindow.document.close();
+  
+    // Focus the new window and print
     printWindow.focus();
     printWindow.print();
-    printWindow.close();
+  
+    // Optionally close the window after printing
+    printWindow.onafterprint = () => {
+      printWindow.close();
+    };
   };
-
+  
   if (!salaryDetails) {
     return <p>No salary details available.</p>;
   }
@@ -83,20 +162,59 @@ const SalaryDetails = () => {
       >
         {/* User Info */}
         <h2 style={{ marginBottom: "10px", color: "#007BFF" }}>{userName}</h2>
-        <p><strong>Bank Name:</strong> {salaryDetails.bank_name}</p>
-        <p><strong>Bank Transaction ID:</strong> {salaryDetails.bank_transaction}</p>
-
-        {/* Two-column Layout */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginTop: "20px" }}>
-          <p><strong>Basic Salary:</strong> {salaryDetails.basic_salary}</p>
-          <p><strong>DA:</strong> {salaryDetails.da}</p>
-          <p><strong>TA:</strong> {salaryDetails.ta}</p>
-          <p><strong>HRA:</strong> {salaryDetails.hra}</p>
-          <p><strong>Gross Salary:</strong> {salaryDetails.gross_salary}</p>
-          <p><strong>Total Deductions:</strong> {salaryDetails.total_deduction}</p>
-          <p><strong>Net Salary:</strong> {salaryDetails.net_salary}</p>
-          <p><strong>Pay Month:</strong> {new Date(salaryDetails.pay_month).toLocaleDateString()}</p>
+        <div className="container my-4">
+      {/* Bank Details */}
+      <div className="card mb-4  shadow-sm">
+        <div className="card-body ">
+          <h5 className="card-title border-bottom pb-2">Bank Details</h5>
+          <div className="row">
+          <div className="col-md-6">
+          <p><strong>Bank Name:</strong> {salaryDetails.bank_name}</p>
+          </div>
+          <div className="col-md-6">
+          <p><strong>Bank Transaction ID:</strong> {salaryDetails.bank_transaction}</p>
+          </div>     
+          </div>
         </div>
+      </div>
+
+      {/* Salary Breakdown */}
+      <div className="card mb-4 shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title border-bottom pb-2">Salary Breakdown</h5>
+          <div className="row">
+            <div className="col-md-6">
+              <p><strong>Basic Salary:</strong> {salaryDetails.basic_salary}</p>
+              <p><strong>DA:</strong> {salaryDetails.da}</p>
+            </div>
+            <div className="col-md-6">
+              <p><strong>TA:</strong> {salaryDetails.ta}</p>
+              <p><strong>HRA:</strong> {salaryDetails.hra}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Summary */}
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title border-bottom pb-2">Summary</h5>
+          <div className="row">
+            <div className="col-md-6">
+              <p><strong>Gross Salary:</strong> {salaryDetails.gross_salary}</p>
+              <p><strong>Total Deductions:</strong> {salaryDetails.total_deduction}</p>
+            </div>
+            <div className="col-md-6">
+              <p><strong>Net Salary:</strong> {salaryDetails.net_salary}</p>
+              <p>
+                <strong>Pay Month:</strong>{" "}
+                {new Date(salaryDetails.pay_month).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
       </div>
 
       {/* Buttons */}

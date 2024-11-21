@@ -1,14 +1,5 @@
-import axios from 'axios';
-import environment from '../config/environment';
-import { companyName } from '../constants/commonConstant';
 
-
-const apiClient = axios.create({
-    baseURL: environment.nodeApiUrl,
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
+import apiClient from '../apiClient/apiClient';
 
 // Authenticating users 
 export const authenticate_user = async (payload) => {
