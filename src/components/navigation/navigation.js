@@ -28,6 +28,7 @@ import GeneratePaySlip from "../admin/generatePaySlip/generatePaySlip";
 import PaySlip from "../paySlip/paySlip";
 import  CompanyEditableDetails  from "../admin/companyEditableDetails/companyEditableDetails";
 import SalaryDetails from "../salaryDetails/salaryDetails";
+import PaySlipYear from "../../paySlipYear/paySlipYear";
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -126,8 +127,9 @@ const Navigation = () => {
         }
       />
       <Route path="/admin/sign-up-client" element = {<VendorSignUp/>}/>
-      <Route path="/pay-slip/salary-details/" element={<SalaryDetails />} />
-      <Route path="/pay-slip" element = {<PaySlip/>}/>
+      <Route path="/pay-slip-years/months/salary-details/" element={<SalaryDetails />} />
+      <Route path="/pay-slip-years/" element={<PaySlipYear/>} />
+      <Route path="/pay-slip-years/months" element = {<PaySlip/>}/>
       <Route path="/admin/vendor"  element={<Vendor/>}/>
       <Route path="/admin/vendor/vendor-details" element={<CompanyEditableDetails />}/>
       <Route path="*" element={<Navigate to="/" />} />

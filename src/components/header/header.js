@@ -126,7 +126,7 @@ const Header = () => {
                       </NavDropdown.Item>
                       <NavDropdown.Item
                         as={Link}
-                        to="/pay-slip"
+                        to="/pay-Slip-Years"
                         onClick={() => setExpanded(false)}
                       >
                         Generate_Pay_Slip

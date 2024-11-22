@@ -1,67 +1,66 @@
 import React, { useEffect, useState } from "react";
-import {  useAtomValue } from "jotai";
-import { registrationIdAtom } from "../jotia/globalAtoms/userRelatedAtoms";
+import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSalaryData } from "../../api/employeeService";
-import { useNavigate } from "react-router-dom";
 
 const PaySlip = () => {
-  const registrationId  = useAtomValue(registrationIdAtom);
-  const [paySlipData, setPaySlipData] = useState([]);
+  const { state } = useLocation();
   const navigate = useNavigate();
+  
+  // Initialize state based on localStorage or location state
+  const [paySlipData, setPaySlipData] = useState(() => JSON.parse(localStorage.getItem("paySlipData")) || []);
+  const [employeeId, setEmployeeId] = useState(() => state?.employeeId || localStorage.getItem("employeeId"));
+  const [year, setYear] = useState(() => state?.year || localStorage.getItem("year"));
 
+  // Update localStorage whenever employeeId or year changes
   useEffect(() => {
-    const fetchData = async () => {
-      if (!registrationId) {
-        console.log("registrationId is not yet available. Skipping fetch.");
-        return;
-      }
+    if (employeeId && year) {
+      localStorage.setItem("employeeId", employeeId);
+      localStorage.setItem("year", year);
+    }
+  }, [employeeId, year]);
 
-      console.log("Fetching data with registrationId:", registrationId);
-      try {
-        const response = await fetchSalaryData(registrationId);
-        setPaySlipData(response);
-      } catch (error) {
-        console.error("Error fetching salary data:", error);
-      }
-    };
+  // Fetch pay slip data when employeeId or year changes
+  useEffect(() => {
+    if (employeeId && year) {
+      fetchSalaryData(employeeId, year)
+        .then((data) => {
+          setPaySlipData(data);
+          localStorage.setItem("paySlipData", JSON.stringify(data));
+        })
+        .catch((error) => console.error("Error fetching salary data:", error));
+    }
+  }, [employeeId, year]); // Only depend on employeeId and year
 
-    fetchData();
-  }, [registrationId]);
-
-  const handleViewDetails = (data) => {
-    navigate('/pay-slip/salary-details/', {
-      state: { salaryDetails: data },
-    });
-  };
-
-  if (!registrationId) {
-    return <p>Loading...</p>;
-  }
+  if (!employeeId || !year) return <p className="text-center text-danger">Employee ID or Year is missing.</p>;
 
   return (
-    <div>
-      <h1>User Pay Slips</h1>
-      <div>
-        {paySlipData.length > 0 ? (
-          <ul>
-            {paySlipData.map((data) => {
-              const payMonthText = new Date(data.pay_month).toLocaleString("default", {
-                month: "long",
-                year: "numeric",
-              });
-              return (
-                <li key={data.id}>
-                  <button onClick={() => handleViewDetails(data)}>
-                    {payMonthText}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p>No pay slips available.</p>
-        )}
-      </div>
+    <div className="container my-4">
+      <h2 className="text-center mb-4">Pay Slips</h2>
+      {paySlipData.length > 0 ? (
+        <ul className="list-group">
+  {paySlipData.map(({ id, pay_month, ...data }) => (
+  <li key={id} className="list-group-item d-flex justify-content-between align-items-center">
+    <span>{new Date(pay_month).toLocaleString("default", { month: "long", year: "numeric" })}</span>
+    <button
+      className="btn btn-primary"
+      onClick={() =>
+        navigate("/pay-slip-years/months/salary-details/", { 
+          state: { 
+            salaryDetails: data,
+            payMonth: pay_month  // Pass the pay_month here
+          }
+        })
+      }
+    >
+      <i className="bi bi-file"></i> View Details
+    </button>
+  </li>
+))}
+
+        </ul>
+      ) : (
+        <p className="text-center text-muted">No pay slips available.</p>
+      )}
     </div>
   );
 };
