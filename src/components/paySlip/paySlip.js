@@ -35,33 +35,38 @@ const PaySlip = () => {
 
   return (
     <div className="container my-4">
-      <h2 className="text-center mb-4">Pay Slips</h2>
-      {paySlipData.length > 0 ? (
-        <ul className="list-group">
-  {paySlipData.map(({ id, pay_month, ...data }) => (
-  <li key={id} className="list-group-item d-flex justify-content-between align-items-center">
-    <span>{new Date(pay_month).toLocaleString("default", { month: "long", year: "numeric" })}</span>
-    <button
-      className="btn btn-primary"
-      onClick={() =>
-        navigate("/pay-slip-years/months/salary-details/", { 
-          state: { 
-            salaryDetails: data,
-            payMonth: pay_month  // Pass the pay_month here
-          }
-        })
-      }
-    >
-      <i className="bi bi-file"></i> View Details
-    </button>
-  </li>
-))}
-
-        </ul>
-      ) : (
-        <p className="text-center text-muted">No pay slips available.</p>
-      )}
-    </div>
+    <h2 className="text-center mb-4">Pay Slips for {year}</h2>
+    {paySlipData.length > 0 ? (
+      <div className="d-flex flex-wrap justify-content-start">
+        {paySlipData.map(({ id, pay_month, ...data }) => (
+          <div key={id} className="m-2">
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                navigate("/pay-slip-years/pay-slip-months/pay-slip-details/", {
+                  state: {
+                    salaryDetails: data,
+                    payMonth: pay_month, // Pass the pay_month here
+                  },
+                })
+              }
+            >
+              <i className="bi bi-file"></i>{" "}
+              <span>
+                {new Date(pay_month).toLocaleString("default", {
+                  month: "long",
+                  // year: "numeric",
+                })}
+              </span>
+            </button>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p className="text-center text-muted">No pay slips available.</p>
+    )}
+  </div>
+  
   );
 };
 

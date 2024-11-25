@@ -1,28 +1,31 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { useAuth } from "../../AuthContext";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { useAuth } from '../../AuthContext'; // Assuming you have this hook for auth logic
+import { useAtomValue, useSetAtom } from 'jotai';
+import { usernameAtom, roleNameAtom, roleIdAtom } from '../jotia/globalAtoms/userRelatedAtoms'; // Import atoms
 
-import "./header.scss";
-import * as constants from "../../constants/commonConstant";
-import logo from "../../assets/images/ova2_logo.jpg";
-
-import { useAtomValue } from "jotai";
-import {
-  usernameAtom,
-  roleNameAtom,
-} from "../jotia/globalAtoms/userRelatedAtoms";
+import './header.scss';
+import * as constants from '../../constants/commonConstant';
+import logo from '../../assets/images/ova2_logo.jpg';
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
-  const username = useAtomValue(usernameAtom);
-  const roleName = useAtomValue(roleNameAtom);
+  const username = useAtomValue(usernameAtom); 
+  const roleName = useAtomValue(roleNameAtom); 
+  const setUsername = useSetAtom(usernameAtom); 
+  const setRoleName = useSetAtom(roleNameAtom); 
+  
   const handleToggle = () => setExpanded(!expanded);
+  
   const handleLogout = () => {
     logout();
-    setExpanded(false);
+    setUsername(''); 
+    setRoleName(''); 
+    setExpanded(false); 
   };
+
 
   return (
     <div className="ova2-header">
@@ -30,123 +33,42 @@ const Header = () => {
         <div className="container">
           <Navbar expand="lg" expanded={expanded}>
             <Link className="navbar-brand text-left" to="/home">
-              <img
-                src={logo}
-                alt={constants.companyName}
-                className="header-logo"
-              />
+              <img src={logo} alt={constants.companyName} className="header-logo" />
             </Link>
-            <Navbar.Toggle
-              aria-controls="navbar-nav"
-              className="toggle-size"
-              onClick={handleToggle}
-            />
+            <Navbar.Toggle aria-controls="navbar-nav" className="toggle-size" onClick={handleToggle} />
             <Navbar.Collapse id="navbar-nav">
               <Nav className="ml-auto">
-                <Link
-                  className="nav-link"
-                  to="/home"
-                  onClick={() => setExpanded(false)}
-                >
-                  Home
-                </Link>
-                <Link
-                  className="nav-link"
-                  to="/training"
-                  onClick={() => setExpanded(false)}
-                >
-                  Training
-                </Link>
-                <Link
-                  className="nav-link"
-                  to="/projects"
-                  onClick={() => setExpanded(false)}
-                >
-                  Projects
-                </Link>
-                <Link
-                  className="nav-link"
-                  to="/service"
-                  onClick={() => setExpanded(false)}
-                >
-                  Service
-                </Link>
-                <Link
-                  className="nav-link"
-                  to="/contact"
-                  onClick={() => setExpanded(false)}
-                >
-                  Contact
-                </Link>
+                <Link className="nav-link" to="/home" onClick={() => setExpanded(false)}>Home</Link>
+                <Link className="nav-link" to="/training" onClick={() => setExpanded(false)}>Training</Link>
+                <Link className="nav-link" to="/projects" onClick={() => setExpanded(false)}>Projects</Link>
+                <Link className="nav-link" to="/service" onClick={() => setExpanded(false)}>Service</Link>
+                <Link className="nav-link" to="/contact" onClick={() => setExpanded(false)}>Contact</Link>
+
                 <NavDropdown title="Jobs" id="jobs-dropdown">
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/in/jobs"
-                    onClick={() => setExpanded(false)}
-                    className="capitalize-first"
-                  >
+                  <NavDropdown.Item as={Link} to="/in/jobs" onClick={() => setExpanded(false)} className="capitalize-first">
                     India
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/us/jobs"
-                    onClick={() => setExpanded(false)}
-                  >
+                  <NavDropdown.Item as={Link} to="/us/jobs" onClick={() => setExpanded(false)}>
                     USA
                   </NavDropdown.Item>
                 </NavDropdown>
 
                 {isAuthenticated ? (
                   <>
-                    {roleName.toLocaleLowerCase() === "admin" && (
-                      <Link
-                        className="nav-link"
-                        to="/admin"
-                        onClick={() => setExpanded(false)}
-                      >
-                       Admin
-                      </Link>
+                    {roleName.toLowerCase() === 'admin' && (
+                      <Link className="nav-link" to="/admin" onClick={() => setExpanded(false)}>Admin</Link>
                     )}
-
-                    {/* <img src={user?.image} alt={user?.userName} className="nav-user-image" /> */}
                     <NavDropdown title={username} id="user-dropdown">
-                      <NavDropdown.Item
-                        as={Link}
-                        to="/profile"
-                        onClick={() => setExpanded(false)}
-                      >
-                        Profile
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        as={Link}
-                        to="/settings"
-                        onClick={() => setExpanded(false)}
-                      >
-                        Settings
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        as={Link}
-                        to="/pay-Slip-Years"
-                        onClick={() => setExpanded(false)}
-                      >
-                        Generate_Pay_Slip
-                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>Profile</NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>Settings</NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/pay-Slip-Years" onClick={() => setExpanded(false)}>Generate_Pay_Slip</NavDropdown.Item>
                     </NavDropdown>
-                    <button
-                      className="nav-link btn btn-link"
-                      title="Logout"
-                      onClick={handleLogout}
-                    >
+                    <button className="nav-link btn btn-link" title="Logout" onClick={handleLogout}>
                       <i className="bi bi-box-arrow-right"></i>
                     </button>
                   </>
                 ) : (
-                  <Link
-                    className="nav-link d-flex align-items-center"
-                    to="/login"
-                    title="Login"
-                    onClick={() => setExpanded(false)}
-                  >
+                  <Link className="nav-link d-flex align-items-center" to="/login" title="Login" onClick={() => setExpanded(false)}>
                     <i className="bi bi-box-arrow-in-right me-2"></i>
                     <span>Login/Sign-up</span>
                   </Link>

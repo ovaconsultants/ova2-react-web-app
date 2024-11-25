@@ -61,11 +61,11 @@ const TrainingDetail = () => {
       </Row>
 
       {/* Enroll Now Button */}
-      <div className="row mt-4">
+      {/* <div className="row mt-4">
         <div className="col text-center pb-4">
           <button className="btn btn-primary enroll-btn" onClick={handleEnrollNow}>Enroll Now</button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

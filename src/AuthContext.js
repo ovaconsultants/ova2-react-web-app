@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const storedAuthState = JSON.parse(localStorage.getItem('isAuthenticated'));
-       // console.log('Stored Auth State:', storedAuthState);
+        console.log('Stored Auth State:', storedAuthState);
     
         if (storedAuthState) {
           const isValid = await simulateAuthCheck();
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
           } else {
             setIsAuthenticated(false);
             localStorage.removeItem('isAuthenticated'); // Clear invalid state
-            localStorage.removeItem('username');
+            // localStorage.removeItem('username');
           }
         } else {
           setIsAuthenticated(false);
@@ -42,13 +42,13 @@ export const AuthProvider = ({ children }) => {
   const login = (props) => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', true);
-    localStorage.setItem('username', props.username);
+    // localStorage.setItem('username', props.username);
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('username');
+    // localStorage.removeItem('username');
   };
 
   return (

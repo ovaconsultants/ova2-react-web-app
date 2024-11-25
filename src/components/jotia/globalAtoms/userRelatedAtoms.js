@@ -1,8 +1,8 @@
-import { atom } from 'jotai';
-import {  atomWithStorage } from 'jotai/utils';
+import { atomWithStorage } from 'jotai/utils';
 
-export const usernameAtom = atomWithStorage('');
-export const roleIdAtom = atom('');
-export const registrationIdAtom = atomWithStorage();
-export const roleNameAtom = atom('');
-export const userImageAtom = atom('');
+// Atoms with storage for persistence across page reloads
+export const usernameAtom = atomWithStorage('username', ''); // Default empty string for username
+export const roleIdAtom = atomWithStorage('roleId', ''); // Default empty string for roleId
+export const registrationIdAtom = atomWithStorage('registrationId', ''); // Default empty string for registrationId
+export const roleNameAtom = atomWithStorage('roleName', ''); // Default empty string for roleName
+export const userImageAtom = atomWithStorage('userImage', ''); // Default empty string for userImage

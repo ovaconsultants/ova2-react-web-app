@@ -10,7 +10,8 @@ const Tile = ({ title, description, image, route, roleName, data }) => {
   const navigate = useNavigate();
 
   // Split roleName into an array for easier validation
-  const allowedRoles = roleName.split(',');
+  const allowedRoles = (roleName || '').split(',');
+  console.log("this is the allowed roles " ,roleName);
 
   const handleSelect = () => {
     setIsSelected(!isSelected);

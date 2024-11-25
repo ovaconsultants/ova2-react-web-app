@@ -13,6 +13,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegistrationType, setSelectedRegistrationType] = useState(null);
   const [selectedActiveStatus, setSelectedActiveStatus] = useState(null); // State for active status filter
+  const [selectedRole, setSelectedRole] = useState(null);
 
   const filteredUsers = users.filter((user) => {
     // Search filtering
@@ -27,13 +28,16 @@ const Users = () => {
     const matchesRegistrationType =
       selectedRegistrationType === null ||
       user.registration_type_id === selectedRegistrationType;
+    
+    const matchesRole = 
+     selectedRole === null || user.role_id === selectedRole  
 
     // Active status filtering
     const matchesActiveStatus =
       selectedActiveStatus === null || user.is_active === (selectedActiveStatus === "yes");
 
     // Combine all filters
-    return matchesSearch && matchesRegistrationType && matchesActiveStatus;
+    return matchesSearch && matchesRegistrationType && matchesRole &&  matchesActiveStatus ;
   });
 
   useEffect(() => {
@@ -73,6 +77,7 @@ const Users = () => {
         acc[type.role_id] = type.role_name;
         return acc;
       }, {});
+
       setRoleMap(map);
     } catch (error) {
       console.error("Failed to fetch roles:", error);
@@ -90,6 +95,10 @@ const Users = () => {
     setSelectedRegistrationType(registrationTypeId);
   };
 
+  const handleRoleChange = (e) => {
+    const roleid = e.target.value ? parseInt(e.target.value) : null;
+    setSelectedRole(roleid);
+  };
   const handleActiveStatusChange = (e) => {
     setSelectedActiveStatus(e.target.value);
   };
@@ -109,6 +118,25 @@ const Users = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+
+        
+          {/* Role  Type Dropdown */}
+          <div className="ml-2">
+          <select
+            id="roleType"
+            className="form-control"
+            value={selectedRole || ""}
+            onChange={handleRoleChange}
+          >
+            <option value="">-- Select Role Type --</option>
+            {Object.entries(roleMap).map(([id, name]) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
+        
         
         {/* Registration Type Dropdown */}
         <div className="ml-2">
@@ -125,8 +153,8 @@ const Users = () => {
               </option>
             ))}
           </select>
-        </div>
-        
+        </div> 
+
         
         {/* Active Status Dropdown */}
         <div className="ml-2">

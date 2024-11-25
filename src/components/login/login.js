@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 import './login.scss';
-import { authenticateUser } from '../../api/authenticateService';
 import { Link } from 'react-router-dom';
 import { authenticate_user } from '../../api/adminUserService';
 import { useSetAtom } from 'jotai';
 import { usernameAtom , registrationIdAtom , roleIdAtom , roleNameAtom , userImageAtom } from '../jotia/globalAtoms/userRelatedAtoms';
 
+
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // functions for setting atom value 
   const setGlobalUsername = useSetAtom(usernameAtom);
@@ -23,13 +23,13 @@ const Login = () => {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    if (!username || !password) {
+    if (!userName || !password) {
       setError('username & password are required');
       return;
     }
 
     const payload = {
-      userName: username,
+      userName: userName,
       password: password,
     };
 
@@ -53,7 +53,8 @@ const Login = () => {
         setGlobalRoleName(roleName);
         setGlobalUserImage(userImage);
         login({ username, image: userImage });
-        navigate('/admin');
+        roleName === 'admin' ? navigate('/admin') : navigate('/');
+
       } else {
         setError('Invalid username or password');
       }
@@ -86,7 +87,7 @@ const Login = () => {
               <div className="block">
                 <div className="form-group">
                   <input name="user_name" type="text" className="form-control" placeholder="Email or Phone"
-                    value={username}
+                    value={userName}
                     onChange={(e) => setUsername(e.target.value)}
                     required />
                 </div>

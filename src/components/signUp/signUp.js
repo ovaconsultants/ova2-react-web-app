@@ -88,7 +88,7 @@ const SignUp = () => {
   ];
   const secondaryTextFields = [
     { name: "LastName", type: "text" },
-    { name: "Phone_number", type: "tel" },
+    { name: "Phone Number", type: "tel" },
     { name: "Address", type: "text" },
   ];
 
@@ -148,13 +148,17 @@ const SignUp = () => {
                 )}
               </div>
             </div>
-            <div className="d-flex justify-content-center">
-              <button
-                className="btn btn-default mt-3 ms-3 col-md-4 col-sm-12 mb-4"
-                type="submit"
-              >
-                Sign Up
-              </button>
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-lg-12 col-md-4 col-sm-12">
+                  <button
+                    className="btn btn-default mt-3 mb-4 w-100"
+                    type="submit"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

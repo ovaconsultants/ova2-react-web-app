@@ -58,6 +58,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/react-redux',
         data:trainingData?.reactReduxTraining,
+         roleName: 'user,admin,sub-admin,manager,sales_team'
     },
     {
         title: 'Power BI',
@@ -65,6 +66,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/power-bi',
         data:trainingData?.powerBiTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },   
     {
         title: 'UI / UX',
@@ -72,6 +74,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/ui-ux',
         data:trainingData?.uiTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
     {
         title: 'Java',
@@ -79,6 +82,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/java',
         data:trainingData?.javaTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
     {
         title: 'SQL/PLSQL',
@@ -86,6 +90,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/sql',
         data:trainingData?.sqlTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
      {
      title: 'Power BI',
@@ -93,6 +98,7 @@ export const trainingTilesData = [
      image: '',
      route: '/training/power-bi',
      data:trainingData?.powerBiTraining,
+     roleName: 'user,admin,sub-admin,manager,sales_team',
  },   
    
    
