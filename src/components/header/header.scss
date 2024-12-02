@@ -22,6 +22,10 @@
 .capitalize-first::first-letter {
     text-transform: uppercase;
 }
+.custom-text {
+    text-transform: none !important;
+  }
+  
 
 .toggle-size {
     padding: 3px 5px;
@@ -40,3 +44,7 @@
     bottom: 10.5px;
     right: 1.5px;
 }
+.capitalize {
+    text-transform: lowercase;
+  }
+  

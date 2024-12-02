@@ -46,7 +46,6 @@ const SignUp = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     const isFormValid = Object.keys(formData).every((field) => {
       const errors = validateField(field, formData[field], formErrors);
       setFormErrors(errors);

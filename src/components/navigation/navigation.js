@@ -29,6 +29,7 @@ import PaySlip from "../paySlip/paySlip";
 import  CompanyEditableDetails  from "../admin/companyEditableDetails/companyEditableDetails";
 import SalaryDetails from "../salaryDetails/salaryDetails";
 import PaySlipYear from "../../paySlipYear/paySlipYear";
+import ForgotPassword from "../forgotPassword/forgotPassword";
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -75,6 +76,7 @@ const Navigation = () => {
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route path="/password-recovery" element={<ForgotPassword/>} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/search" element={<UserSearch />} />
       <Route

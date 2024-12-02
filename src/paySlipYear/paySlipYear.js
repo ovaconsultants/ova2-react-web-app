@@ -38,7 +38,7 @@ const PaySlipYear = () => {
         <div className="container my-4">
             <h2 className="text-center mb-4">Pay Slips</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h5>Employee Name : {userName}</h5>
+                <h5>{userName}</h5>
                 <Button onClick={toggleSortOrder} className="global-color">
                     <i className={`bi ${sortOrder === 'asc' ? 'bi-sort-numeric-up' : 'bi-sort-numeric-down'}`}></i> Sort
                 </Button>

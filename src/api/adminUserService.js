@@ -71,3 +71,21 @@ export const deleteUser = async (registration_id)=> {
   }
 }
 
+
+export const sendMail = async (userName) => {
+  try {
+    const  payload = { 
+        "to": userName,
+        "subject": "Password recovery  Email from ova2consultancies",
+        "text": "This is your password generated : ",
+        "html": "<p><strong>Please do not share it with any one </strong></p>"
+      }
+      const response = await apiClient.post('/send-email' , payload);
+      return response.data ;
+     
+  } catch (error) {
+      console.error('failed to authenticate user');
+      throw error ;
+  }
+}
+
