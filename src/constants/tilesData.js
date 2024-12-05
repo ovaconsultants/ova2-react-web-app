@@ -56,6 +56,20 @@ export const jobTilesData = [
         route: '/admin/contact-query-details',
         roleName: 'admin',
     },
+    {
+        title: 'Enrolement Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/enrolement-details',
+        roleName: 'admin',
+    },
+    {
+        title: 'Letter Head',
+        description: 'Click Me!.',
+        image: '',
+        route: '/   ',
+        roleName: 'admin',
+    },
     // Add more tiles as needed
 ];
 export const trainingTilesData = [
@@ -65,7 +79,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/react-redux',
         data:trainingData?.reactReduxTraining,
-         roleName: 'user,admin,sub-admin,manager,sales_team'
+        roleName: 'user,admin,sub-admin,manager,sales_team'
     },
     {
         title: 'Power BI',
@@ -99,16 +113,6 @@ export const trainingTilesData = [
         data:trainingData?.sqlTraining,
         roleName: 'user,admin,sub-admin,manager,sales_team',
     },
-     {
-     title: 'Power BI',
-     description: 'Click Me!.',
-     image: '',
-     route: '/training/power-bi',
-     data:trainingData?.powerBiTraining,
-     roleName: 'user,admin,sub-admin,manager,sales_team',
- },   
    
-   
-
-    // Add more tiles as needed
+   // Add more tiles as needed
 ];
