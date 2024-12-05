@@ -1,0 +1,22 @@
+.custom-toast {
+    background-color: #4CAF50 !important;  
+    color: white !important;              
+    font-size: 16px;                      
+    display: flex;                        
+    align-items: center;
+    border-radius: 5px;                    
+  }
+  
+  .custom-toast .Toastify__toast-body {
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-toast .Toastify__close-button {
+    color: white !important;               
+  }
+  
+  .custom-toast .Toastify__progress-bar {
+    background-color: #388E3C !important; 
+  }
+  

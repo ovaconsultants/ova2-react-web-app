@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './trainingDetail.scss';  // Custom styles for tabs
-import { useLocation } from 'react-router-dom';
+import { useLocation , useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Tabs, Tab, Row, Col } from 'react-bootstrap';  // Importing Tabs, Tab, Row, and Col from react-bootstrap
 
 const TrainingDetail = () => {
+  const navigate = useNavigate();
   const { courseName } = useParams(); 
   const location = useLocation();
   const { data } = location?.state || {};
   const [activeTab, setActiveTab] = useState(0);  // Managing active tab state
 
   const handleEnrollNow = () => {
-    console.log("Enroll Now");
-  }
+    navigate(`/training/${courseName}/enroll`, { state: { data } });
+    console.log("Enroll Now clicked for:", courseName);
+};
+
 
   const handleSelect = (key) => {
     setActiveTab(key);  // Change active tab when a tab is selected

@@ -1,0 +1,64 @@
+/* Pay Slip Button Styles */
+.btn-pay-slip {
+    background-color: #493628;  /* Green color */
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-pay-slip:hover {
+    background-color: #AB886D;  /* Darker green */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);  /* Hover lift effect */
+  }
+  
+  .btn-pay-slip:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Focus border */
+  }
+  
+  /* Pay Slip Card Hover Effect */
+  .m-3 {
+    transition: all 0.3s ease;
+  }
+  
+  .m-3:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 767px) {
+    .btn-pay-slip {
+      padding: 12px 20px;
+      font-size: 16px;
+    }
+  
+    .btn-pay-slip i {
+      font-size: 1.2rem;
+    }
+  
+    .fs-5 {
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  
+    .btn-pay-slip {
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+  
+    .fs-5 {
+      font-size: 1rem;
+    }
+  }
+  

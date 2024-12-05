@@ -12,6 +12,7 @@ const TileContainer = ({tilesData}) => {
           title={tile.title}
           description={tile.description}
           image={tile.image}
+          roleName={tile.roleName}
           route={tile.route}
           data={tile.data}
         />

@@ -14,3 +14,56 @@
         }
     }
 }
+
+.capitalize-first {
+    text-transform: lowercase;
+}
+
+.capitalize-first::first-letter {
+    text-transform: uppercase;
+}
+.custom-text {
+    text-transform: none !important;
+  }
+  
+
+.toggle-size {
+    padding: 3px 5px;
+    font-size: 18px;
+    width: 39px;
+    height: 34px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.toggle-size .navbar-toggler-icon {
+    width: 30px;
+    height: 30px;
+    background-size: 30px 30px;
+    position: relative;
+    bottom: 10.5px;
+    right: 1.5px;
+}
+.capitalize {
+    text-transform: lowercase;
+  }
+
+  .nav-dropdown-item.custom-text {
+    color: #333; 
+    padding: 0.7rem 1rem; 
+    text-align: left;
+  }
+  
+  .nav-dropdown-item.custom-text:hover,
+  .nav-dropdown-item.custom-text:focus {
+    background-color: rgb(101, 94, 122); 
+    color: #fff;
+  }
+  
+  .nav-dropdown-item.custom-text:active {
+    background-color: rgb(101, 94, 122); 
+    color: #fff; 
+    outline: none; 
+  }
+  
+  

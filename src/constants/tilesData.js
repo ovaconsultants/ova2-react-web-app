@@ -5,20 +5,57 @@ export const jobTilesData = [
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-details',
+        roleName: 'admin',
     },
     {
         title: 'Job Applicants',
         description: 'Click Me!.',
         image: '',
         route: '/admin/job-applicants',
+        roleName: 'admin',
     },
     {
         title: 'Consultant Details',
         description: 'Click Me!.',
         image: '',
         route: '/admin/contact-details',
+        roleName : 'admin',
     },
-
+    {
+        title: 'User Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/users',
+        roleName : 'admin',
+    },
+    {
+        title: 'Profile',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/profile',
+        roleName: 'user,admin,sub-admin,manager,sales_team',
+    },
+    {
+        title: 'Vendor Management',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/vendor',
+        roleName: 'admin',
+    },
+    {
+        title: 'Generate Pay Slip',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/pay-slip',
+        roleName: 'admin',
+    },
+    {
+        title: 'Contact Query Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/contact-query-details',
+        roleName: 'admin',
+    },
     // Add more tiles as needed
 ];
 export const trainingTilesData = [
@@ -28,6 +65,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/react-redux',
         data:trainingData?.reactReduxTraining,
+         roleName: 'user,admin,sub-admin,manager,sales_team'
     },
     {
         title: 'Power BI',
@@ -35,6 +73,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/power-bi',
         data:trainingData?.powerBiTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },   
     {
         title: 'UI / UX',
@@ -42,6 +81,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/ui-ux',
         data:trainingData?.uiTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
     {
         title: 'Java',
@@ -49,6 +89,7 @@ export const trainingTilesData = [
         image: '',
         route: '/training/java',
         data:trainingData?.javaTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
     {
         title: 'SQL/PLSQL',
@@ -56,7 +97,16 @@ export const trainingTilesData = [
         image: '',
         route: '/training/sql',
         data:trainingData?.sqlTraining,
+        roleName: 'user,admin,sub-admin,manager,sales_team',
     },
+     {
+     title: 'Power BI',
+     description: 'Click Me!.',
+     image: '',
+     route: '/training/power-bi',
+     data:trainingData?.powerBiTraining,
+     roleName: 'user,admin,sub-admin,manager,sales_team',
+ },   
    
    
 

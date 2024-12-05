@@ -1,13 +1,4 @@
-import axios from 'axios';
-import environment from '../config/environment';
-
-const apiClient = axios.create({
-    baseURL: environment.apiUrl,
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
-
+import apiClient from '../apiClient/apiClient';
 
 export const createApplicant = async (applicant) => {
   try {
