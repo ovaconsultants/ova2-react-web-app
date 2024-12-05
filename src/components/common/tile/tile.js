@@ -4,22 +4,21 @@ import { useAtomValue } from 'jotai';
 import './tile.scss';
 import { roleNameAtom } from '../../jotia/globalAtoms/userRelatedAtoms';
 
-const Tile = ({ title, description, image, route, roleName, data }) => {
+const Tile = ({ title, description, image, route, roleName=null, data }) => {
   const [isSelected, setIsSelected] = useState(false);
-  const userRole = useAtomValue(roleNameAtom);
+  const userRole = useAtomValue(roleNameAtom); 
   const navigate = useNavigate();
 
-  // Split roleName into an array for easier validation
-  const allowedRoles = (roleName || '').split(',');
-  console.log("this is the allowed roles " ,roleName);
 
+  const allowedRoles = (roleName || '').split(',').filter(Boolean);
+  const shouldRenderTile = !userRole || allowedRoles.includes(userRole);
   const handleSelect = () => {
     setIsSelected(!isSelected);
     navigate(route, { state: { data } });
   };
 
-  // Only render if the user's role is allowed
-  if (!allowedRoles.includes(userRole)) {
+
+  if (!shouldRenderTile) {
     return null;
   }
 
