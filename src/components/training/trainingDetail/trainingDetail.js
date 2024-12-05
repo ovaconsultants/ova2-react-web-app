@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './trainingDetail.scss';  // Custom styles for tabs
 import { useLocation , useNavigate } from 'react-router-dom';
@@ -7,20 +7,35 @@ import { Tabs, Tab, Row, Col } from 'react-bootstrap';  // Importing Tabs, Tab, 
 
 const TrainingDetail = () => {
   const navigate = useNavigate();
-  const { courseName } = useParams(); 
+  const { courseName } = useParams();
   const location = useLocation();
-  const { data } = location?.state || {};
-  const [activeTab, setActiveTab] = useState(0);  // Managing active tab state
+  const [data, setData] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
 
-  const handleEnrollNow = () => {
-    navigate(`/training/${courseName}/enroll`, { state: { data } });
-    console.log("Enroll Now clicked for:", courseName);
-};
-
+  useEffect(() => {
+    const locationData = location?.state?.data;
+    if (locationData) {
+      setData(locationData);
+      localStorage.setItem("trainingData", JSON.stringify(locationData));
+    } else {
+      const savedData = localStorage.getItem("trainingData");
+      if (savedData) {
+        setData(JSON.parse(savedData));
+      }
+    }
+  }, [location]);
 
   const handleSelect = (key) => {
-    setActiveTab(key);  // Change active tab when a tab is selected
-  }
+    setActiveTab(key);
+  };
+
+  const handleEnrollNow = () => {
+    if (data) {
+      localStorage.setItem("trainingData", JSON.stringify(data));
+    }
+    navigate(`/training/${courseName}/enroll`, { state: { data } });
+  };
+
 
   return (
     <div className="container training-schedule-container text-start">
@@ -74,3 +89,5 @@ const TrainingDetail = () => {
 };
 
 export default TrainingDetail;
+
+//
