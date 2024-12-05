@@ -30,6 +30,8 @@ import  CompanyEditableDetails  from "../admin/companyEditableDetails/companyEdi
 import SalaryDetails from "../salaryDetails/salaryDetails";
 import PaySlipYear from "../../paySlipYear/paySlipYear";
 import ForgotPassword from "../forgotPassword/forgotPassword";
+import ContactQueryDetails from "../admin/contactQueryDetails/contactQueryDetails";
+import TrainingProgramEnrollmentForm from "../training/trainingProgramEnrollment/trainingProgramEnrollmentForm";
 // import Submenu01 from '../../../src/';
 // import Submenu02 from '../../../submenu/Submenu02';
 // import BlogGrid from '../../../blog/BlogGrid';
@@ -47,6 +49,8 @@ const Navigation = () => {
       <Route path="/home" element={<Home />} />
       <Route path="/training" element={<TrainingProgram />} />
       <Route path="/training/:courseName" element={<TrainingDetail />} />
+      <Route path="/training/:courseName/enroll" element={<TrainingProgramEnrollmentForm />} />
+
       <Route path="/projects" element={<Projects />} />
       <Route path="/portfolio-single" element={<PortfolioSingle />} />
       {/* <Route path="/submenu01" element={<Submenu01 />} /> */}
@@ -119,6 +123,14 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+       <Route
+        path="/admin/contact-query-details"
+        element={
+          <ProtectedRoute>
+            <ContactQueryDetails />
+          </ProtectedRoute>
+        }
+      />
      <Route path="/admin/users/user-details" element={<UserEdit />} />
 
         < Route path="/profile"
@@ -134,6 +146,7 @@ const Navigation = () => {
       <Route path="/pay-slip-years/pay-slip-months" element = {<PaySlip/>}/>
       <Route path="/admin/vendor"  element={<Vendor/>}/>
       <Route path="/admin/vendor/vendor-details" element={<CompanyEditableDetails />}/>
+      
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

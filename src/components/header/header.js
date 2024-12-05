@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { useAuth } from "../../AuthContext"; // Assuming you have this hook for auth logic
+import { useAuth } from "../../AuthContext";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   usernameAtom,
   roleNameAtom,
-  roleIdAtom,
-} from "../jotia/globalAtoms/userRelatedAtoms"; // Import atoms
+  registrationIdAtom,
+} from "../jotia/globalAtoms/userRelatedAtoms";
 
 import "./header.scss";
 import * as constants from "../../constants/commonConstant";
@@ -17,9 +17,12 @@ const Header = () => {
   const [expanded, setExpanded] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const username = useAtomValue(usernameAtom);
+  const initials = username.split(" ") .map((word) => word.charAt(0).toUpperCase()) .join(""); 
   const roleName = useAtomValue(roleNameAtom);
+  const userId = useAtomValue(registrationIdAtom); // Get userId from registrationIdAtom
   const setUsername = useSetAtom(usernameAtom);
   const setRoleName = useSetAtom(roleNameAtom);
+  const navigate = useNavigate();
 
   const handleToggle = () => setExpanded(!expanded);
 
@@ -28,6 +31,11 @@ const Header = () => {
     setUsername("");
     setRoleName("");
     setExpanded(false);
+  };
+
+  const handleProfileClick = () => {
+    setExpanded(false);
+    navigate("/profile", { state: { userId } });
   };
 
   return (
@@ -115,18 +123,21 @@ const Header = () => {
                       </Link>
                     )}
                     <NavDropdown
-                      title={username}
+                      title={initials}
                       id="user-dropdown"
-                      className="capitalize"
+                      // className="capitalize"
                     >
                       <NavDropdown.Item
-                        as={Link}
-                        to="/profile"
-                        onClick={() => setExpanded(false)}
-                        className="custom-text"
+                        as="button"
+                        onClick={() => {
+                          handleProfileClick();
+                          setExpanded(false);
+                        }}
+                        className="nav-dropdown-item custom-text"
                       >
                         Profile
                       </NavDropdown.Item>
+
                       <NavDropdown.Item
                         as={Link}
                         to="/settings"

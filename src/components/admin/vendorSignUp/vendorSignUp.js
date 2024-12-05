@@ -46,7 +46,7 @@ const VendorSignUp = () => {
     const errors = validateForm();
     if (Object.keys(errors).length === 0) {
       try {
-        ToastMessage("User registered successfully");
+        ToastMessage("Vendor registered successfully");
         await postCompanyDetails(companyData);
         setTimeout(() => {
           navigate("/admin/vendor");

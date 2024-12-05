@@ -12,7 +12,7 @@ import {
   roleNameAtom,
   userImageAtom,
 } from "../jotia/globalAtoms/userRelatedAtoms";
-import { sendMail } from "../../api/adminUserService";
+
 
 const Login = () => {
   const [userName, setUsername] = useState("");
@@ -43,11 +43,12 @@ const Login = () => {
       const response = await authenticate_user(payload);
 
       console.log("response from the autheticate api ", response);
-      const username = response?.user?._full_name;
+      const username = response?.user?._full_name || ""; 
+      console.log(username);
       const roleId = response?.user?._role_id;
       const registrationId = response?.user?._registration_id;
       const roleName = response?.user?._role_name;
-      const userImage = "https://example.com/user-image.jpg"; // Example user image URL
+      const userImage = "https://example.com/user-image.jpg"; 
       const token = response?.token;
       localStorage.setItem("jwtToken", token);
 
@@ -112,7 +113,10 @@ const Login = () => {
                   />
                 </div>
                 <div className="text-end mb-3">
-                  <Link to="/password-recovery" className="fs-6 me-3 text-primary text-decoration-none fw-bold">
+                  <Link
+                    to="/password-recovery"
+                    className="fs-6 me-3 text-primary text-decoration-none fw-bold"
+                  >
                     Forgot password?
                   </Link>
                 </div>
@@ -124,20 +128,19 @@ const Login = () => {
                   Login
                 </button>
                 <div className="text-center mt-4">
-            <p className="mb-0">
-              Don’t have an account?{" "}
-              <Link
-                to="/sign-up"
-                className="text-primary text-decoration-none fw-bold"
-              >
-                Sign up now
-              </Link>
-            </p>
-          </div>
+                  <p className="mb-0">
+                    Don’t have an account?{" "}
+                    <Link
+                      to="/sign-up"
+                      className="text-primary text-decoration-none fw-bold"
+                    >
+                      Sign up now
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
           </form>
-        
         </div>
       </section>
     </div>

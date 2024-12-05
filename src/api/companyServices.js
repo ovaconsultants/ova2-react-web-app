@@ -96,3 +96,14 @@ export const fetchAllEmployeeAllocations = async () => {
     
    }
 }
+
+  // posting the compnay details to server 
+  export const postContactQuery = async (query_data) => {
+    try {
+       const response = await apiClient.post('company/postCompanyData' , query_data);
+       return response ;
+    } catch (error) {
+      console.log("error occured during the posting the company data");
+      throw error ;
+    }
+      }

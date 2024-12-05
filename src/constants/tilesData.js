@@ -49,6 +49,13 @@ export const jobTilesData = [
         route: '/admin/pay-slip',
         roleName: 'admin',
     },
+    {
+        title: 'Contact Query Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/contact-query-details',
+        roleName: 'admin',
+    },
     // Add more tiles as needed
 ];
 export const trainingTilesData = [

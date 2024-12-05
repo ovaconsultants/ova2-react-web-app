@@ -89,3 +89,39 @@ export const sendMail = async (userName) => {
   }
 }
 
+
+  // posting the compnay details to server 
+  export const postContactQuery = async (query_data) => {
+    try {
+       const response = await apiClient.post('/contact-query' ,  query_data);
+       console.log(query_data)
+       return response ;
+    } catch (error) {
+      console.log("error occured during the posting the contact data");
+      throw error ;
+    }
+      }
+    
+  // getting all the queries from the database 
+  export const fetchAllQueries = async ()=> {
+    try {
+      const response  = await apiClient.get('/getAllQueries')
+      return response.data ;
+    } catch (error) {
+      console.log("error occured during the fetching all the queries");
+      throw error ;
+    }
+  }    
+
+  // posting enrolled course Details 
+  export const postEnrollmentCourseDetails = async (enrollData)=> {
+    try {
+      const response  = await apiClient.post('users/registerEnrollment' , enrollData);
+      return response.data ;
+      console.log(" here in service " , response);
+    } catch (error) {
+      console.log("error occured during the fetching all the queries");
+      throw error ;
+    }
+  }    
+

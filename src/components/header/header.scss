@@ -47,4 +47,23 @@
 .capitalize {
     text-transform: lowercase;
   }
+
+  .nav-dropdown-item.custom-text {
+    color: #333; 
+    padding: 0.7rem 1rem; 
+    text-align: left;
+  }
+  
+  .nav-dropdown-item.custom-text:hover,
+  .nav-dropdown-item.custom-text:focus {
+    background-color: rgb(101, 94, 122); 
+    color: #fff;
+  }
+  
+  .nav-dropdown-item.custom-text:active {
+    background-color: rgb(101, 94, 122); 
+    color: #fff; 
+    outline: none; 
+  }
+  
   
