@@ -122,7 +122,7 @@ const SignUp = () => {
                   />
                 ))}
                 <Dropdown
-                  visibleSelectorString="register as a "
+                  visibleSelectorString="Register as  "
                   name="registrationTypeId"
                   value={formData.registrationTypeId}
                   onChange={handleChange}
