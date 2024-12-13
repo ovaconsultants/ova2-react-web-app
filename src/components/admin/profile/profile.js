@@ -15,11 +15,13 @@ import {
 const Profile = () => {
   const location = useLocation();
   const userId = location.state?.userId;
+  const [loading, setLoading] = useState(true);
   const [userDetails, setUserDetails] = useState({});
   const [editingField, setEditingField] = useState(null); // Track which field is being edited
   const [formErrors, setFormErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [newPassword, setNewPassword] = useState(""); // Temporary state for password input
+  const [phoneInput, setPhoneInput] = useState(""); // Separate state for phone input
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -27,6 +29,8 @@ const Profile = () => {
         if (userId) {
           const data = await getUserDetails(userId);
           setUserDetails(data);
+          setPhoneInput(data.phone || ""); 
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -37,15 +41,24 @@ const Profile = () => {
   }, [userId]);
 
   const handleInputChange = ({ target: { name, value } }) => {
-    if (name === "password") {
+    if (name === "phone") {
+      // Allow only numeric values
+      if (/^\d*$/.test(value)) {
+        setPhoneInput(value);
+        setFormErrors((prev) => ({
+          ...prev,
+          phone: value.length !== 10 ? "Phone number must be 10 digits" : "",
+        }));
+      }
+    } else if (name === "password") {
       setNewPassword(value); // Store the password securely in the temporary state
     } else {
       setUserDetails((prev) => ({ ...prev, [name]: value }));
+      setFormErrors((prev) => ({
+        ...prev,
+        [name]: !value ? `${name} is required` : "",
+      }));
     }
-    setFormErrors((prev) => ({
-      ...prev,
-      [name]: !value ? `${name} is required` : "",
-    }));
   };
 
   const handleSave = async (field) => {
@@ -56,11 +69,15 @@ const Profile = () => {
 
     try {
       const updatedValue =
-        field === "password" ? { password: newPassword } : { [field]: userDetails[field] };
+        field === "phone" ? { phone: phoneInput } : 
+        field === "password" ? { password: newPassword } : 
+        { [field]: userDetails[field] };
 
       await updateUser(userId, updatedValue);
 
-      if (field === "password") {
+      if (field === "phone") {
+        setUserDetails((prev) => ({ ...prev, phone: phoneInput }));
+      } else if (field === "password") {
         setUserDetails((prev) => ({ ...prev, password: newPassword }));
         setNewPassword(""); // Clear the temporary password state after saving
       }
@@ -72,9 +89,15 @@ const Profile = () => {
     }
   };
 
-  if (!userId) {
+  if (!userId ) {
     return <p>No user selected. Please go back and try again.</p>;
   }
+
+  
+  if (loading) {
+    return <p>Loading...</p>; 
+  }
+
 
   return (
     <div className="container mt-5">
@@ -147,15 +170,20 @@ const Profile = () => {
                   <input
                     type="text"
                     name="phone"
-                    value={userDetails.phone || ""}
+                    value={phoneInput}
                     onChange={handleInputChange}
                     className="form-control me-2"
                     style={{ maxWidth: "300px" }}
+                    maxLength="10"
                   />
+                  {formErrors.phone && (
+                    <p className="text-danger mt-1">{formErrors.phone}</p>
+                  )}
                   <div className="mt-2">
                     <button
                       className="btn btn-primary me-3"
                       onClick={() => handleSave("phone")}
+                      disabled={formErrors.phone !== ""}
                     >
                       <FontAwesomeIcon icon={faSave} />
                     </button>
@@ -193,7 +221,7 @@ const Profile = () => {
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Enter new password"
-                    value={newPassword} // Bind to temporary state
+                    value={newPassword}
                     onChange={handleInputChange}
                     className="form-control me-2"
                     style={{ maxWidth: "300px" }}
@@ -209,7 +237,7 @@ const Profile = () => {
                       className="btn btn-danger"
                       onClick={() => {
                         setEditingField(null);
-                        setNewPassword(""); // Clear the temporary password state
+                        setNewPassword("");
                       }}
                     >
                       <FontAwesomeIcon icon={faTimes} />
