@@ -1,2 +1,2 @@
 import { atom } from 'jotai'
-const homeAtom = atom(false)
+export const homeAtom = atom(false);

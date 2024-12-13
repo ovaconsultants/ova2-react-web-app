@@ -1,10 +1,11 @@
 import React from 'react';
-import { useAtom } from 'jotai'
+import { useSetAtom} from 'jotai'
 import { Link } from 'react-router-dom';
-import { homeAtom } from '../../jotia/globalAtoms/homeAtom'
+import {homeAtom}  from '../../jotia/globalAtoms/homeAtom';
 
 const ActionHome = () => {
-  const [anime, setHomeAtom] = useAtom(homeAtom)
+  const setHomeAtom = useSetAtom(homeAtom)
+    setHomeAtom(true);
   return (
     <section className="call-to-action bg-1 section-sm overly">
       <div className="container">

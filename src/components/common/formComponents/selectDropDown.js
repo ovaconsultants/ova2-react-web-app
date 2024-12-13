@@ -25,10 +25,14 @@ export const Dropdown = ({
           {visibleSelectorString}
         </option>
         {options.map((option) => (
-          <option key={option[keyField]} value={option[valueField]}>
-            {option[labelField]}
-          </option>
-        ))}
+  <option key={option[keyField]} value={option[valueField]}>
+    {option[labelField]
+      .toLowerCase() // Convert the entire string to lowercase first
+      .replace(/^\w/, (c) => c.toUpperCase()) // Capitalize the first letter
+    }
+  </option>
+))}
+
       </select>
       <div className="error-space">
         {error && <span className="error-message">{error}</span>}
