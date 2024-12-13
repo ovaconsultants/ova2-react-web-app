@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { TextInput } from "../common/formComponents/textInput";
 import { Dropdown } from "../common/formComponents/selectDropDown";
 import { validateField } from "../common/formComponents/validateFields";
+import {homeAtom}  from '../jotia/globalAtoms/homeAtom';
+import { useAtomValue } from "jotai";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     FirstName: "",
@@ -24,6 +27,7 @@ const SignUp = () => {
   const [formErrors, setFormErrors] = useState({});
   const [registrationTypes, setRegistrationTypes] = useState([]);
   const navigate = useNavigate();
+  const homeAtomValue = useAtomValue(homeAtom);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +39,7 @@ const SignUp = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [homeAtomValue]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,7 +126,7 @@ const SignUp = () => {
                   />
                 ))}
                 <Dropdown
-                  visibleSelectorString="register as a "
+                  visibleSelectorString="Register as  "
                   name="registrationTypeId"
                   value={formData.registrationTypeId}
                   onChange={handleChange}

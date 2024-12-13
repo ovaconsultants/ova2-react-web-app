@@ -154,15 +154,20 @@ const Header = () => {
                       >
                         Generate Pay Slip
                       </NavDropdown.Item>
-                    </NavDropdown>
-
-                    <button
+                      <NavDropdown.Item
+                        as={Link}
+                        to=""
+                        onClick={() => setExpanded(false)}
+                        className="custom-text"
+                      >
+                          <button
                       className="nav-link btn btn-link"
                       title="Logout"
                       onClick={handleLogout}
-                    >
-                      <i className="bi bi-box-arrow-right"></i>
-                    </button>
+                    >Log out </button>
+                      </NavDropdown.Item>
+                    </NavDropdown>
+
                   </>
                 ) : (
                   <Link
