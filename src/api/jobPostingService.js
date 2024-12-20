@@ -2,7 +2,7 @@ import axios from 'axios';
 import environment from '../config/environment';
 
 const apiClient = axios.create({
-    baseURL: environment.apiUrl,
+    baseURL: environment.nodeApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
@@ -10,7 +10,7 @@ const apiClient = axios.create({
 
 export const createJobPosting = async (jobData) => {
     try {
-        const response = await apiClient.post('/jobposting/create', jobData);
+        const response = await apiClient.post('/jobs/job-posting', jobData);
         return response.data;
     } catch (error) {
         console.error('Failed to create job posting:', error);
@@ -42,7 +42,8 @@ export const deleteJobPosting = async (jobId, updatedBy) => {
 
 export const getJobPostings = async (country) => {
     try {
-        const response = await apiClient.get(`/jobposting/get?country=${country}`);
+        const response = await apiClient.get(`jobs/retrieve-job-postings/?country=${country}`);
+        console.log('API Response:', response.data);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch job postings:', error);

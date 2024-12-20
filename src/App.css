@@ -2,7 +2,7 @@
   text-align: center;
   max-height: 100vh;
   overflow-y: auto;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   /* For Firefox */
   -ms-overflow-style: none;
   /* For Internet Explorer and Edge */

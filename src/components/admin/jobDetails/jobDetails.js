@@ -23,6 +23,7 @@ const JobDetails = () => {
             try {
                 if (isMounted) {
                     const response = await getJobPostings(country);
+                    console.log('API Response:', );
                     setJobs(response.data);
                     setFilteredJobs(response.data.slice(0, 10));
                 }
@@ -139,8 +140,8 @@ const JobDetails = () => {
                                     </td>
                                     <td className='job-title' onClick={() => handleJobClick(job.jobId)} >{job.title}</td>
                                     <td>{job.company}</td>
-                                    <td>{job.workplaceType}</td>
-                                    <td>{job.employeeLocation}</td>
+                                    <td>{job.workplacetype}</td>
+                                    <td>{job.employeelocation}</td>
                                     <td>
                                         <button
                                             onClick={() => handleRemove(job)}
@@ -157,19 +158,19 @@ const JobDetails = () => {
                                                 <div className="expanded-content text-start col">
                                                     <div><strong>Title:</strong> {job.title}</div>
 
-                                                    <div><strong>Workplace Type:</strong> {job.workplaceType}</div>
+                                                    <div><strong>Workplace Type:</strong> {job.workplacetype}</div>
 
                                                     <div><strong>Experience:</strong> {job.experience}</div>
 
-                                                    <div><strong>Work Authorization:</strong> {job.workAuthorization}</div>
+                                                    <div><strong>Work Authorization:</strong> {job.workauthorization}</div>
                                                 </div>
                                                 <div className="expanded-content text-start col">
                                                     <div><strong>Company:</strong> {job.company}</div>
 
-                                                    <div><strong>Location:</strong> {job.employeeLocation}</div>
+                                                    <div><strong>Location:</strong> {job.employeelocation}</div>
 
-                                                    <div><strong>Employment Type:</strong> {job.employmentType}</div>
-                                                    <div><strong>Posted Date:</strong> {job.createdDate}</div>
+                                                    <div><strong>Employment Type:</strong> {job.employmenttype}</div>
+                                                    <div><strong>Posted Date:</strong> {job.createddate}</div>
 
                                                 </div>
                                             </div>
