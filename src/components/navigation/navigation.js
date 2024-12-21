@@ -146,8 +146,11 @@ const Navigation = () => {
       <Route path="/pay-slip-years/pay-slip-months" element = {<PaySlip/>}/>
       <Route path="/admin/vendor"  element={<Vendor/>}/>
       <Route path="/admin/vendor/vendor-details" element={<CompanyEditableDetails />}/>
+      {/* <Route path="/hr/anjalitomar" element={<Navigate to={<HrPortfolio/>} />} /> */}
+      {/* <Route path="/hr/anjalitomar" element={<Navigate to="/portfolio/html/index.html" replace />} /> */}
       
       <Route path="*" element={<Navigate to="/" />} />
+    
     </Routes>
   );
 };
