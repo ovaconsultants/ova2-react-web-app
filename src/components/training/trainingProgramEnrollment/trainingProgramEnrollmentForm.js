@@ -10,6 +10,7 @@ const TrainingProgramEnrollmentForm = () => {
   const location = useLocation();
   const navigate  = useNavigate();
   const data = location.state?.data || {};
+  console.log("coursee details " , data);
   const { courseName } = useParams();
 
   // State to hold form data

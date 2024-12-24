@@ -2,7 +2,7 @@ import apiClient from '../apiClient/apiClient';
 
 export const createApplicant = async (applicant) => {
   try {
-    const response = await apiClient.post(`applicant/create`, applicant);
+    const response = await apiClient.post(`/applicant/job-applicant/create`, applicant);
     return response.data;
   } catch (error) {
     console.error('There was an error inserting the applicant!', error);
@@ -12,7 +12,7 @@ export const createApplicant = async (applicant) => {
 
 export const fetchApplicants = async () => {
   try {
-    const response = await apiClient.get('applicant/get');
+    const response = await apiClient.get('/applicant/job-applicant/get');
     return response.data;
   } catch (error) {
     console.error('There was an error fetching the applicants!', error);

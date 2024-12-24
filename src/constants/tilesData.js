@@ -1,4 +1,5 @@
 import {trainingData} from "./trainingData";
+import { clientsData } from "../components/clientsData/clientData";
 export const jobTilesData = [
     {
         title: 'Job Details',
@@ -114,5 +115,40 @@ export const trainingTilesData = [
         roleName: 'user,admin,sub-admin,manager,sales_team',
     },
    
-   // Add more tiles as needed
 ];
+
+export const ClientsTilesData = [
+    {
+      title: "Vaanya Finserv Consultancy Pvt Ltd",
+      description: "",
+      image: "",
+      route: "/clients/vaanya", 
+      data: clientsData?.client1, 
+      roleName: "user,admin,sub-admin,manager,sales_team",
+    },
+    {
+      title: "Somvanshi Solar & Power Consultancy Pvt Ltd",
+      description: "",
+      image: "",
+      route: "/clients/somvanshi",
+      data: clientsData?.client2, 
+      roleName: "user,admin,sub-admin,manager,sales_team",
+    },
+    {
+        title: "Grand Dream Resort",
+        description: "",
+        image: "",
+        route: "/clients/grand-dream-resort", 
+        data: clientsData?.client3, 
+        roleName: "user,admin,sub-admin,manager,sales_team",
+      },
+      {
+        title: "OMK And Sons",
+        description: "",
+        image: "",
+        route: "/clients/omk-and-sons", 
+        data: clientsData?.client4, 
+        roleName: "user,admin,sub-admin,manager,sales_team",
+      },
+  ];
+  

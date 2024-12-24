@@ -1,0 +1,68 @@
+/* Clients Page Styling */
+
+/* Container for the tiles */
+.tile-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Spacing between tiles */
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+  
+  /* Individual Tile Styling */
+  .tile {
+    background: #ffffff; /* White background for clean look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden;
+    width: 300px; /* Set tile width */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    text-align: center;
+  }
+  
+  /* Hover effect */
+  .tile:hover {
+    transform: translateY(-5px); /* Lift tile slightly */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Tile Image Placeholder */
+  .tile img {
+    width: 100%;
+    height: 160px; /* Fixed height for image */
+    object-fit: cover; /* Maintain image aspect ratio */
+    background: #e0e0e0; /* Gray placeholder background */
+  }
+  
+  /* Tile Title Styling */
+  .tile-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 15px 0 10px;
+    color: #333333; /* Darker text for title */
+  }
+  
+  /* Tile Description */
+  .tile-description {
+    font-size: 0.95rem;
+    color: #666666; /* Slightly lighter text */
+    margin-bottom: 15px;
+  }
+  
+  /* Tile CTA (Button-like link) */
+  .tile-cta {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #6c757d; /* Gray button */
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .tile-cta:hover {
+    background-color: #5a6268; /* Slightly darker on hover */
+  }
+  

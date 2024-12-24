@@ -17,6 +17,7 @@ const Header = () => {
   const [expanded, setExpanded] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const username = useAtomValue(usernameAtom);
+  console.log(username);
   const initials = username.split(" ") .map((word) => word.charAt(0).toUpperCase()) .join(""); 
   const roleName = useAtomValue(roleNameAtom);
   const userId = useAtomValue(registrationIdAtom); // Get userId from registrationIdAtom
@@ -92,6 +93,13 @@ const Header = () => {
                 >
                   Contact
                 </Link>
+                <Link
+                  className="nav-link"
+                  to="/clients"
+                  onClick={() => setExpanded(false)}
+                >
+                  Clients
+                </Link>
 
                 <NavDropdown title="Jobs" id="jobs-dropdown">
                   <NavDropdown.Item
@@ -125,7 +133,7 @@ const Header = () => {
                     <NavDropdown
                       title={initials}
                       id="user-dropdown"
-                      // className="capitalize"
+                      
                     >
                       <NavDropdown.Item
                         as="button"
