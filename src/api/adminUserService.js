@@ -117,11 +117,24 @@ export const sendMail = async (userName) => {
   export const postEnrollmentCourseDetails = async (enrollData)=> {
     try {
       const response  = await apiClient.post('users/registerEnrollment' , enrollData);
+      const respons  = await apiClient.get('users/fetchAllEnrollments');
+      console.log("fetched data from the api for all enrollments " , respons)
+     
       return response.data ;
-      console.log(" here in service " , response);
     } catch (error) {
       console.log("error occured during the fetching all the queries");
       throw error ;
     }
   }    
 
+// fetching all the employees 
+export const fetchingAllEnrollments = async ()=> {
+  try {
+    const response  = await apiClient.get('users/fetchAllEnrollments');
+    console.log("response for all the enrollments "  , response);
+    return response.data ;
+  } catch (error) {
+    console.log("error occured during the fetching all the queries");
+    throw error ;
+  }
+}    

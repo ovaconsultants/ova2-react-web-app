@@ -29,9 +29,10 @@ export const updateJobPosting = async (jobId, jobData) => {
 };
 
 export const deleteJobPosting = async (jobId, updatedBy) => {
+    console.log("job id :" , jobId)
     try {
-        const response = await apiClient.delete(`/jobposting/delete/${jobId}`, {
-            params: { updatedBy }
+        const response = await apiClient.put(`/jobs/delete-job-posting/${jobId}`, {
+          updatedBy 
         });
         return response.data;
     } catch (error) {
@@ -52,7 +53,7 @@ export const getJobPostings = async (country) => {
 };
 export const getJobPostingById = async (jobId) => {
     try {
-        const response = await apiClient.get(`/jobposting/getById?jobId=${jobId}`);
+        const response = await apiClient.get(`/jobs/job-posting/getById?jobId=${jobId}`);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch job posting:', error);

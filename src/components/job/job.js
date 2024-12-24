@@ -7,6 +7,7 @@ import { formatDate } from '../../utils/commonUtil';
 import LoadingSpinner from '../common/loadingSpinner/loadingSpinner';
 
 const Job = () => {
+    console.log("this is params for job page " , useParams());
     const { jobId } = useParams();
     const [job, setJob] = useState({});
     const [error, setError] = useState(null);
@@ -19,6 +20,7 @@ const Job = () => {
         async function fetchJob() {
             try {
                 if (isMounted) {
+                    console.log("Job ID from URL:", jobId);
                     const response = await getJobPostingById(jobId);
                     setJob(response.data);
                     setLoading(false);
@@ -34,6 +36,7 @@ const Job = () => {
         return () => {
             isMounted = false;
         };
+        
     }, [jobId]);
 
     const handleApplyNow = (job) => {

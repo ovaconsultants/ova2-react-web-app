@@ -14,7 +14,7 @@ const JobDetails = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [jobIdDelete, setJobIdDelete] = useState(0);
     const observer = useRef();
-    const username = localStorage.getItem('username');
+    const username = localStorage.getItem('username') ;
 
     useEffect(() => {
         let isMounted = true;
@@ -25,6 +25,7 @@ const JobDetails = () => {
                     const response = await getJobPostings(country);
                     console.log('API Response:', );
                     setJobs(response.data);
+                    console.log("this is the job array  data coming from server  ",response.data )
                     setFilteredJobs(response.data.slice(0, 10));
                 }
             } catch (err) {
@@ -49,7 +50,8 @@ const JobDetails = () => {
     }, [searchTerm, pageSize, jobs]);
 
     const handleRemove = async (job) => {
-        const jobId = job.jobId;
+        console.log("this is job " , job);
+        const jobId = job.jobid;
         try {
             const response = await deleteJobPosting(jobId, username);
             if (response.statusCode === 200) {
@@ -138,7 +140,7 @@ const JobDetails = () => {
                                             {expandedRow === index ? '-' : '+'}
                                         </span>
                                     </td>
-                                    <td className='job-title' onClick={() => handleJobClick(job.jobId)} >{job.title}</td>
+                                    <td className='job-title' onClick={() => handleJobClick(job.jobid)} >{job.title}</td>
                                     <td>{job.company}</td>
                                     <td>{job.workplacetype}</td>
                                     <td>{job.employeelocation}</td>
