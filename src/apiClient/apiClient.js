@@ -1,13 +1,21 @@
 import axios from 'axios';
 import environment from '../config/environment'; 
 
+
 const apiClient = axios.create({
     baseURL: environment.nodeApiUrl,
     headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true // This ensures cookies (including the JWT in authToken) are included with each request
+        'Content-Type': 'application/json'
+        
+    }
 }); 
 
-export default apiClient;
+apiClient.interceptors.request.use((config) => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
+export default apiClient;
