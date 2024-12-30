@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom"; // Removed `useLocation`
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ToastMessage from "../../../constants/toastMessage";
 import { postEnrollmentCourseDetails } from "../../../api/adminUserService";
 import "react-toastify/dist/ReactToastify.css";
 
 const TrainingProgramEnrollmentForm = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const data = location.state?.data || {};
   const { courseName: originalCourseName } = useParams();
 
   // Capitalize the first letter of each word in the course name
@@ -25,6 +28,7 @@ const TrainingProgramEnrollmentForm = () => {
     phone: "",
   });
 
+  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   // Handle input changes
@@ -40,16 +44,18 @@ const TrainingProgramEnrollmentForm = () => {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
-    try {
-      const response = await postEnrollmentCourseDetails(formData);
-      if (response) {
-        ToastMessage("You have successfully registered for the course.");
-      }
-    } catch (error) {
-      console.error(
+    try { 
+      ToastMessage(`You have successfully registered for ${courseName}`);
+        const response = await postEnrollmentCourseDetails(formData) ;
+       if(response){
+         navigate("/training");
+        }
+  } catch (error) {
+      console.log(
         "Error in getting response from the server while posting:",
         error
       );
+      ToastMessage("Failed to submit the enrollment. Please try again.");
     }
   };
 
@@ -124,10 +130,8 @@ const TrainingProgramEnrollmentForm = () => {
 
             <div className="row justify-content-center">
               <div className="col-lg-6 col-md-8 col-sm-12">
-                <button
-                  className="btn btn-primary w-100 mt-3 mb-4"
-                  type="submit"
-                  style={{ backgroundColor: "#47424c", borderColor: "#47424c" }}
+                <button className="btn btn-primary w-100 mt-3 mb-4"
+                  type="submit"style={{ backgroundColor: "#47424c", borderColor: "#47424c" }}
                 >
                   Submit Enrollment
                 </button>
@@ -137,6 +141,9 @@ const TrainingProgramEnrollmentForm = () => {
         </div>
       </section>
 
+      {successMessage && (
+        <div className="alert alert-success">{successMessage}</div>
+      )}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
       <ToastContainer />
