@@ -107,3 +107,47 @@ export const fetchAllEmployeeAllocations = async () => {
       throw error ;
     }
       }
+
+ export const addVendorComment = async (commentData) => {
+        try {
+          const response = await apiClient.post("company/add-comment", commentData);
+        if (response.status === 201) {
+            console.log("Vendor comment added successfully:", response.data);
+            return {
+              success: true,
+              message: response.data.message,
+              data: response.data,
+            };
+          } else {
+            console.warn("Unexpected response status:", response.status);
+            return {
+              success: false,
+              message: `Unexpected response status: ${response.status}`,
+            };
+          }
+        } catch (error) {
+          console.error("Error occurred during posting the vendor comment:", error);
+      
+          return {
+            success: false,
+            message: error.response?.data?.message || "An error occurred while adding vendor comment.",
+            error: error.response?.data || error.message,
+          };
+        }
+      };
+
+      export const fetchCommentsByCompanyId = async (companyId) => {
+        if (!companyId) {
+          throw new Error("Company ID is required to fetch comments.");
+        }
+      
+        try {
+          const response = await apiClient.get(`/company/fetchAllComments/${companyId}`);
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching comments by company ID:", error);
+          throw error;
+        }
+      };      
+      
+      

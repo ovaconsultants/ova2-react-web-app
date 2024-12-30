@@ -6,19 +6,25 @@ import Multiselect from "multiselect-react-dropdown";
 import { Button, Modal, Row, Col, Card, Form } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
 import {
-  getCompanyDetails, updateCompanyDetails, fetchCompanyTypes, fetchCommunicationMediums,
-  deleteCompany, fetchAllEmployeeAllocations
+  getCompanyDetails,
+  updateCompanyDetails,
+  fetchCompanyTypes,
+  fetchCommunicationMediums,
+  deleteCompany,
+  fetchAllEmployeeAllocations,
+  addVendorComment,
 } from "../../../api/companyServices";
 import ToastMessage from "../../../constants/toastMessage";
 import { validateCompanyEditingField } from "../../common/formComponents/validateFields";
 import { getInitialCompanyDetails } from "./compnayEditableStateData";
 import "../../admin/companyEditableDetails/companyEditableDetails.scss";
-import { fieldsData  , secondaryFieldsData , SelectField , EditableField } from "./compnayEditableStateData";
+import { fieldsData, secondaryFieldsData, SelectField, EditableField } from "./compnayEditableStateData";
 
 const CompanyEditableDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const initialCompanyId = location.state?.companyId || localStorage.getItem("companyId");
+
   const [companyDetails, setCompanyDetails] = useState(getInitialCompanyDetails());
   const [communicationMediums, setCommunicationMediums] = useState([]);
   const [selectedMedium, setSelectedMedium] = useState([]);
@@ -29,22 +35,27 @@ const CompanyEditableDetails = () => {
   const [formErrors, setFormErrors] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [initialData, setInitialData] = useState(getInitialCompanyDetails());
+  const [comment, setComment] = useState("");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [companyResponse, typesResponse, mediumsData, employees] = await Promise.all([
-        getCompanyDetails(initialCompanyId), fetchCompanyTypes(), fetchCommunicationMediums(), fetchAllEmployeeAllocations()
+        getCompanyDetails(initialCompanyId),
+        fetchCompanyTypes(),
+        fetchCommunicationMediums(),
+        fetchAllEmployeeAllocations(),
       ]);
+
       setCompanyDetails({
         ...companyResponse,
-        employee: companyResponse.employee , // Assuming `responderId` is the ID of the selected responder
-        is_active: companyResponse.is_active ? "true" : "false" // Convert boolean to string for selection
-      }); // Set the initial responder ID
+        employee: companyResponse.employee,
+        is_active: companyResponse.is_active ? "true" : "false",
+      });
       setInitialData(companyResponse);
       setCompanyTypes(typesResponse);
       setCommunicationMediums(mediumsData);
-      setSelectedMedium(mediumsData.filter(m => companyResponse.communicatethrough.includes(m.id)));
+      setSelectedMedium(mediumsData.filter((m) => companyResponse.communicatethrough.includes(m.id)));
       setResponders(employees);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -52,9 +63,10 @@ const CompanyEditableDetails = () => {
       setLoading(false);
     }
   }, [initialCompanyId]);
-  
 
-  useEffect(() => { if (initialCompanyId) fetchData(); }, [fetchData, initialCompanyId]);
+  useEffect(() => {
+    if (initialCompanyId) fetchData();
+  }, [fetchData, initialCompanyId]);
 
   const handleInputChange = ({ target: { name, value } }) => {
     setCompanyDetails({ ...companyDetails, [name]: value });
@@ -64,11 +76,34 @@ const CompanyEditableDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updatedDetails = { ...companyDetails, communicatethrough: selectedMedium.map(m => m.id).join(", ") };
-      const response = await updateCompanyDetails(initialCompanyId, updatedDetails);
-      if (response.message === "Company updated successfully.") {
-        ToastMessage(response.message);
-        setIsEditing(false);
+      const updatedDetails = {
+        ...companyDetails,
+        communicatethrough: selectedMedium.map((m) => m.id).join(", "),
+      };
+
+      const hasDetailsChanged = JSON.stringify(updatedDetails) !== JSON.stringify(initialData);
+
+      if (!hasDetailsChanged && !comment) {
+        ToastMessage("No changes detected", "info");
+        return;
+      }
+
+      if (hasDetailsChanged) {
+        const response = await updateCompanyDetails(initialCompanyId, updatedDetails);
+        if (response.message === "Company updated successfully.") {
+          ToastMessage(response.message);
+          setIsEditing(false); // Close fields after saving
+          setInitialData(updatedDetails); // Update initial data to match saved state
+        }
+      }
+
+      if (comment) {
+        const response = await addVendorComment({ company_id: initialCompanyId, comment });
+        if (response.success) {
+          setComment("");
+          ToastMessage("Comment added successfully!", "success");
+          setIsEditing(false); // Close fields after saving
+        }
       }
     } catch (error) {
       console.error("Error updating company details:", error);
@@ -85,11 +120,11 @@ const CompanyEditableDetails = () => {
       alert("Failed to delete company");
     }
   };
+
   const handleCancel = () => {
-    // Reset companyDetails to the initial data
     setCompanyDetails(initialData);
     setIsEditing(false);
-    setShowDeleteModal(false); // Ensure modal is hidden when canceling
+    setShowDeleteModal(false);
   };
 
   return loading ? (
@@ -100,7 +135,11 @@ const CompanyEditableDetails = () => {
         <Col xs={12} className="d-flex justify-content-between align-items-center">
           <h2>{isEditing ? "Edit Company Details" : "Company Details"}</h2>
           <div>
-            <Button variant="primary" onClick={isEditing ? handleSubmit : () => setIsEditing(true)} className="me-2">
+            <Button
+              variant="primary"
+              onClick={isEditing ? handleSubmit : () => setIsEditing(true)}
+              className="me-2"
+            >
               <FontAwesomeIcon icon={isEditing ? faSave : faEdit} /> {isEditing ? "Save" : "Edit"}
             </Button>
             <Button variant="danger" onClick={handleCancel}>
@@ -115,24 +154,81 @@ const CompanyEditableDetails = () => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={6}>
-              {fieldsData.map((field) => (
-      <EditableField  key={field.name}  label={field.label}  name={field.name} type={field.type} value={companyDetails[field.name]}  onChange={handleInputChange} error={formErrors[field.name]} isEditing={isEditing}
-      />
-    ))}
-        </Col>
+                {fieldsData.map((field) => (
+                  <EditableField
+                    key={field.name}
+                    label={field.label}
+                    name={field.name}
+                    type={field.type}
+                    value={companyDetails[field.name]}
+                    onChange={handleInputChange}
+                    error={formErrors[field.name]}
+                    isEditing={isEditing}
+                  />
+                ))}
+                {/* Add the comments section */}
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold-comments">Add Comments</Form.Label>
+                  {isEditing ? (
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Add a comment..."
+                    />
+                  ) : (
+                    <p className="mb-0 text-start">{comment || "No comments added yet"}</p>
+                  )}
+                </Form.Group>
+              </Col>
               <Col md={6}>
                 {secondaryFieldsData.map((field) => (
-        <EditableField key={field.name}  label={field.label}   name={field.name}   type={field.type}  value={companyDetails[field.name]} onChange={handleInputChange} error={formErrors[field.name]} isEditing={isEditing}
-        />
-      ))}
-                <SelectField label="Responder" name="employee" options={responders} value={companyDetails.employee} onChange={handleInputChange} isEditing={isEditing} error={formErrors.employee} />
-                <SelectField label="Status" name="is_active" options={ [ { id : "true" , sts : "active" },  { id:  "false" , sts : "Inactive" }]} value={companyDetails.is_active} onChange={handleInputChange} isEditing={isEditing} error={formErrors.employee} />
+                  <EditableField
+                    key={field.name}
+                    label={field.label}
+                    name={field.name}
+                    type={field.type}
+                    value={companyDetails[field.name]}
+                    onChange={handleInputChange}
+                    error={formErrors[field.name]}
+                    isEditing={isEditing}
+                  />
+                ))}
+                <SelectField
+                  label="Responder"
+                  name="employee"
+                  options={responders}
+                  value={companyDetails.employee}
+                  onChange={handleInputChange}
+                  isEditing={isEditing}
+                  error={formErrors.employee}
+                />
+                <SelectField
+                  label="Status"
+                  name="is_active"
+                  options={[
+                    { id: "true", sts: "Active" },
+                    { id: "false", sts: "Inactive" },
+                  ]}
+                  value={companyDetails.is_active}
+                  onChange={handleInputChange}
+                  isEditing={isEditing}
+                  error={formErrors.is_active}
+                />
                 <Form.Group className="mb-3">
                   <Form.Label className="fw-bold text-start w-100">Communication Through</Form.Label>
                   {isEditing ? (
-                    <Multiselect  options={communicationMediums} selectedValues={selectedMedium} onSelect={setSelectedMedium}onRemove={setSelectedMedium} displayValue="medium"className="fw-bold text-start w-100"/>
+                    <Multiselect
+                      options={communicationMediums}
+                      selectedValues={selectedMedium}
+                      onSelect={setSelectedMedium}
+                      onRemove={setSelectedMedium}
+                      displayValue="medium"
+                      className="fw-bold text-start w-100"
+                    />
                   ) : (
-                    <p className="mb-0 text-start">{selectedMedium.map(m => m.medium).join(", ")}</p>
+                    <p className="mb-0 text-start">{selectedMedium.map((m) => m.medium).join(", ")}</p>
                   )}
                 </Form.Group>
               </Col>
@@ -142,15 +238,23 @@ const CompanyEditableDetails = () => {
       </Card>
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
-      <Modal.Header closeButton><Modal.Title>Confirm Deletion</Modal.Title></Modal.Header>
-    <Modal.Body>Are you sure you want to delete this company?</Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={() => setShowDeleteModal(false)}></Button>
-      <Button variant="danger" onClick={handleDelete}></Button>
-    </Modal.Footer>
-  </Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this company?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-  <ToastContainer />
-</div>
-); };
-export default CompanyEditableDetails ;
+      <ToastContainer position="top-right" autoClose={3000} />
+    </div>
+  );
+};
+
+export default CompanyEditableDetails;
