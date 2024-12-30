@@ -23,6 +23,7 @@ const Jobs = ({ country }) => {
             try {
                 if (isMounted) {
                     const response = await getJobPostings(country);
+                    console.log(response.data);
                     setJobs(response.data);
                     setFilteredJobs(response.data.slice(0, 10));
                 }
@@ -117,7 +118,7 @@ const Jobs = ({ country }) => {
                                             {expandedRow === index ? '-' : '+'}
                                         </span>
                                     </td>
-                                    <td className='job-title' onClick={() => handleJobClick(job.jobId)} >{job.title}</td>
+                                    <td className='job-title' onClick={() => handleJobClick(job.jobid)} >{job.title}</td>
                                     <td>{job.company}</td>
                                     <td>{job.workplacetype}</td>
                                     <td>{job.employeelocation}</td>

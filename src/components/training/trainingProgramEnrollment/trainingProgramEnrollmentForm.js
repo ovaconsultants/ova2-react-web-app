@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import { useLocation, useParams , useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom"; // Removed `useLocation`
 import { ToastContainer } from "react-toastify";
+import ToastMessage from "../../../constants/toastMessage";
 import { postEnrollmentCourseDetails } from "../../../api/adminUserService";
 import "react-toastify/dist/ReactToastify.css";
 
-// import './trainingEnrollment.scss'; // Optional: Custom styles for customizations
-
 const TrainingProgramEnrollmentForm = () => {
-  const location = useLocation();
-  const navigate  = useNavigate();
-  const data = location.state?.data || {};
-  console.log("coursee details " , data);
-  const { courseName } = useParams();
+  const { courseName: originalCourseName } = useParams();
+
+  // Capitalize the first letter of each word in the course name
+  const capitalizeWords = (str) =>
+    str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+  const courseName = capitalizeWords(originalCourseName);
 
   // State to hold form data
   const [formData, setFormData] = useState({
@@ -21,7 +25,6 @@ const TrainingProgramEnrollmentForm = () => {
     phone: "",
   });
 
-  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   // Handle input changes
@@ -37,19 +40,17 @@ const TrainingProgramEnrollmentForm = () => {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
-    try { 
-        const response = await postEnrollmentCourseDetails(formData) ;
-        if(response){
-            setTimeout(alert(`you have successfully regstered for ${courseName}`), 4000);
-             navigate("/training");
-        }
-        
-        
+    try {
+      const response = await postEnrollmentCourseDetails(formData);
+      if (response) {
+        ToastMessage("You have successfully registered for the course.");
+      }
     } catch (error) {
-        console.log("error in getting response from the server while posting :" , error )
-        throw error ;
+      console.error(
+        "Error in getting response from the server while posting:",
+        error
+      );
     }
-
   };
 
   return (
@@ -60,7 +61,9 @@ const TrainingProgramEnrollmentForm = () => {
             <div className="col-md-12 text-center">
               <div className="block">
                 <h1 className="display-4 mb-4">Training Program Enrollment</h1>
-                <p className="lead">Please fill in the details to enroll in the course</p>
+                <p className="lead">
+                  Please fill in the details to enroll in the course
+                </p>
               </div>
             </div>
           </div>
@@ -73,7 +76,7 @@ const TrainingProgramEnrollmentForm = () => {
             {/* First column with two fields */}
             <div className="col-md-6">
               <div className="block">
-                {[ 
+                {[
                   { name: "course_name", type: "text", placeholder: "Course Name" },
                   { name: "student_name", type: "text", placeholder: "Student Name" },
                 ].map(({ name, type, placeholder }, index) => (
@@ -88,7 +91,9 @@ const TrainingProgramEnrollmentForm = () => {
                       required
                       placeholder={placeholder}
                     />
-                    {errorMessage && <div className="text-danger">{errorMessage}</div>}
+                    {errorMessage && (
+                      <div className="text-danger">{errorMessage}</div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -97,7 +102,7 @@ const TrainingProgramEnrollmentForm = () => {
             {/* Second column with two fields */}
             <div className="col-md-6">
               <div className="block">
-                {[ 
+                {[
                   { name: "email", type: "email", placeholder: "Email Address" },
                   { name: "phone", type: "text", placeholder: "Phone Number" },
                 ].map(({ name, type, placeholder }, index) => (
@@ -119,7 +124,11 @@ const TrainingProgramEnrollmentForm = () => {
 
             <div className="row justify-content-center">
               <div className="col-lg-6 col-md-8 col-sm-12">
-                <button className="btn btn-primary w-100 mt-3 mb-4" type="submit">
+                <button
+                  className="btn btn-primary w-100 mt-3 mb-4"
+                  type="submit"
+                  style={{ backgroundColor: "#47424c", borderColor: "#47424c" }}
+                >
                   Submit Enrollment
                 </button>
               </div>
@@ -128,7 +137,6 @@ const TrainingProgramEnrollmentForm = () => {
         </div>
       </section>
 
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
       <ToastContainer />

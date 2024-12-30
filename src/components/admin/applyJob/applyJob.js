@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { createApplicant } from '../../../api/applicantService';
 import './applyJob.scss';
+import ToastMessage from "../../../constants/toastMessage";
+import { ToastContainer } from "react-toastify";
 
 const ApplyJob = ({ closeModal, jobId }) => {
  // const [applications, setApplications] = useState([]);
@@ -17,6 +19,7 @@ const ApplyJob = ({ closeModal, jobId }) => {
       jobId,
     };
     const response = await createApplicant(application);
+    ToastMessage("Application registered successfully");
     console.log('Job Updated:', response);
     setShowSuccess(true);
     e.target.reset();
@@ -30,11 +33,11 @@ const ApplyJob = ({ closeModal, jobId }) => {
     <div className="apply-job-form">
       <section className="contact-form">
         <div className="container">
-        {showSuccess && (
+        {/* {showSuccess && (
             <div className="alert alert-success mt-3" role="alert">
               Application Submitted Successfully! HR will connect you soon.
             </div>
-          )}
+          )} */}
           <form className="row" onSubmit={handleApplicationSubmit}>
             <div className="col-md-12 col-sm-12">
               <div className="block">
@@ -82,6 +85,7 @@ const ApplyJob = ({ closeModal, jobId }) => {
       
         </div>
       </section>
+       <ToastContainer />
     </div>
   );
 };
