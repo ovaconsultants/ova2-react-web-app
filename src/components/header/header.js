@@ -160,7 +160,7 @@ const Header = () => {
                         onClick={() => setExpanded(false)}
                         className="custom-text"
                       >
-                        Generate Pay Slip
+                         Pay Slip
                       </NavDropdown.Item>
                       <NavDropdown.Item
                         as={Link}

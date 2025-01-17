@@ -113,8 +113,10 @@ const TrainingProgramEnrollmentForm = () => {
           <div className="row">
             <div className="col-md-12 text-center">
               <div className="block">
-                <h1 className="display-4 mb-4">Training Program Enrollment</h1>
-                <p className="lead">Please fill in the details to enroll in the course</p>
+                <h1 className="display-8 mb-4">Training Program Enrollment</h1>
+                <p className="lead">
+                  Please fill in the details to enroll in the course
+                </p>
               </div>
             </div>
           </div>
