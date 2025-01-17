@@ -206,7 +206,11 @@ const Vendor = () => {
                       <tr key={comment.id}>
                         <td>{index + 1}</td>
                         <td>{comment.comment}</td>
-                        <td><em>{comment.created_date}</em></td>
+                        <td><em>{new Date(comment.created_date).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })}</em></td>
                       </tr>
                     ))}
                   </tbody>

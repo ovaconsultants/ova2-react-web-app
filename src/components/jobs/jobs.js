@@ -66,7 +66,7 @@ const Jobs = ({ country }) => {
         setShowModal(false);
     };
     const handleJobClick = (jobId) => {
-        navigate(`/job/${jobId}`);
+        navigate("/job/job-details", { state: { jobId: jobId } });
       };
 
 
@@ -85,7 +85,7 @@ const Jobs = ({ country }) => {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 text-start">
             <h4 className="text-center">Job Listings - {country}</h4>
             <input
                 type="text"
@@ -177,7 +177,7 @@ const Jobs = ({ country }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title">Apply for {selectedJob?.title}</h5>
+                            <h5 className="modal-title1">Apply for {selectedJob?.title}</h5>
                             <button type="button" className="close" onClick={closeModal}>
                                 <span>&times;</span>
                             </button>

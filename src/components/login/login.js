@@ -23,8 +23,9 @@ const Login = () => {
   const setGlobalRegistrationId = useSetAtom(registrationIdAtom);
   const setGlobalRoleName = useSetAtom(roleNameAtom);
   const setGlobalUserImage = useSetAtom(userImageAtom);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const [error, setError] = useState("");
+   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -101,17 +102,28 @@ const Login = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group position-relative">
                   <input
                     name="password"
-                    type="password"
+                    type={passwordVisible ? "text" : "password"}
                     className="form-control"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
+                  <span
+                    className="password-toggle-icon position-absolute"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                  >
+                    <i
+                      className={`bi ${
+                        passwordVisible ? "bi-eye-slash-fill" : "bi-eye-fill"
+                      }`}
+                    ></i>
+                  </span>
                 </div>
+
                 <div className="text-end mb-3">
                   <Link
                     to="/password-recovery"

@@ -1,6 +1,6 @@
 import React from 'react';
 import {companyName}  from "../../../constants/commonConstant";
-
+import "../aboutHome/aboutHome.scss";
 const AboutHome = () => {
     return (
         <section className="about section">

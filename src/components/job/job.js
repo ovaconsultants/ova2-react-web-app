@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { getJobPostingById } from "../../api/jobPostingService";
 import ApplyJob from "../admin/applyJob/applyJob";
-import "../jobs/jobs.scss";
+import "./job.scss";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../../utils/commonUtil";
+import { useLocation } from "react-router-dom";
 import LoadingSpinner from "../common/loadingSpinner/loadingSpinner";
 
 const Job = () => {
   console.log("this is params for job page ", useParams());
-  const { jobId } = useParams();
+  const location = useLocation();
+  const jobId = location?.state?.jobId;
   const [job, setJob] = useState({});
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
