@@ -6,7 +6,7 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-   withCredentials: true, // Include cookies with requests
+  credentials: 'include', // Ensures cookies are sent with the request
 });
 
 export default apiClient;
