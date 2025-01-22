@@ -37,6 +37,8 @@ import TrainingProgramEnrollmentForm from "../training/trainingProgramEnrollment
 import CourseEnrollementDetails from "../admin/course-enrolement-details/course-enrolement-details";
 import Clients from "../clientsData/clients/clients";
 import ClientDetails from "../clientsData/clientDetails/clientDetails";
+import UserGuide from "../userGuide/userGuide";
+
 
 const Navigation = () => {
   return (
@@ -49,6 +51,7 @@ const Navigation = () => {
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<Home />} />
       <Route path="/service" element={<Service />} />
+      <Route path="/user-guide" element={<UserGuide />} />
 
       {/* Training and Projects */}
       <Route path="/training" element={<TrainingProgram />} />
@@ -67,8 +70,8 @@ const Navigation = () => {
       <Route path="/clients/:clientName" element={<ClientDetails />} />
 
       {/* Job Listings and Details */}
-      <Route path="/in/jobs" element={<Jobs country="India" />} />
-      <Route path="/us/jobs" element={<Jobs country="USA" />} />
+      <Route path="/india/jobs" element={<Jobs country="India" />} />
+      <Route path="/usa/jobs" element={<Jobs country="USA" />} />
       <Route path="/job/:jobId" element={<Job />} />
 
       {/* Authentication Routes */}
@@ -98,7 +101,7 @@ const Navigation = () => {
 
       {/* Admin Contact Queries and Enrollment Details */}
       <Route path="/admin/contact-query-details" element={<ProtectedRoute><ContactQueryDetails /></ProtectedRoute>} />
-      <Route path="/admin/enrollement-details" element={<ProtectedRoute><CourseEnrollementDetails /></ProtectedRoute>} />
+      <Route path="/admin/enrollment-details" element={<ProtectedRoute><CourseEnrollementDetails /></ProtectedRoute>} />
 
       {/* Admin Vendor Management */}
       <Route path="/admin/vendor" element={<ProtectedRoute><Vendor /></ProtectedRoute>} />

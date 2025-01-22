@@ -93,6 +93,13 @@ const Header = () => {
                 >
                   Contact
                 </Link>
+                {/* <Link
+                  className="nav-link"
+                  to="/user-guide"
+                  onClick={() => setExpanded(false)}
+                >
+                  { Help }
+                </Link> */}
                 <Link
                   className="nav-link"
                   to="/clients"
@@ -104,7 +111,7 @@ const Header = () => {
                 <NavDropdown title="Jobs" id="jobs-dropdown">
                   <NavDropdown.Item
                     as={Link}
-                    to="/in/jobs"
+                    to="/india/jobs"
                     onClick={() => setExpanded(false)}
                     className="capitalize-first"
                   >
@@ -112,7 +119,7 @@ const Header = () => {
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     as={Link}
-                    to="/us/jobs"
+                    to="/usa/jobs"
                     onClick={() => setExpanded(false)}
                   >
                     USA
@@ -160,7 +167,7 @@ const Header = () => {
                         onClick={() => setExpanded(false)}
                         className="custom-text"
                       >
-                         Pay Slip
+                        Pay Slip
                       </NavDropdown.Item>
                       <NavDropdown.Item
                         as={Link}
