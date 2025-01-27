@@ -1,148 +1,396 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Modal, Button } from "react-bootstrap";
-import { FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
+import Multiselect from "multiselect-react-dropdown";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { updateUser, fetchRoles, getUserDetails, deleteUser } from "../../api/adminUserService";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
+import { FaPencilAlt } from "react-icons/fa";
+import {
+  updateUser,
+  fetchRoles,
+  getUserDetails,
+  deleteUser,
+  updateUserTechnologies,
+} from "../../api/adminUserService";
 import { fetchRegistrationTypes } from "../../api/registerService";
+import { fetchSoftwareTechnologies } from "../../api/adminUserService";
 import ToastMessage from "../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
-import { TextInput } from "../common/formComponents/textInput";
 import { validateEditingField } from "../common/formComponents/validateFields";
+import { TextInput } from "../common/formComponents/textInput";
+import { Dropdown } from "../common/formComponents/selectDropDown";
 import "./userEdit.scss";
 
 const UserEdit = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
-  const [registrationTypes, setRegistrationTypes] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [formErrors, setFormErrors] = useState({});
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editedUserDetails, setEditedUserDetails] = useState({});
+  const [registrationTypeMap, setRegistrationTypeMap] = useState([]);
+  const [roleMap, setRoleMap] = useState([]);
+  const [technologies, setTechnologies] = useState([]);
+  const [selectedTechnologies, setSelectedTechnologies] = useState([]);
+  const [formErrors, setFormErrors] = useState({}); // State to store validation errors
+
+  const location = useLocation();
+  const userId = location.state?.userId;
+  console.log("passed userid :", userId);
   const navigate = useNavigate();
-  const userId = useLocation().state?.userId;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const loadData = async (fetchFn, setFn, errorMessage) => {
+  const handleShowDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleSaveTechnologies = async () => {
     try {
-      const data = await fetchFn();
-      setFn(data);
-    } catch (error) {
-      console.error(errorMessage, error);
-    }
-  };
+      const technologyIds = selectedTechnologies.join(","); // Join technology IDs as a comma-separated string
 
-  useEffect(() => {
-    if (userId) loadData(() => getUserDetails(userId), setUserDetails, "Failed to fetch user details");
-    loadData(fetchRegistrationTypes, setRegistrationTypes, "Failed to fetch registration types");
-    loadData(fetchRoles, setRoles, "Failed to fetch roles");
-  }, [userId]);
+      // Send the update request with technology IDs
+      await updateUserTechnologies(userId, technologyIds);
 
-  const handleInputChange = ({ target: { name, value } }) => {
-    setFormErrors((prev) => validateEditingField(name, value, prev));
-    setUserDetails((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = async () => {
-    if (Object.values(formErrors).some((error) => error)) return alert("Fix errors before saving.");
-    try {
-      await updateUser(userId, userDetails);
-      const updatedDetails = {
-        ...userDetails,
-        role_name: roles.find((role) => role.role_id === userDetails.role_id)?.role_name,
-        registration_type_name: registrationTypes.find(
-          (type) => type.registration_type_id === userDetails.registration_type_id
-        )?.registration_type_name,
-      };
-      setUserDetails(updatedDetails);
       ToastMessage("User updated successfully!");
-      setIsEditing(false);
     } catch (error) {
-      console.error("Failed to update user details", error);
+      console.error("Error updating technologies:", error);
     }
   };
 
-  const handleDelete = async () => {
+  const handleConfirmDelete = async () => {
     try {
+      ToastMessage("User deleted successfully");
       await deleteUser(userId);
-      ToastMessage("User deleted successfully!");
-      navigate("/admin/users");
+      setTimeout(() => navigate("/admin/users"), 3000);
     } catch (error) {
-      console.error("Failed to delete user", error);
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user");
     } finally {
       setShowDeleteModal(false);
     }
   };
 
-  const FormField = ({ label, name, type = "text", options = [] }) => (
-    <div className="mb-3 text-start">
-  <label className="d-block mb-1"><strong>{label}:</strong></label>
-  {isEditing ? (
-    <div>
-      {options.length > 0 ? (
-        <select name={name} className="form-control" value={userDetails[name] || ""} onChange={handleInputChange}>
-          <option value="">Select {label}</option>
-          {options.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-        </select>
-      ) : (
-        <TextInput name={name} value={userDetails[name] || ""} onChange={handleInputChange} type={type} error={formErrors[name]} />
-      )}
-    </div>
-  ) : (
-    <p className="d-block mb-0">{options.find((opt) => opt.id == userDetails[name])?.name || userDetails[name] || "Not Selected"}</p>
-  )}
-</div>
+  useEffect(() => {
+    const loadUserDetails = async () => {
+      try {
+        const data = await getUserDetails(userId);
+        console.log("user details from userEdit component", data);
+           // Set selected technologies based on the user's assigned technologies
+        const userTechnologiesArray = data.technologies
+        .split(",")
+        .map(Number);
+      console.log("User technologies array:", userTechnologiesArray);
 
-  );
+         setSelectedTechnologies(userTechnologiesArray);
+        setEditedUserDetails(data);
+      } catch (error) {
+        console.error("Failed to fetch user details", error);
+      }
+    };
+    if (userId) loadUserDetails();
+  }, [userId]);
+
+  useEffect(() => {
+    const loadRegistrationTypes = async () => {
+      try {
+        const registrationTypes = await fetchRegistrationTypes();
+        setRegistrationTypeMap(registrationTypes);
+      } catch (error) {
+        console.error("Failed to fetch registration types:", error);
+      }
+    };
+
+    const loadRolesTypesAndTechnologies = async () => {
+      try {
+        const rolesType = await fetchRoles();
+        const fetchedTechnologies = await fetchSoftwareTechnologies();
+        setTechnologies(fetchedTechnologies);
+        setRoleMap(rolesType);
+      } catch (error) {
+        console.error("Failed to fetch roles:", error);
+      }
+    };
+
+    loadRegistrationTypes();
+    loadRolesTypesAndTechnologies();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const updatedErrors = validateEditingField(name, value, formErrors);
+    setFormErrors(updatedErrors); // Update errors state
+    setEditedUserDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDropdownChange = (e) => {
+    const { name, value } = e.target;
+    const updatedErrors = validateEditingField(name, value, formErrors);
+    setFormErrors(updatedErrors);
+    setEditedUserDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    const hasErrors = Object.values(formErrors).some((error) => error);
+    if (hasErrors) {
+      alert("Please fix the errors before saving.");
+      return;
+    }
+
+    try {
+      await handleSaveTechnologies();
+      await updateUser(userId, editedUserDetails);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update user details", error);
+      alert("Error updating user details");
+    }
+  };
+
+  const textFields1 = [
+    { name: "first_name", label: "First Name" },
+    { name: "last_name", label: "Last Name" },
+    { name: "email", label: "Email", type: "email" },
+    { name: "address", label: "Address" },
+  
+  ];
+  const textFields2 = [
+    { name: "phone", label: "Phone", type: "tel" },
+  ];
+  const additionalFields = [
+    { name: "current_location", label: "Current Location", type: "text" },
+    { name: "experience_in_years", label: "Experience (Years)", type: "number" },
+  ];
+
+  const dropdownFields = [
+    {
+      name: "role_id",
+      label: "Role",
+      options: roleMap,
+      visibleSelectorString: "Select Role",
+    },
+    {
+      name: "registration_type_id",
+      label: "Registration Type",
+      options: registrationTypeMap,
+      visibleSelectorString: "Select Registration Type",
+    },
+  ];
 
   return (
     <div className="container mt-5">
-      <div className="d-flex justify-content-between mb-4">
-        <h2>{isEditing ? "Edit User Details" : "User Details"}</h2>
-        <div>
+      <div className="row mb-4">
+        <div className="col-8 text-start">
+          <h2>{isEditing ? "Edit User Details" : "User Details"}</h2>
+        </div>
+        <div className="col-4 text-end">
           {isEditing ? (
             <>
-              <button className="btn btn-primary" onClick={handleSave}><FontAwesomeIcon icon={faSave} /></button>
-              <button className="btn btn-danger ms-2" onClick={() => setIsEditing(false)}><FontAwesomeIcon icon={faTimes} /></button>
+              <button
+                className="btn btn-primary"
+                onClick={handleSave}
+                data-bs-toggle="tooltip"
+                title="Save"
+              >
+                <FontAwesomeIcon icon={faSave} />
+              </button>
+              <button
+                className="btn btn-danger ms-2"
+                onClick={() => setIsEditing(false)}
+                data-bs-toggle="tooltip"
+                title="Cancel"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
             </>
           ) : (
             <>
-              <button className="btn btn-primary" onClick={() => setIsEditing(true)}><FaEdit /></button>
-              <button className="btn btn-danger ms-2" onClick={() => setShowDeleteModal(true)}>Delete</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setIsEditing(true)}
+                data-bs-toggle="tooltip"
+                title="Edit"
+              >
+                <i className="bi bi-pencil"></i>
+              </button>
+              <button
+                className="btn btn-danger ms-2"
+                onClick={handleShowDeleteModal}
+                data-bs-toggle="tooltip"
+                title="Delete"
+              >
+                <i className="bi bi-trash"></i>
+              </button>
             </>
           )}
         </div>
       </div>
 
-      <div className="card mb-4">
+      <div className="card mb-4 text-start">
         <div className="card-body">
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form onSubmit={handleSave}>
             <div className="row">
-              <div className="col-md-6 text-start">
-                <FormField label="First Name" name="first_name" />
-                <FormField label="Last Name" name="last_name" />
-                <FormField label="Email" name="email" type="email" />
-                <FormField label="Active" name="is_active" options={[{ id: true, name: "Yes" }, { id: false, name: "No" }]} />
+              <div className="col-md-6">
+                {textFields1.map(({ name, label, type }) => (
+                  <div key={name} className="mb-3">
+                    <label>
+                      <strong>{label}:</strong>
+                    </label>
+                    {isEditing ? (
+                      <TextInput
+                        name={name}
+                        value={editedUserDetails[name] || ""}
+                        onChange={handleInputChange}
+                        type={type || "text"}
+                        error={formErrors[name]} // Show error message
+                      />
+                    ) : (
+                      <p>{editedUserDetails[name]}</p>
+                    )}
+                  </div>
+                ))}
+                <div className="mb-3">
+                  <label>
+                    <strong>Active:</strong>
+                  </label>
+                  {isEditing ? (
+                    <select
+                      className="form-control"
+                      value={editedUserDetails.is_active ? "Yes" : "No"}
+                      onChange={(e) =>
+                        handleInputChange({
+                          target: {
+                            name: "is_active",
+                            value: e.target.value === "Yes",
+                          },
+                        })
+                      }
+                    >
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  ) : (
+                    <p>{editedUserDetails.is_active ? "Yes" : "No"}</p>
+                  )}
+                </div>
               </div>
-              <div className= "col-md-6 text-start ">
-                <FormField label="Address" name="address" />
-                <FormField label="Phone" name="phone" type="tel" />
-                <FormField label="Role" name="role_id" options={roles.map((role) => ({ id: role.role_id, name: role.role_name }))} />
-                <FormField label="Registration Type" name="registration_type_id" options={registrationTypes.map((type) => ({ id: type.registration_type_id, name: type.registration_type_name }))} />
+
+              <div className="col-md-6">
+                {textFields2.concat(additionalFields).map(({ name, label, type }) => (
+                  <div key={name} className="mb-3">
+                    <label>
+                      <strong>{label}:</strong>
+                    </label>
+                    {isEditing ? (
+                      <TextInput
+                        name={name}
+                        value={editedUserDetails[name] || ""}
+                        onChange={handleInputChange}
+                        type={type || "text"}
+                        error={formErrors[name]}
+                      />
+                    ) : (
+                      <p>{editedUserDetails[name]}</p>
+                    )}
+                  </div>
+                ))}
+                {dropdownFields.map(
+                  ({ name, label, options, visibleSelectorString }) => (
+                    <div key={name} className="mb-3">
+                      <label>
+                        <strong>{label}:</strong>
+                      </label>
+                      {isEditing ? (
+                        <Dropdown
+                          name={name}
+                          value={editedUserDetails[name] || ""}
+                          onChange={handleDropdownChange}
+                          options={options}
+                          visibleSelectorString={visibleSelectorString}
+                          error={formErrors[name]}
+                        />
+                      ) : (
+                        <p>
+                          {(options.find(
+                            (opt) =>
+                              opt[
+                                options[0] ? Object.keys(options[0])[0] : "id"
+                              ] === editedUserDetails[name]
+                          ) || {})[
+                            options[0] ? Object.keys(options[0])[1] : "name"
+                          ] || editedUserDetails[name]}
+                        </p>
+                      )}
+                    </div>
+                  )
+                )}
               </div>
             </div>
+            <div className="row mb-3">
+              <div className="col-md-6 text-start">
+                <strong className="me-3">Technology:</strong>
+                {isEditing ? (
+                  <>
+                    <Multiselect
+                      options={technologies?.filter((tech) => tech) || []}
+                      selectedValues={selectedTechnologies
+                        .map((techId) =>
+                          technologies?.find((tech) => tech.id === techId)
+                        )
+                        .filter(Boolean)}
+                      onSelect={(selectedList) =>
+                        setSelectedTechnologies(
+                          selectedList.map((tech) => tech.id)
+                        )
+                      }
+                      onRemove={(removedList) => {
+                        // Filter out removed technologies from the selected list
+                        const removedIds = new Set(
+                          removedList.map((tech) => tech.id)
+                        );
+                        const updatedTechnologies = selectedTechnologies.filter(
+                          (techId) => removedIds.has(techId)
+                        );
+                        setSelectedTechnologies(updatedTechnologies);
+                      }}
+                      displayValue="technology"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p className="mb-0">
+                      {technologies.length > 0 &&
+                        selectedTechnologies
+                          .map((techId) =>
+                            technologies.find((tech) => tech.id === techId)
+                          )
+                          .filter(Boolean)
+                          .map((tech) => tech.technology)
+                          .join(", ")}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+            
           </form>
         </div>
       </div>
 
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton><Modal.Title>Confirm Delete</Modal.Title></Modal.Header>
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
         <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Cancel</Button>
-          <Button variant="danger" onClick={handleDelete}>Ok</Button>
+          <Button
+            variant="secondary"
+            onClick={handleCloseDeleteModal}
+            className="cancel-btn"
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Ok
+          </Button>
         </Modal.Footer>
       </Modal>
-
       <ToastContainer />
     </div>
   );

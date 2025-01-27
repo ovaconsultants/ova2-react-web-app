@@ -65,6 +65,13 @@ export const jobTilesData = [
         roleName: 'admin',
     },
     {
+        title: 'Exception Logs Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/exception-logs-details',
+        roleName: 'admin',
+    },
+    {
         title: 'Letter Head',
         description: 'Click Me!.',
         image: '',

@@ -49,9 +49,9 @@
   }
 
   .nav-dropdown-item.custom-text {
-    color: #333; 
+    color: #808080; 
     padding: 0.7rem 1rem; 
-    text-align: left;
+    text-align: center;
   }
   
   .nav-dropdown-item.custom-text:hover,
@@ -73,6 +73,14 @@
     padding: 5px 10px;
     display: inline-block;
   }
-  
+
+  .navigation .navbar .dropdown-menu a {
+    font-weight: normal;
+    color: #808080;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+ 
   
   

@@ -1,11 +1,14 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getCompanies,
   fetchCompanyTypes,
   fetchAllEmployeeAllocations,
   fetchCommentsByCompanyId,
+  postExcelVendorFile,
 } from "../../../api/companyServices";
+import Dropdown from "./dropdown";
+import ExpandedRow from "./expandRow";
 import "./vendor.scss";
 
 const Vendor = () => {
@@ -18,11 +21,17 @@ const Vendor = () => {
   const [companyTypes, setCompanyTypes] = useState([]);
   const [responders, setResponders] = useState([]);
   const [comments, setComments] = useState({});
+  const [uploadMessage, setUploadMessage] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({
     companyType: "",
     responder: "",
     isActive: "",
   });
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadResponse, setUploadResponse] = useState("");
+  const [hasMoreRecords, setHasMoreRecords] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const observer = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -89,8 +98,24 @@ const Vendor = () => {
   }, [companies, searchTerm, selectedFilters]);
 
   useEffect(() => {
-    setFilteredCompanies(filteredCompaniesMemo);
+    setFilteredCompanies(filteredCompaniesMemo.slice(0, 20));
   }, [filteredCompaniesMemo]);
+
+  const loadMoreCompanies = () => {
+    const nextPage = currentPage + 1;
+    const newCompanies = filteredCompaniesMemo.slice(
+      nextPage * 20 - 20,
+      nextPage * 20
+    );
+
+    if (newCompanies.length === 0) {
+      setHasMoreRecords(false);
+      return;
+    }
+
+    setFilteredCompanies((prev) => [...prev, ...newCompanies]);
+    setCurrentPage(nextPage);
+  };
 
   const toggleExpandRow = (index, companyId) => {
     if (expandedRow === index) {
@@ -114,6 +139,29 @@ const Vendor = () => {
     });
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadResponse("");
+    setUploadMessage("Vendor Data is uploading...");
+    try {
+      const response = await postExcelVendorFile(file);
+      setUploadResponse(
+        `Upload Successful! ${response.successfulEntries.length} entries succeeded, ${response.failedEntries.length} failed.`
+      );
+      const updatedCompanies = await getCompanies();
+      setCompanies(updatedCompanies);
+    } catch (err) {
+      setUploadResponse("File upload failed. Please try again.");
+      console.error("File upload error:", err);
+    } finally {
+      setIsUploading(false);
+      setUploadMessage("");
+    }
+  };
+
   if (error) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -121,111 +169,6 @@ const Vendor = () => {
       </div>
     );
   }
-
-  const Dropdown = ({ name, options, value, onChange, placeholder }) => (
-    <div className="col-auto">
-      <select
-        className="form-control mb-3 dropdown-height"
-        name={name}
-        value={value}
-        onChange={onChange}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((opt) => (
-          <option key={opt.id || opt.value} value={opt.id || opt.value}>
-            {opt.type_name || opt.employeename || opt.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-
-  const ExpandedRow = ({ company }) => (
-    <tr>
-      <td colSpan="9" className="expanded-row">
-        <div className="row">
-          <div className="col-md-6">
-            <table className="table table-bordered">
-              <tbody>
-                {[
-                  { label: "Comment", value: company.comment },
-                  { label: "Communication Through", value: company.communicatethrough },
-                  { label: "Contact No", value: company.contact_no },
-                  { label: "Contact Person Designation", value: company.contact_person_designation },
-                  { label: "Contact Person Email", value: company.contact_person_email },
-                  { label: "Current Position", value: company.currentposition },
-                ].map(({ label, value }) => (
-                  <tr key={label}>
-                    <td className="font-weight-bold">{label}:</td>
-                    <td>{value || "N/A"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="col-md-6">
-            <table className="table table-bordered">
-              <tbody>
-                {[
-                  { label: "Follow Up", value: company.followup },
-                  // { label: "Follow Up Date", value: company.followupdate },
-                  { label: "Website URL", value: company.website_url, isLink: true },
-                  { label: "Industry Sector", value: company.industry_sector },
-                  { label: "Description", value: company.description },
-                ].map(({ label, value, isLink }) => (
-                  <tr key={label}>
-                    <td className="font-weight-bold">{label}:</td>
-                    <td>
-                      {isLink ? (
-                        <a href={value} target="_blank" rel="noopener noreferrer">
-                          {value}
-                        </a>
-                      ) : (
-                        value || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="col-md-12 mt-3">
-            <strong>Comments:</strong>
-            {comments[company.id] ? (
-              comments[company.id].length > 0 ? (
-                <table className="table table-bordered mt-2">
-                  <thead>
-                    <tr className="table-secondary">
-                      <th>#</th>
-                      <th>Comment</th>
-                      <th>Follow Up Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comments[company.id].map((comment, index) => (
-                      <tr key={comment.id}>
-                        <td>{index + 1}</td>
-                        <td>{comment.comment}</td>
-                        <td><em>{new Date(comment.created_date).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}</em></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>No comments available.</p>
-              )
-            ) : (
-              <p>Loading comments...</p>
-            )}
-          </div>
-        </div>
-      </td>
-    </tr>
-  );
 
   return (
     <div className="container mt-5">
@@ -265,6 +208,28 @@ const Vendor = () => {
           onChange={handleFilterChange}
           placeholder="--Status--"
         />
+        <div className="col-auto">
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileUpload}
+            style={{ display: "none" }}
+            id="uploadFileInput"
+          />
+          <label
+            htmlFor="uploadFileInput"
+            className="btn btn-primary mb-3"
+            style={{ cursor: "pointer" }}
+          >
+            {isUploading ? "Uploading..." : "Upload Excel"}
+          </label>
+        </div>
+        {isUploading && (
+          <div className="alert alert-info" role="alert">
+            {uploadMessage || "Vendor Data is uploading... Please wait."}
+          </div>
+        )}
+
         <div className="col-auto">
           <button
             type="button"
@@ -326,7 +291,7 @@ const Vendor = () => {
                       <td>{companyType ? companyType.type_name : "Unknown"}</td>
                       <td>{company.is_active ? "Yes" : "No"}</td>
                     </tr>
-                    {expandedRow === index && <ExpandedRow company={company} />}
+                    {expandedRow === index && <ExpandedRow company={company} comments={comments} />}
                   </React.Fragment>
                 );
               })
@@ -340,6 +305,14 @@ const Vendor = () => {
           </tbody>
         </table>
       </div>
+
+      {hasMoreRecords && (
+        <div className="text-center mt-4">
+          <button className="btn btn-primary" onClick={loadMoreCompanies}>
+            Show More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

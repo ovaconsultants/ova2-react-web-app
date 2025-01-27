@@ -36,7 +36,7 @@ const Header = () => {
 
   const handleProfileClick = () => {
     setExpanded(false);
-    navigate("/profile", { state: { userId } });
+    navigate(`/profile/${userId}`);
   };
 
   return (
@@ -170,16 +170,14 @@ const Header = () => {
                         Pay Slip
                       </NavDropdown.Item>
                       <NavDropdown.Item
-                        as={Link}
-                        to=""
-                        onClick={() => setExpanded(false)}
-                        className="custom-text"
+                        as="button"
+                        onClick={() => {
+                          handleLogout();
+                          setExpanded(false);
+                        }}
+                        className="nav-dropdown-item custom-text"
                       >
-                          <button
-                      className="nav-link btn btn-link"
-                      title="Logout"
-                      onClick={handleLogout}
-                    >Log out </button>
+                        Log Out
                       </NavDropdown.Item>
                     </NavDropdown>
 
