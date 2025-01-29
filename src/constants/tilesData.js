@@ -58,10 +58,17 @@ export const jobTilesData = [
         roleName: 'admin',
     },
     {
-        title: 'Enrollment Details',
+        title: ' Course Enrollment Details',
         description: 'Click Me!.',
         image: '',
-        route: '/admin/enrollement-details',
+        route: '/admin/enrollment-details',
+        roleName: 'admin',
+    },
+    {
+        title: 'Exception Logs Details',
+        description: 'Click Me!.',
+        image: '',
+        route: '/admin/exception-logs-details',
         roleName: 'admin',
     },
     {

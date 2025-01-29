@@ -148,6 +148,23 @@ export const fetchAllEmployeeAllocations = async () => {
           console.error("Error fetching comments by company ID:", error);
           throw error;
         }
-      };      
+      };  
+      
+      export const postExcelVendorFile = async (file) => {
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const response = await apiClient.post("/company/upload", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+      
+         return response.data;
+        } catch (error) {
+          console.error('Error occurred during the Excel file upload:', error);
+          throw error; 
+        }
+      };
       
       

@@ -36,6 +36,7 @@ const fieldNames = [
       { name: "email_address" },
       { name: "contact_no" },
       { name: "location" },
+      { name: "website_url" },
       { name: "contact_person_name" },
       { name: "contact_person_phone" },
       { name: "contact_person_email" },

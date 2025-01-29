@@ -37,23 +37,29 @@ import TrainingProgramEnrollmentForm from "../training/trainingProgramEnrollment
 import CourseEnrollementDetails from "../admin/course-enrolement-details/course-enrolement-details";
 import Clients from "../clientsData/clients/clients";
 import ClientDetails from "../clientsData/clientDetails/clientDetails";
+import ExceptionLogsDetails from "../admin/exceptionLogsDetails/exceptionLogsDetails";
+// import UserGuide from "../userGuide/userGuide";
+
 
 const Navigation = () => {
   return (
-
     <Routes>
       {/* -------------------------- Public Routes -------------------------- */}
-      
+
       {/* Home and General Pages */}
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<Home />} />
       <Route path="/service" element={<Service />} />
+      {/* <Route path="/user-guide" element={<UserGuide />} /> */}
 
       {/* Training and Projects */}
       <Route path="/training" element={<TrainingProgram />} />
       <Route path="/training/:courseName" element={<TrainingDetail />} />
-      <Route path="/training/:courseName/enroll" element={<TrainingProgramEnrollmentForm />} />
+      <Route
+        path="/training/:courseName/enroll"
+        element={<TrainingProgramEnrollmentForm />}
+      />
       <Route path="/projects" element={<Projects />} />
       <Route path="/portfolio-single" element={<PortfolioSingle />} />
 
@@ -62,13 +68,13 @@ const Navigation = () => {
       <Route path="/pricing" element={<Contact />} />
       <Route path="/contact" element={<Contact />} />
 
-       {/* Clients */}
+      {/* Clients */}
       <Route path="/clients" element={<Clients />} />
       <Route path="/clients/:clientName" element={<ClientDetails />} />
 
       {/* Job Listings and Details */}
-      <Route path="/in/jobs" element={<Jobs country="India" />} />
-      <Route path="/us/jobs" element={<Jobs country="USA" />} />
+      <Route path="/india/jobs" element={<Jobs country="India" />} />
+      <Route path="/usa/jobs" element={<Jobs country="USA" />} />
       <Route path="/job/:jobId" element={<Job />} />
 
       {/* Authentication Routes */}
@@ -77,55 +83,150 @@ const Navigation = () => {
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/search" element={<UserSearch />} />
 
-
-
       {/* ------------------------ Protected Admin Routes ------------------------ */}
 
       {/* Admin Panel and Protected Routes */}
-      <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/:userId"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Admin Job and Contact Details */}
-      <Route path="/admin/contact-details" element={<ProtectedRoute><ContactDetails /></ProtectedRoute>} />
-      <Route path="/admin/job-posting" element={<ProtectedRoute><JobPosting /></ProtectedRoute>} />
-      <Route path="/admin/job-applicants" element={<ProtectedRoute><JobApplicants /></ProtectedRoute>} />
-      <Route path="/admin/job-details" element={<ProtectedRoute><JobDetails /></ProtectedRoute>} />
+      <Route
+        path="/admin/contact-details"
+        element={
+          <ProtectedRoute>
+            <ContactDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/job-posting"
+        element={
+          <ProtectedRoute>
+            <JobPosting />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/job-applicants"
+        element={
+          <ProtectedRoute>
+            <JobApplicants />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/job-details"
+        element={
+          <ProtectedRoute>
+            <JobDetails />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Admin Pay Slips and User Management */}
-      <Route path="/admin/pay-slip" element={<ProtectedRoute><GeneratePaySlip /></ProtectedRoute>} />
-      <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+      <Route
+        path="/admin/pay-slip"
+        element={
+          <ProtectedRoute>
+            <GeneratePaySlip />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/admin/users/user-details" element={<UserEdit />} />
 
       {/* Admin Contact Queries and Enrollment Details */}
+      <Route
+        path="/admin/contact-query-details"
+        element={
+          <ProtectedRoute>
+            <ContactQueryDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/enrollement-details"
+        element={
+          <ProtectedRoute>
+            <CourseEnrollementDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Exception Logs Details Management */}
+      <Route
+        path="/admin/exception-logs-details"
+        element={
+          <ProtectedRoute>
+            <ExceptionLogsDetails />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/admin/contact-query-details" element={<ProtectedRoute><ContactQueryDetails /></ProtectedRoute>} />
-      <Route path="/admin/enrollement-details" element={<ProtectedRoute><CourseEnrollementDetails /></ProtectedRoute>} />
+      <Route path="/admin/enrollment-details" element={<ProtectedRoute><CourseEnrollementDetails /></ProtectedRoute>} />
 
       {/* Admin Vendor Management */}
-      <Route path="/admin/vendor" element={<ProtectedRoute><Vendor /></ProtectedRoute>} />
-      <Route path="/admin/vendor/vendor-details" element={<ProtectedRoute><CompanyEditableDetails /></ProtectedRoute>} />
+      <Route
+        path="/admin/vendor"
+        element={
+          <ProtectedRoute>
+            <Vendor />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/vendor/vendor-details"
+        element={
+          <ProtectedRoute>
+            <CompanyEditableDetails />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Vendor Sign-Up (Non-Protected) */}
       <Route path="/admin/sign-up-client" element={<VendorSignUp />} />
 
-
-
       {/* ------------------------- Salary and Pay Slip Routes ------------------------ */}
-      <Route path="/pay-slip-years/pay-slip-months/pay-slip-details/" element={<SalaryDetails />} />
+      <Route
+        path="/pay-slip-years/pay-slip-months/pay-slip-details/"
+        element={<SalaryDetails />}
+      />
       <Route path="/pay-slip-years/" element={<PaySlipYear />} />
       <Route path="/pay-slip-years/pay-slip-months" element={<PaySlip />} />
 
-
-
       {/* -------------------------- Default Route -------------------------- */}
-      <Route path="/pay-slip-years/" element={<PaySlipYear/>} />
-      <Route path="/pay-slip-years/pay-slip-months" element = {<PaySlip/>}/>
-      <Route path="/admin/vendor"  element={<Vendor/>}/>
-      <Route path="/admin/vendor/vendor-details" element={<CompanyEditableDetails />}/>
+      <Route path="/pay-slip-years/" element={<PaySlipYear />} />
+      <Route path="/pay-slip-years/pay-slip-months" element={<PaySlip />} />
+      <Route path="/admin/vendor" element={<Vendor />} />
+      <Route
+        path="/admin/vendor/vendor-details"
+        element={<CompanyEditableDetails />}
+      />
       {/* <Route path="/hr/anjalitomar" element={<Navigate to={<HrPortfolio/>} />} /> */}
       {/* <Route path="/hr/anjalitomar" element={<Navigate to="/portfolio/html/index.html" replace />} /> */}
-      
+
       <Route path="*" element={<Navigate to="/" />} />
-    
     </Routes>
   );
 };

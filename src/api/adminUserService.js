@@ -5,6 +5,7 @@ import apiClient from '../apiClient/apiClient';
 export const authenticate_user = async (payload) => {
     try {
         const response = await apiClient.post('/users/authenticateAdminUser' , payload);
+        console.log("response from the authenticate user : " , response)
         return response.data ;
        
     } catch (error) {
@@ -37,6 +38,20 @@ export const fetchUsers = async () => {
     };
   }
 
+  // updating user technology
+  export const updateUserTechnologies = async (id , technologyIds) => {
+    console.log("this is the id and technologyIds from updateUserTechnologies function " , id , technologyIds)
+    try {
+       const response = await apiClient.put('/users/updateUserTechnologies', {id , technologyIds}) ;
+       console.log("response from updating the user : " , response)
+       return response ;
+        }
+  catch (error){
+     console.error("failed to update the user : ",  error);
+     throw error ;
+     };
+   }
+
   // fetching all the roles from the database 
   export const fetchRoles = async()=>{
     try {
@@ -53,6 +68,7 @@ export const fetchUsers = async () => {
 export const getUserDetails = async (userId) => {
   try {
     const response = await apiClient.get(`/users/fetchUserWithId/${userId}`); 
+    console.log("response from getUserDetails function " , response);
     return response.data;  
   } catch (error) {
     console.log('An error occurred while fetching data from the server:', error);
@@ -137,4 +153,76 @@ export const fetchingAllEnrollments = async ()=> {
     console.log("error occured during the fetching all the queries");
     throw error ;
   }
-}    
+} 
+export const fetchSoftwareTechnologies = async () => {
+  try {
+    const response = await apiClient.get('users/fetchtechnologies');
+    console.log(response); 
+    return response.data;  
+  } catch (error) {
+    console.log("Error occurred while fetching software technologies");
+    throw error; 
+  }
+};
+
+export const fetchUserTechnologies = async (_registration_id) => {  
+  try {
+    const response = await apiClient.get(`users/fetchUserTechnologies/${_registration_id}`);
+    console.log(response); 
+    return response;  
+  } catch (error) {
+    console.log("Error occurred while fetching user technologies");
+    throw error; 
+  }
+}  
+
+export const postExceptionLogs = async (logData) => {
+  try {
+    const response = await apiClient.post('/exception/insert-exception-logs', logData);
+    console.log(logData);
+    return response;
+  } catch (error) {
+    console.log("Error occurred while posting the exception log");
+    throw error;
+  }
+};
+
+
+export const getExceptionLogs = async (severity, source) => { 
+  try {
+    // Prepare query parameters for the request.
+    const params = {};
+    if (severity) params.severity = severity;
+    if (source) params.source = source;
+
+    // Make a GET request with query parameters.
+    const response = await apiClient.get('/exception/get-exception-logs', { params });
+
+    console.log('Fetched exception logs:', response.data);
+    return response.data; // Return the data from the response.
+  } catch (error) {
+    console.error('Error occurred while fetching the exception logs:', error);
+    throw error; // Propagate the error to handle it in the calling code.
+  }
+};
+
+export const postExcelUserFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await apiClient.post("users/upload", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('Response from the Excel file upload:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error occurred during the Excel file upload:', error);
+    throw error;
+  }
+};
+
+
+

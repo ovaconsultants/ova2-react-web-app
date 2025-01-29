@@ -8,14 +8,36 @@
 }
 
 .flat-tabs .nav-link.active {
-  border-bottom: 3px solid #007bff;  // Blue bottom border for the active tab
-  color: #007bff;  // Text color change on active tab
+  --bs-btn-bg: #494a4b;
+  border-bottom: 3px solid #494a4b;  // Blue bottom border for the active tab
+  color: #494a4b;  // Text color change on active tab
 }
 
 .flat-tabs .nav-link:hover {
-  color: #007bff;  // Text color change on hover
+  color: #494a4b;  // Text color change on hover
 }
 
 .flat-tabs .nav-item {
   margin-bottom: -1px;  // Remove gap between tab and content
+}
+.btn-primary {
+  --bs-btn-disabled-border-color: #494a4b;
+  --bs-btn-disabled-bg: #494a4b;
+  --bs-btn-active-bg: #494a4b;
+  --bs-btn-active-border-color: #494a4b;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #494a4b;
+   --bs-btn-border-color: rgb(71, 66, 76);
+   --bs-btn-hover-color: #fff; 
+    --bs-btn-hover-bg: #494a4b; 
+    --bs-btn-hover-border-color: #494a4b;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+  background-color: rgb(71, 66, 76);
+}
+.btn:not(:disabled):not(.disabled):hover {
+  cursor: pointer;
+  background-color: rgb(77, 76, 79);
 }
