@@ -206,7 +206,23 @@ export const getExceptionLogs = async (severity, source) => {
   }
 };
 
+export const postExcelUserFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
 
+    const response = await apiClient.post("users/upload", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('Response from the Excel file upload:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error occurred during the Excel file upload:', error);
+    throw error;
+  }
+};
 
 
 
