@@ -2,6 +2,7 @@
   padding-top: 70px;
   padding-bottom: 35px;
 }
+
 .error {
   color: red;
   margin-bottom: 15px;
@@ -12,16 +13,17 @@
   left: 240px;
   bottom: 40px;
   position: relative;
-  content: "\f33e"; 
+  content: "\f33e";
 }
 
 @media (min-width: 600px) and (max-width: 1200px) {
   .bi-eye-fill::before,
   .bi-eye-slash-fill::before {
-    left: 120px; 
-    bottom: 40px; 
+    left: 120px;
+    bottom: 40px;
   }
 }
+
 .me-3 {
   margin-right: 0rem !important;
 }

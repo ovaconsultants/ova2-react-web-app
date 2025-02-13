@@ -38,7 +38,7 @@ import CourseEnrollementDetails from "../admin/course-enrolement-details/course-
 import Clients from "../clientsData/clients/clients";
 import ClientDetails from "../clientsData/clientDetails/clientDetails";
 import ExceptionLogsDetails from "../admin/exceptionLogsDetails/exceptionLogsDetails";
-// import UserGuide from "../userGuide/userGuide";
+ import UserGuide from "../userGuide/userGuide";
 
 
 const Navigation = () => {
@@ -51,8 +51,8 @@ const Navigation = () => {
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<Home />} />
       <Route path="/service" element={<Service />} />
-      {/* <Route path="/user-guide" element={<UserGuide />} /> */}
-
+      <Route path="/user-guide/*" element={<UserGuide />} />
+      
       {/* Training and Projects */}
       <Route path="/training" element={<TrainingProgram />} />
       <Route path="/training/:courseName" element={<TrainingDetail />} />
