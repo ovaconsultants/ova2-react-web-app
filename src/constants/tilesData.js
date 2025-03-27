@@ -78,8 +78,18 @@ export const jobTilesData = [
         route: '/   ',
         roleName: 'admin',
     },
+   
     // Add more tiles as needed
 ];
+
+export const ova2EtokenMainTile = [
+    {
+      title: "Ova2-Etoken",
+      description: "Manage Etoken Features",
+      route: "/admin/ova2-etoken",
+      roleName: "admin,sub-admin,manager,sales_team",
+    },
+  ];
 export const trainingTilesData = [
     {
         title: 'React-Redux',
@@ -156,6 +166,42 @@ export const ClientsTilesData = [
         route: "/clients/omk-and-sons", 
         data: clientsData?.client4, 
         roleName: "user,admin,sub-admin,manager,sales_team",
+      },
+  ];
+  
+  
+
+  
+  export const EtokenTilesData = [
+    // {
+    //   title: "Etoken Advertisement",
+    //   description: "Manage etoken advertisements",
+    //   route: "/admin/ova2-etoken/etoken-advertisement",
+    //   roleName: "admin,sub-admin,manager,sales_team",
+    // },
+    {
+      title: "Active Advertisement",
+      description: "View active advertisements",
+      route: "/admin/ova2-etoken/active-advertisement",
+      roleName: "admin,sub-admin,manager,sales_team",
+    },
+    {
+        title: "Doctor Details",
+        description: "View active advertisements",
+        route: "/admin/ova2-etoken/doctor-details",
+        roleName: "admin,sub-admin,manager,sales_team",
+      },
+      {
+        title: " Payment Advertisement",
+        description: "View Payment advertisements",
+        route: "/admin/ova2-etoken/fetch-payment-advertisement",
+        roleName: "admin,sub-admin,manager,sales_team",
+      },
+      {
+        title: "Exception Logs",
+        description: "View Exception Logs",
+        route: "/admin/ova2-etoken/exception-logs",
+        roleName: "admin,sub-admin,manager,sales_team",
       },
   ];
   

@@ -38,8 +38,17 @@ import CourseEnrollementDetails from "../admin/course-enrolement-details/course-
 import Clients from "../clientsData/clients/clients";
 import ClientDetails from "../clientsData/clientDetails/clientDetails";
 import ExceptionLogsDetails from "../admin/exceptionLogsDetails/exceptionLogsDetails";
- import UserGuide from "../userGuide/userGuide";
-
+import UserGuide from "../userGuide/userGuide";
+import Advertisement from "../admin/etokenAdvertisement/etokenAdvertisement";
+import DoctorDetails from "../admin/doctorDetails/doctorDetails";
+import ActiveAdvertisement from "../admin/activeAdvertisement/activeAdvertisement";
+import Etoken from "../ova2EtokenData/Etoken/etoken";
+import Ova2EtokenDetails from "../ova2EtokenData/etokenDetalis/etokenDetails";
+import ClinicDetails from "../admin/clinicDetails/clinicDetails";
+import PaymentAdvertisement from "../admin/paymentAdvertisement/paymentAdvertisement";
+import UpdateAdvertisement from "../admin/updateActiveAdvertisement/updateActiveAdvertisement";
+import ExceptionLogs from "../admin/etokenExceptionlogs/etokenExceptionlogs";
+import FetchPaymentAdvertisement from "../admin/fetchPaymentAdvertisement/fetchPaymentAdvertisement";
 
 const Navigation = () => {
   return (
@@ -52,7 +61,7 @@ const Navigation = () => {
       <Route path="/about" element={<Home />} />
       <Route path="/service" element={<Service />} />
       <Route path="/user-guide/*" element={<UserGuide />} />
-      
+
       {/* Training and Projects */}
       <Route path="/training" element={<TrainingProgram />} />
       <Route path="/training/:courseName" element={<TrainingDetail />} />
@@ -71,6 +80,10 @@ const Navigation = () => {
       {/* Clients */}
       <Route path="/clients" element={<Clients />} />
       <Route path="/clients/:clientName" element={<ClientDetails />} />
+
+      {/* Clients */}
+      <Route path="admin/ov2-etoken" element={<Etoken />} />
+      <Route path="/etoken/:etokenName" element={<etokenDetails />} />
 
       {/* Job Listings and Details */}
       <Route path="/india/jobs" element={<Jobs country="India" />} />
@@ -103,12 +116,29 @@ const Navigation = () => {
         }
       />
 
+      <Route
+        path="/etoken/:etokenName"
+        element={
+          <ProtectedRoute>
+            <Ova2EtokenDetails />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Admin Job and Contact Details */}
       <Route
         path="/admin/contact-details"
         element={
           <ProtectedRoute>
             <ContactDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/doctor-details"
+        element={
+          <ProtectedRoute>
+            <DoctorDetails />
           </ProtectedRoute>
         }
       />
@@ -143,6 +173,94 @@ const Navigation = () => {
         element={
           <ProtectedRoute>
             <GeneratePaySlip />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken"
+        element={
+          <ProtectedRoute>
+            <Etoken />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/etoken-advertisement"
+        element={
+          <ProtectedRoute>
+            <Advertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/active-advertisement"
+        element={
+          <ProtectedRoute>
+            <ActiveAdvertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/doctor-details"
+        element={
+          <ProtectedRoute>
+            <DoctorDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/doctor-details/:doctorId"
+        element={
+          <ProtectedRoute>
+            <ClinicDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/payment-advertisement"
+        element={
+          <ProtectedRoute>
+            <PaymentAdvertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/fetch-payment-advertisement"
+        element={
+          <ProtectedRoute>
+            <FetchPaymentAdvertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/update-advertisement/:ad_id"
+        element={
+          <ProtectedRoute>
+            <UpdateAdvertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/exception-logs"
+        element={
+          <ProtectedRoute>
+            <ExceptionLogs />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/etoken-advertisement"
+        element={
+          <ProtectedRoute>
+            <Advertisement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/active-advertisement"
+        element={
+          <ProtectedRoute>
+            <ActiveAdvertisement />
           </ProtectedRoute>
         }
       />
@@ -183,8 +301,22 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/admin/contact-query-details" element={<ProtectedRoute><ContactQueryDetails /></ProtectedRoute>} />
-      <Route path="/admin/enrollment-details" element={<ProtectedRoute><CourseEnrollementDetails /></ProtectedRoute>} />
+      <Route
+        path="/admin/contact-query-details"
+        element={
+          <ProtectedRoute>
+            <ContactQueryDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/enrollment-details"
+        element={
+          <ProtectedRoute>
+            <CourseEnrollementDetails />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Admin Vendor Management */}
       <Route

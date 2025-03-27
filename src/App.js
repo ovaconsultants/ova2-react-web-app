@@ -9,7 +9,6 @@ import './plugins/slick/slick.css';
 import './scss/style.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; 
-
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
 import Breadcrumb from './components/breadcrumb/breadcrumb';

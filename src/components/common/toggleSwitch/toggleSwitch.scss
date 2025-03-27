@@ -1,0 +1,38 @@
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60px; /* Smaller width */
+    height: 30px; /* Smaller height */
+    background-color: #ccc;
+    border-radius: 15px; /* Adjusted border radius */
+    padding: 3px; /* Reduced padding */
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  .toggle-switch.on {
+    background-color: #28a745; /* Green when ON */
+  }
+  
+  .toggle-label {
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    color: white;
+    padding-left: 8px; /* Adjusted padding */
+  }
+  
+  .toggle-slider {
+    width: 20px; /* Smaller slider */
+    height: 20px; /* Smaller slider */
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    right: 3px; /* Adjusted position */
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .toggle-switch.on .toggle-slider {
+    transform: translateX(-30px);
+  }
