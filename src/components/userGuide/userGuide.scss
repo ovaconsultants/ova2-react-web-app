@@ -1,0 +1,145 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: #222;
+  color: #fff;
+  padding: 15px;
+  transition: width 0.3s ease-in-out;
+  position: relative;
+  left: 0px;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  /* gap: 9px; */
+  margin-left: 12px;
+}
+img,
+svg {
+  vertical-align: text-top;
+}
+
+.topic-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s;
+  gap: 12px; /* Ensures spacing between the icon and text */
+}
+
+.home-icon {
+  margin-right: 10px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+}
+
+.topic-list {
+  list-style: none;
+  padding: 0;
+}
+
+.topic-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s;
+}
+
+.topic-btn .topic-icon {
+  margin-right: 10px;
+}
+
+.topic-btn:hover,
+.topic-btn.active {
+  background: #444;
+  border-radius: 5px;
+}
+
+/* Content */
+.content2 {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: center; /* Keeps content centered */
+  overflow-y: auto; /* Enables vertical scrolling */
+  max-height: 100vh; /* Ensures it doesn't exceed the viewport height */
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.content1 {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  max-width: 900px;
+  justify-content: center; /* Keeps content centered */
+  overflow-y: auto; /* Enables vertical scrolling */
+  max-height: 100vh; /* Ensures it doesn't exceed the viewport height */
+  position: relative;
+  bottom: 41px;
+}
+
+/* Right-align the welcome container */
+.welcome-container {
+  text-align: justify;
+  margin: auto; /* Centers the container */
+  padding: 20px;
+  background: #fff; /* Light background for better visibility */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for professional look */
+  border-radius: 8px;
+}
+.sidebar {
+  width: 250px;
+  background: #fff; /* Change from #222 (dark) to #fff (white) */
+  color: #000; /* Adjust text color to ensure visibility */
+  padding: 15px;
+  transition: width 0.3s ease-in-out;
+  position: relative;
+  left: 41px;
+}
+
+.topic-btn {
+  background: none; /* Remove any grey background */
+  color: black; /* Ensure text is readable */
+}
+
+.topic-btn:hover,
+.topic-btn.active {
+  background: #f0f0f0; /* Light grey on hover, or change to another color */
+}

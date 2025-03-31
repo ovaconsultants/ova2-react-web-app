@@ -44,7 +44,7 @@ try {
   console.log("error occured during the posting the company data");
   throw error ;
 }
-  }
+ }
 
 
 // updating company data to server 

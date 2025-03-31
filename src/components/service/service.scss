@@ -1,0 +1,19 @@
+.service-about {
+    .container {
+      .row {
+        text-align: left; // Ensures all text within the row is left-aligned
+  
+        .col-lg-6 {
+          h2 {
+            text-align: left; // Align heading left
+          }
+  
+          p {
+            text-align: left; // Align all paragraphs left
+            margin-top: 30px; // Retain margin for spacing
+          }
+        }
+      }
+    }
+  }
+  

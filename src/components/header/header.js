@@ -93,13 +93,13 @@ const Header = () => {
                 >
                   Contact
                 </Link>
-                {/* <Link
+                { <Link
                   className="nav-link"
                   to="/user-guide"
                   onClick={() => setExpanded(false)}
                 >
-                  { Help }
-                </Link> */}
+                   Help 
+                </Link> }
                 <Link
                   className="nav-link"
                   to="/clients"

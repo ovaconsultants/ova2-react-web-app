@@ -32,16 +32,18 @@ const Service = () => {
             <div className="col-lg-6">
               <h2>Innovative UX/UI Design, Training, and Placement Agency</h2>
               <p className="mt-30">
+                
                 We are a leading agency specializing in creative UX/UI design, professional training, and job placement services.
                 Our mission is to transform digital experiences through innovative design while empowering professionals
                 with the skills they need to succeed in the tech industry.
+              
               </p>
-              <p className="mt-30">
+              <p className="mt-30" >
                 Our comprehensive training programs are designed to keep professionals at the forefront of the industry.
                 We offer courses on the latest technologies and best practices, providing hands-on experience and real-world applications.
                 Our goal is to equip individuals and teams with the knowledge and skills to excel in their careers.
               </p>
-              <p className="mt-30">
+              <p className="mt-30" >
                 Our placement services connect talented professionals with top companies.
                 We work closely with both job seekers and employers to ensure a perfect match.
                 By understanding the unique needs of each party, we facilitate successful placements that lead to long-term career growth and business success.
