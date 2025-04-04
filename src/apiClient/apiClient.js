@@ -11,11 +11,17 @@ const apiClient = axios.create({
 
 
 export const dotNetApiClient = axios.create({
-  baseURL: environment.dotNetApiUrl, // http://localhost:3002
+  baseURL: environment.dotNetApiUrl, 
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true,
+});
+
+
+dotNetApiClient.interceptors.request.use(config => {
+  console.log('Request URL:', config.baseURL + config.url);
+  return config;
 });
 
 export default apiClient;
