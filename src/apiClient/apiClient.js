@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 
 export const dotNetApiClient = axios.create({
-  baseURL: environment.dotNetApiUrl, 
+  baseURL: environment.etokenApiUrl, 
   headers: {
     'Content-Type': 'application/json',
   },
