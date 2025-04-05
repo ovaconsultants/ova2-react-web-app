@@ -113,23 +113,23 @@ const ExceptionLogs = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredExceptions.length > 0 ? (
+          {filteredExceptions?.length > 0 ? (
             filteredExceptions
               .slice(0, visibleRecords)
               .map((exception) => (
-                <tr key={exception.exception_id}>
-                  <td>{exception.exception_id}</td>
-                  <td>{exception.exception_description}</td>
-                  <td>{exception.platform}</td>
+                <tr key={exception?.exception_id}>
+                  <td>{exception?.exception_id}</td>
+                  <td>{exception?.exception_description}</td>
+                  <td>{exception?.platform}</td>
                   <td>
-                    {exception.is_active === "Y" ? (
+                    {exception?.is_active === "Y" ? (
                       <span className="badge bg-success">Active</span>
                     ) : (
                       <span className="badge bg-danger">Inactive</span>
                     )}
                   </td>
-                  <td>{exception.created_by}</td>
-                  <td>{new Date(exception.created_date).toLocaleString()}</td>
+                  <td>{exception?.created_by}</td>
+                  <td>{new Date(exception?.created_date).toLocaleString()}</td>
                 </tr>
               ))
           ) : (
@@ -143,7 +143,7 @@ const ExceptionLogs = () => {
       </table>
 
       {/* See More Button */}
-      {filteredExceptions.length > visibleRecords && (
+      {filteredExceptions?.length > visibleRecords && (
         <div className="text-center mt-3">
           <button className="btn btn-primary" onClick={handleSeeMore}>
             See More
