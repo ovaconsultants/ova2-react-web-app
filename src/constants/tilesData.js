@@ -84,12 +84,13 @@ export const jobTilesData = [
 
 export const ova2EtokenMainTile = [
     {
-      title: "Ova2-Etoken",
-      description: "Manage Etoken Features",
+      title: "Ova2-Etoken Tiles",
+      description: "Clikc Me!.",
       route: "/admin/ova2-etoken",
       roleName: "admin,sub-admin,manager,sales_team",
     },
   ];
+
 export const trainingTilesData = [
     {
         title: 'React-Redux',
@@ -173,34 +174,35 @@ export const ClientsTilesData = [
 
   
   export const EtokenTilesData = [
-    // {
-    //   title: "Etoken Advertisement",
-    //   description: "Manage etoken advertisements",
-    //   route: "/admin/ova2-etoken/etoken-advertisement",
-    //   roleName: "admin,sub-admin,manager,sales_team",
-    // },
+   
     {
-      title: "Active Advertisement",
-      description: "View active advertisements",
+      title: "Advertisement",
+      description: 'Click Me!.',
       route: "/admin/ova2-etoken/active-advertisement",
       roleName: "admin,sub-admin,manager,sales_team",
     },
     {
         title: "Doctor Details",
-        description: "View active advertisements",
+        description: 'Click Me!.',
         route: "/admin/ova2-etoken/doctor-details",
         roleName: "admin,sub-admin,manager,sales_team",
       },
       {
         title: " Payment Advertisement",
-        description: "View Payment advertisements",
+        description: 'Click Me!.',
         route: "/admin/ova2-etoken/fetch-payment-advertisement",
         roleName: "admin,sub-admin,manager,sales_team",
       },
       {
         title: "Exception Logs",
-        description: "View Exception Logs",
+        description: 'Click Me!.',
         route: "/admin/ova2-etoken/exception-logs",
+        roleName: "admin,sub-admin,manager,sales_team",
+      },
+      {
+        title: "Clinic Details",
+        description: 'Click Me!.',
+        // route: "/admin/ova2-etoken/exception-logs",
         roleName: "admin,sub-admin,manager,sales_team",
       },
   ];

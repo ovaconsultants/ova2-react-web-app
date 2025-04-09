@@ -89,28 +89,38 @@ const DoctorDetails = () => {
   return (
     <div className="container mt-4">
       <h1 className="text-center mb-4">Doctor Details</h1>
-      <div className="row mb-2">
-        <div className="col-md-8 mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by Name, Specialization, Mobile, or Email"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <div className="col-md-4 mb-2">
-          <select
-            className="form-control"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">---Select Doctor Status---</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-      </div>
+      <div className="row mb-2 align-items-center">
+  <div className="col-md-7 mb-2">
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Search by Name, Specialization, Mobile, or Email"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+  </div>
+  <div className="col-md-3 mb-2">
+    <select
+      className="form-control"
+      value={statusFilter}
+      onChange={(e) => setStatusFilter(e.target.value)}
+    >
+      <option value="">---Select Doctor Status---</option>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+    </select>
+  </div>
+  <div className="col-md-2 mb-2 text-end">
+    <button
+      className="btn text-white w-100"
+      style={{ backgroundColor: "#47424c" }}
+      onClick={() => navigate("/admin/ova2-etoken/add-doctor")}
+    >
+      Add Doctor
+    </button>
+  </div>
+</div>
+
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>

@@ -34,7 +34,6 @@ const FetchPaymentAdvertisement = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAction, setSelectedAction] = useState(null);
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
   const [toggleModal, setToggleModal] = useState(false);
   const [togglePaymentId, setTogglePaymentId] = useState(null);
@@ -151,7 +150,7 @@ const FetchPaymentAdvertisement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await updateAdvertisementPayment(formData);
+      await updateAdvertisementPayment(formData);
       toast.success("Payment updated successfully!");
       setIsEditing(false);
       setExpandedRow(null);
@@ -163,10 +162,10 @@ const FetchPaymentAdvertisement = () => {
       toast.error("Error updating payment.");
     }
   };
+  
 
   // Handle delete action
   const handleDelete = (paymentId) => {
-    setSelectedAction("delete");
     setSelectedPaymentId(paymentId);
     setShowModal(true);
   };
@@ -225,8 +224,7 @@ const FetchPaymentAdvertisement = () => {
       toast.error(`Error deleting payment.`);
     } finally {
       setShowModal(false);
-      setSelectedAction(null);
-      setSelectedPaymentId(null);
+     setSelectedPaymentId(null);
     }
   };
 

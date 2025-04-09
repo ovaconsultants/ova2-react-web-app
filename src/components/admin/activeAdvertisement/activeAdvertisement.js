@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import {
   fetchAdvertisements,
@@ -36,7 +36,7 @@ const ActiveAdvertisement = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-  const { ad_id } = useParams();
+  // const { ad_id } = useParams(); // Keeping this line as it might be needed for future use
 
   // Fetch all doctors on component mount
   useEffect(() => {
@@ -161,7 +161,7 @@ const ActiveAdvertisement = () => {
         display_frequency: { hours: Number(formData.display_frequency) || 0 },
       };
 
-      const response = await updateAdvertisement(data);
+      await updateAdvertisement(data);
       toast.success("Advertisement updated successfully!");
       setIsEditing(false);
       setExpandedRow(null); 

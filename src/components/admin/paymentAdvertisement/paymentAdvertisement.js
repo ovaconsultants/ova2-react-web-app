@@ -89,7 +89,8 @@ const PaymentAdvertisement = () => {
 
   const handleAdvertisementChange = (e) => {
     const adId = e.target.value;
-    const selectedAd = advertisements.find(ad => ad.ad_id == adId);
+    const selectedAd = advertisements.find(ad => ad.ad_id === Number(adId));
+
     
     setSelectedAdvertisementId(adId);
     setPaymentData(prev => ({ 

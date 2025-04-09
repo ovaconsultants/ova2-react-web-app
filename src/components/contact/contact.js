@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import './contact.scss'; 
-import { useNavigate  } from "react-router-dom";
 import { postContactQuery } from "../../api/adminUserService";
 import ToastMessage from "../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
 const Contact = () => {
-  const navigate = useNavigate();
+  
 
   const [contactQuery, setContactQuery] = useState({
     user_name: "",

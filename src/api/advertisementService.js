@@ -118,3 +118,35 @@ export const fetchAdvertisements = async (doctor_id, clinic_id, filter_type = "A
         throw error;
       }
     };
+
+    export const fetchAccounts = async () => {
+      try {
+        const response = await dotNetApiClient.get("/registration/accounts");
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching accounts");
+        throw error;
+      }
+    };
+    
+    export const fetchSpecializations = async (account_id) => {
+      try {
+        const response = await dotNetApiClient.get("/registration/specializations", {
+          params: { account_id }
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching specializations");
+        throw error;
+      }
+    };
+
+    export const insertDoctor = async (doctorData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/addDoctor", doctorData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting doctor:", error);
+        throw error;
+      }
+    };

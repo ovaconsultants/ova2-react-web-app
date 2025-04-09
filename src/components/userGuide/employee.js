@@ -7,7 +7,7 @@ const Employee = () => {
     <h1 className="text-start mb-3">Employee Registration Guide</h1>
     
     <p className="text-start">
-      Easily register as an employee by following these simple steps. Here’s a comprehensive guide to help you through the process:
+      Easily register as an employee by following these simple steps. Here's a comprehensive guide to help you through the process:
     </p>
     <ol className="list-group list-group-numbered">
     <li className="list-group-item">
@@ -17,7 +17,7 @@ const Employee = () => {
   <div className="text-start mb-3">
     <img 
       src="/images/Sign-up-employee.png" 
-      alt="Sign Up Page Screenshot" 
+      alt="Sign Up Page" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />
@@ -29,7 +29,7 @@ const Employee = () => {
  <div className="text-start mb-3">
     <img 
       src="/images/name-id-contact.png" 
-      alt="LogIn Page Image" 
+      alt="Registration form fields" 
       className="img-fluid rounded shadow"
       style={{ width: "400px", marginTop: "40px", borderRadius: "5px" }}
     />
@@ -40,7 +40,7 @@ const Employee = () => {
         <div className="text-start mb-3">
     <img 
       src="/images/employee.png" 
-      alt="Employee LogIn" 
+      alt="Employee registration option" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />
@@ -51,18 +51,18 @@ const Employee = () => {
         <div className="text-start mb-3">
     <img 
       src="/images/sign-up.png" 
-      alt="Employee LogIn" 
+      alt="Sign Up button" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />
   </div>
       </li>
       <li className="list-group-item">
-        <span className="fw-bold">Verify Your Details:</span> Double-check all the information you’ve submitted to avoid any delays in the process.
+        <span className="fw-bold">Verify Your Details:</span> Double-check all the information you've submitted to avoid any delays in the process.
         <div className="text-start mb-3">
     <img 
       src="/images/details-check.png" 
-      alt="Employee LogIn" 
+      alt="Submitted details for verification" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />

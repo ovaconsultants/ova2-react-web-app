@@ -8,7 +8,6 @@ import { ToastContainer } from "react-toastify";
 import ToastMessage from "../../../constants/toastMessage";
 
 const GeneratePaySlip = () => {
-  const [employeeNames, setEmployeeNames] = useState([]);
   const [fullNames, setFullNames] = useState([]);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -31,7 +30,6 @@ const GeneratePaySlip = () => {
     const fetchData = async () => {
       try {
         const names = await fecthingEmployeeNames();
-        setEmployeeNames(names);
         const namesList = names.map(
           (employee) => `${employee.first_name} ${employee.last_name}`
         );
@@ -62,7 +60,6 @@ const GeneratePaySlip = () => {
     (Number(formData.esi) || 0) +
     (Number(formData.tax) || 0) +
     (Number(formData.loan) || 0);
-  
 
   const computeNetSalary = () =>
     computeGrossSalary() - computeTotalDeduction();
@@ -84,9 +81,8 @@ const GeneratePaySlip = () => {
     };
 
     try {
-      const response = await postingEmployeeSalaryData(salaryData);
-     ToastMessage('Payslip updated successfully');
-    
+      await postingEmployeeSalaryData(salaryData);
+      ToastMessage('Payslip updated successfully');
     } catch (error) {
       console.log("Error saving pay slip:", error); 
     }
@@ -132,26 +128,28 @@ const GeneratePaySlip = () => {
               <tbody>
                 <tr>
                   <td> Employee Name </td>
-                  <td> <div className=" d-flex">
-              <div className="form-group w-100">
-                <select
-                  className={`form-select mt-3 ${
-                    formData.fullName ? "input-has-value" : ""
-                  } form-control `}
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="" disabled>choose name</option>
-                  {fullNames.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div></td>
+                  <td> 
+                    <div className=" d-flex">
+                      <div className="form-group w-100">
+                        <select
+                          className={`form-select mt-3 ${
+                            formData.fullName ? "input-has-value" : ""
+                          } form-control `}
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="" disabled>choose name</option>
+                          {fullNames.map((option, index) => (
+                            <option key={index} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </td>
                   <td>Employee Id</td>
                   <td>
                     <input

@@ -46,8 +46,8 @@ export const getInitialCompanyDetails = () => ({
         </Form.Select>
       ) : (
         <p className="mb-0 text-start">
-     {options.find(opt => opt.id == value)?.employeename || options.find(opt => opt.id === value)?.sts || "Not selected"}
-        </p>
+     {options.find(opt => opt.id === Number(value))?.employeename || options.find(opt => opt.id === value)?.sts || "Not selected"}
+    </p>
       )}
       {error && <small className="text-danger">{error}</small>}
     </Form.Group>

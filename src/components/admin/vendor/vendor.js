@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getCompanies,
@@ -28,10 +28,8 @@ const Vendor = () => {
     isActive: "",
   });
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadResponse, setUploadResponse] = useState("");
   const [hasMoreRecords, setHasMoreRecords] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const observer = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -144,17 +142,12 @@ const Vendor = () => {
     if (!file) return;
 
     setIsUploading(true);
-    setUploadResponse("");
     setUploadMessage("Vendor Data is uploading...");
     try {
-      const response = await postExcelVendorFile(file);
-      setUploadResponse(
-        `Upload Successful! ${response.successfulEntries.length} entries succeeded, ${response.failedEntries.length} failed.`
-      );
+      await postExcelVendorFile(file);
       const updatedCompanies = await getCompanies();
       setCompanies(updatedCompanies);
     } catch (err) {
-      setUploadResponse("File upload failed. Please try again.");
       console.error("File upload error:", err);
     } finally {
       setIsUploading(false);
@@ -166,7 +159,7 @@ const Vendor = () => {
     return (
       <div className="alert alert-danger" role="alert">
         Error: {error}
-      </div>
+    </div>
     );
   }
 
@@ -285,7 +278,7 @@ const Vendor = () => {
                       <td>{company.contact_person_name}</td>
                       <td>
                         {responders.find(
-                          (responder) => responder.id == company.employee
+                          (responder) => responder.id === company.employee
                         )?.employeename || "No Responder"}
                       </td>
                       <td>{companyType ? companyType.type_name : "Unknown"}</td>

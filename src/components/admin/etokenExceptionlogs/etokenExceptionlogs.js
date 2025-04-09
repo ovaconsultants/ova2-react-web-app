@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { fetchAllExceptions } from "../../../api/advertisementService";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 const ExceptionLogs = () => {
   const [exceptions, setExceptions] = useState([]);
   const [filteredExceptions, setFilteredExceptions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isActiveFilter, setIsActiveFilter] = useState("all");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 30);
+    return date.toISOString().split('T')[0];
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const date = new Date();
+    return date.toISOString().split('T')[0];
+  });
   const [visibleRecords, setVisibleRecords] = useState(20);
 
   useEffect(() => {
@@ -21,11 +26,7 @@ const ExceptionLogs = () => {
     loadExceptions();
   }, []);
 
-  useEffect(() => {
-    filterExceptions();
-  }, [searchTerm, isActiveFilter, startDate, endDate, exceptions]);
-
-  const filterExceptions = () => {
+  const filterExceptions = useCallback(() => {
     let filtered = exceptions.filter((exception) => {
       const matchesSearch = exception.exception_description
         .toLowerCase()
@@ -34,14 +35,19 @@ const ExceptionLogs = () => {
         isActiveFilter === "all" ||
         (isActiveFilter === "active" && exception.is_active === "Y") ||
         (isActiveFilter === "inactive" && exception.is_active === "N");
-      const exceptionDate = new Date(exception.created_date);
+      
+      const exceptionDate = new Date(exception.created_date).toISOString().split('T')[0];
       const matchesDate =
         (!startDate || exceptionDate >= startDate) &&
         (!endDate || exceptionDate <= endDate);
       return matchesSearch && matchesStatus && matchesDate;
     });
     setFilteredExceptions(filtered);
-  };
+  }, [searchTerm, isActiveFilter, startDate, endDate, exceptions]);
+
+  useEffect(() => {
+    filterExceptions();
+  }, [filterExceptions]);
 
   const handleSeeMore = () => {
     setVisibleRecords((prev) => prev + 20);
@@ -74,28 +80,22 @@ const ExceptionLogs = () => {
           </select>
         </div>
         <div className="col-md-3">
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
+          <input
+            type="date"
+            name="startDate"
             className="form-control"
-            placeholderText="Start Date"
-            dateFormat="dd/MM/yyyy"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
         <div className="col-md-3">
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
+          <input
+            type="date"
+            name="endDate"
             className="form-control"
-            placeholderText="End Date"
-            dateFormat="dd/MM/yyyy"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            min={startDate}
           />
         </div>
       </div>

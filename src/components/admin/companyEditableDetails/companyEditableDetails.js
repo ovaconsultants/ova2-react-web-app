@@ -28,7 +28,6 @@ const CompanyEditableDetails = () => {
   const [companyDetails, setCompanyDetails] = useState(getInitialCompanyDetails());
   const [communicationMediums, setCommunicationMediums] = useState([]);
   const [selectedMedium, setSelectedMedium] = useState([]);
-  const [companyTypes, setCompanyTypes] = useState([]);
   const [responders, setResponders] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,9 +39,9 @@ const CompanyEditableDetails = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [companyResponse, typesResponse, mediumsData, employees] = await Promise.all([
+      const [companyResponse, mediumsData, employees] = await Promise.all([
         getCompanyDetails(initialCompanyId),
-        fetchCompanyTypes(),
+        fetchCompanyTypes(), // Removed assignment to suppress warning
         fetchCommunicationMediums(),
         fetchAllEmployeeAllocations(),
       ]);
@@ -53,7 +52,6 @@ const CompanyEditableDetails = () => {
         is_active: companyResponse.is_active ? "true" : "false",
       });
       setInitialData(companyResponse);
-      setCompanyTypes(typesResponse);
       setCommunicationMediums(mediumsData);
       setSelectedMedium(mediumsData.filter((m) => companyResponse.communicatethrough.includes(m.id)));
       setResponders(employees);
@@ -92,8 +90,8 @@ const CompanyEditableDetails = () => {
         const response = await updateCompanyDetails(initialCompanyId, updatedDetails);
         if (response.message === "Company updated successfully.") {
           ToastMessage(response.message);
-          setIsEditing(false); // Close fields after saving
-          setInitialData(updatedDetails); // Update initial data to match saved state
+          setIsEditing(false);
+          setInitialData(updatedDetails);
         }
       }
 
@@ -102,7 +100,7 @@ const CompanyEditableDetails = () => {
         if (response.success) {
           setComment("");
           ToastMessage("Comment added successfully!", "success");
-          setIsEditing(false); // Close fields after saving
+          setIsEditing(false);
         }
       }
     } catch (error) {
@@ -166,7 +164,6 @@ const CompanyEditableDetails = () => {
                     isEditing={isEditing}
                   />
                 ))}
-                {/* Add the comments section */}
                 <Form.Group className="mb-3">
                   <Form.Label className="fw-bold-comments">Add Comments</Form.Label>
                   {isEditing ? (

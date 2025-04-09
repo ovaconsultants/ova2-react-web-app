@@ -64,7 +64,7 @@ const Profile = () => {
   const [editingField, setEditingField] = useState(null);
   const [selectedTechnologies, setSelectedTechnologies] = useState([]);
   const [formErrors, setFormErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword ] = useState(false);
   const [newPassword, setNewPassword] = useState("");
 
   useEffect(() => {

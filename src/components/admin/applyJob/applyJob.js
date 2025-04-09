@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createApplicant } from '../../../api/applicantService';
 import './applyJob.scss';
 import ToastMessage from "../../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
 
 const ApplyJob = ({ closeModal, jobId }) => {
- // const [applications, setApplications] = useState([]);
-  const [showSuccess, setShowSuccess] = useState(false);
-
   const handleApplicationSubmit = async(e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -21,10 +18,8 @@ const ApplyJob = ({ closeModal, jobId }) => {
     const response = await createApplicant(application);
     ToastMessage("Application registered successfully");
     console.log('Job Updated:', response);
-    setShowSuccess(true);
     e.target.reset();
     setTimeout(() => {
-      setShowSuccess(false);
       closeModal();
     }, 3000);
   };
@@ -33,11 +28,6 @@ const ApplyJob = ({ closeModal, jobId }) => {
     <div className="apply-job-form">
       <section className="contact-form">
         <div className="container">
-        {/* {showSuccess && (
-            <div className="alert alert-success mt-3" role="alert">
-              Application Submitted Successfully! HR will connect you soon.
-            </div>
-          )} */}
           <form className="row" onSubmit={handleApplicationSubmit}>
             <div className="col-md-12 col-sm-12">
               <div className="block">
