@@ -66,9 +66,7 @@ const DoctorDetails = () => {
     setShowModal(true);
   };
 
-  const handleDoctorClick = (doctorId) => {
-    navigate(`/admin/ova2-etoken/doctor-details/${doctorId}`);
-  };
+ 
 
   const filteredDoctors = doctors.filter((doctor) => {
     const matchesSearchQuery =
@@ -145,10 +143,7 @@ const DoctorDetails = () => {
               <tr key={doctor.doctor_id}>
                 <td>{index + 1}</td>
                 <td>
-                  <span
-                    style={{ cursor: "pointer", color: "blue" }}
-                    onClick={() => handleDoctorClick(doctor.doctor_id)}
-                  >
+                  <span>
                     {doctor.first_name} {doctor.last_name}
                   </span>
                 </td>

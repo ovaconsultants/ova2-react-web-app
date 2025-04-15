@@ -202,7 +202,13 @@ export const ClientsTilesData = [
       {
         title: "Clinic Details",
         description: 'Click Me!.',
-        // route: "/admin/ova2-etoken/exception-logs",
+        route: "/admin/ova2-etoken/clinic-details",
+        roleName: "admin,sub-admin,manager,sales_team",
+      },
+      {
+        title: "Clinic Schedhule Details",
+        description: 'Click Me!.',
+        route: "/admin/ova2-etoken/schedhule-details",
         roleName: "admin,sub-admin,manager,sales_team",
       },
   ];

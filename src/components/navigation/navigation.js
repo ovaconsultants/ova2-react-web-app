@@ -49,6 +49,9 @@ import UpdateAdvertisement from "../admin/updateActiveAdvertisement/updateActive
 import ExceptionLogs from "../admin/etokenExceptionlogs/etokenExceptionlogs";
 import FetchPaymentAdvertisement from "../admin/fetchPaymentAdvertisement/fetchPaymentAdvertisement";
 import AddDoctor from "../admin/addDoctor/addDoctor";
+import SchedhuleDetails from "../clinicSchedhule/clinicSchedhuleDetails";
+import AddClinic from "../admin/addClinic/addClinic";
+
 
 const Navigation = () => {
   return (
@@ -146,6 +149,7 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+      
       <Route
         path="/admin/job-posting"
         element={
@@ -221,10 +225,26 @@ const Navigation = () => {
         }
       />
       <Route
-        path="/admin/ova2-etoken/doctor-details/:doctorId"
+        path="/admin/ova2-etoken/add-clinic"
+        element={
+          <ProtectedRoute>
+            <AddClinic/>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/clinic-details"
         element={
           <ProtectedRoute>
             <ClinicDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/schedhule-details"
+        element={
+          <ProtectedRoute>
+            <SchedhuleDetails />
           </ProtectedRoute>
         }
       />

@@ -150,3 +150,23 @@ export const fetchAdvertisements = async (doctor_id, clinic_id, filter_type = "A
         throw error;
       }
     };
+
+    export const insertDoctorClinicSchedule = async (scheduleData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/schedule", scheduleData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting doctor clinic schedule:", error);
+        throw error;
+      }
+    };
+
+    export const insertClinic = async (clinicData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/addClinic", clinicData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting clinic:", error);
+        throw error;
+      }
+    };

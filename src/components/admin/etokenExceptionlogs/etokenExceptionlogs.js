@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { fetchAllExceptions } from "../../../api/advertisementService";
+import LoadingSpinner from "../../common/loadingSpinner";
 
 const ExceptionLogs = () => {
   const [exceptions, setExceptions] = useState([]);
@@ -16,12 +17,20 @@ const ExceptionLogs = () => {
     return date.toISOString().split('T')[0];
   });
   const [visibleRecords, setVisibleRecords] = useState(20);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const loadExceptions = async () => {
-      const data = await fetchAllExceptions();
-      setExceptions(data.exceptions);
-      setFilteredExceptions(data.exceptions);
+      try {
+        setLoading(true);
+        const data = await fetchAllExceptions();
+        setExceptions(data.exceptions);
+        setFilteredExceptions(data.exceptions);
+      } catch (error) {
+        console.error("Error loading exceptions:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     loadExceptions();
   }, []);
@@ -52,6 +61,11 @@ const ExceptionLogs = () => {
   const handleSeeMore = () => {
     setVisibleRecords((prev) => prev + 20);
   };
+
+  // Show loading spinner while initial data is being fetched
+  if (loading) {
+    return <LoadingSpinner fullPage text="Loading exception logs..." />;
+  }
 
   return (
     <div className="container mt-4">
@@ -101,54 +115,52 @@ const ExceptionLogs = () => {
       </div>
 
       {/* Table */}
-      <table className="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Exception ID</th>
-            <th>Description</th>
-            <th>Platform</th>
-            <th>Status</th>
-            <th>Created By</th>
-            <th>Created Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredExceptions?.length > 0 ? (
-            filteredExceptions
-              .slice(0, visibleRecords)
-              .map((exception) => (
-                <tr key={exception?.exception_id}>
-                  <td>{exception?.exception_id}</td>
-                  <td>{exception?.exception_description}</td>
-                  <td>{exception?.platform}</td>
-                  <td>
-                    {exception?.is_active === "Y" ? (
-                      <span className="badge bg-success">Active</span>
-                    ) : (
-                      <span className="badge bg-danger">Inactive</span>
-                    )}
-                  </td>
-                  <td>{exception?.created_by}</td>
-                  <td>{new Date(exception?.created_date).toLocaleString()}</td>
-                </tr>
-              ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                No exceptions found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      {filteredExceptions?.length === 0 && !loading ? (
+        <div className="text-center my-4">No exceptions found.</div>
+      ) : (
+        <>
+          <table className="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Exception ID</th>
+                <th>Description</th>
+                <th>Platform</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredExceptions
+                .slice(0, visibleRecords)
+                .map((exception) => (
+                  <tr key={exception?.exception_id}>
+                    <td>{exception?.exception_id}</td>
+                    <td>{exception?.exception_description}</td>
+                    <td>{exception?.platform}</td>
+                    <td>
+                      {exception?.is_active === "Y" ? (
+                        <span className="badge bg-success">Active</span>
+                      ) : (
+                        <span className="badge bg-danger">Inactive</span>
+                      )}
+                    </td>
+                    <td>{exception?.created_by}</td>
+                    <td>{new Date(exception?.created_date).toLocaleString()}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
 
-      {/* See More Button */}
-      {filteredExceptions?.length > visibleRecords && (
-        <div className="text-center mt-3">
-          <button className="btn btn-primary" onClick={handleSeeMore}>
-            See More
-          </button>
-        </div>
+          {/* See More Button */}
+          {filteredExceptions?.length > visibleRecords && (
+            <div className="text-center mt-3">
+              <button className="btn btn-primary" onClick={handleSeeMore}>
+                See More
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
