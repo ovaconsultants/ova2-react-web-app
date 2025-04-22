@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ToastMessage from "../../../constants/toastMessage";
 import { postEnrollmentCourseDetails } from "../../../api/adminUserService";
 import "react-toastify/dist/ReactToastify.css";
 
 const TrainingProgramEnrollmentForm = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const data = location.state?.data || {};
+ 
   const { courseName: originalCourseName } = useParams();
 
   // Capitalize the first letter of each word in the course name

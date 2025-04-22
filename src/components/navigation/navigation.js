@@ -9,7 +9,6 @@ import PortfolioSingle from "../portfolio/portfolioSingle/portfolioSingle";
 import ContactDetails from "../admin/contactDetails/contactDetails";
 import Projects from "../projects/projects";
 import Login from "../login/login";
-import { AuthProvider } from "../../AuthContext";
 import ProtectedRoute from "../../ProtectedRoute";
 import JobPosting from "../admin/jobPosting/jobPosting";
 import Jobs from "../jobs/jobs";
@@ -49,6 +48,10 @@ import PaymentAdvertisement from "../admin/paymentAdvertisement/paymentAdvertise
 import UpdateAdvertisement from "../admin/updateActiveAdvertisement/updateActiveAdvertisement";
 import ExceptionLogs from "../admin/etokenExceptionlogs/etokenExceptionlogs";
 import FetchPaymentAdvertisement from "../admin/fetchPaymentAdvertisement/fetchPaymentAdvertisement";
+import AddDoctor from "../admin/addDoctor/addDoctor";
+import SchedhuleDetails from "../clinicSchedhule/clinicSchedhuleDetails";
+import AddClinic from "../admin/addClinic/addClinic";
+
 
 const Navigation = () => {
   return (
@@ -65,6 +68,10 @@ const Navigation = () => {
       {/* Training and Projects */}
       <Route path="/training" element={<TrainingProgram />} />
       <Route path="/training/:courseName" element={<TrainingDetail />} />
+      <Route
+        path="/training/:courseName/enroll"
+        element={<TrainingProgramEnrollmentForm />}
+      />
       <Route
         path="/training/:courseName/enroll"
         element={<TrainingProgramEnrollmentForm />}
@@ -142,6 +149,7 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+      
       <Route
         path="/admin/job-posting"
         element={
@@ -208,11 +216,35 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+       <Route
+        path="/admin/ova2-etoken/add-doctor"
+        element={
+          <ProtectedRoute>
+            <AddDoctor />
+          </ProtectedRoute>
+        }
+      />
       <Route
-        path="/admin/ova2-etoken/doctor-details/:doctorId"
+        path="/admin/ova2-etoken/add-clinic"
+        element={
+          <ProtectedRoute>
+            <AddClinic/>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/clinic-details"
         element={
           <ProtectedRoute>
             <ClinicDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/ova2-etoken/schedhule-details"
+        element={
+          <ProtectedRoute>
+            <SchedhuleDetails />
           </ProtectedRoute>
         }
       />
@@ -335,11 +367,31 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/vendor"
+        element={
+          <ProtectedRoute>
+            <Vendor />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/vendor/vendor-details"
+        element={
+          <ProtectedRoute>
+            <CompanyEditableDetails />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Vendor Sign-Up (Non-Protected) */}
       <Route path="/admin/sign-up-client" element={<VendorSignUp />} />
 
       {/* ------------------------- Salary and Pay Slip Routes ------------------------ */}
+      <Route
+        path="/pay-slip-years/pay-slip-months/pay-slip-details/"
+        element={<SalaryDetails />}
+      />
       <Route
         path="/pay-slip-years/pay-slip-months/pay-slip-details/"
         element={<SalaryDetails />}
@@ -355,8 +407,16 @@ const Navigation = () => {
         path="/admin/vendor/vendor-details"
         element={<CompanyEditableDetails />}
       />
+      <Route path="/pay-slip-years/" element={<PaySlipYear />} />
+      <Route path="/pay-slip-years/pay-slip-months" element={<PaySlip />} />
+      <Route path="/admin/vendor" element={<Vendor />} />
+      <Route
+        path="/admin/vendor/vendor-details"
+        element={<CompanyEditableDetails />}
+      />
       {/* <Route path="/hr/anjalitomar" element={<Navigate to={<HrPortfolio/>} />} /> */}
       {/* <Route path="/hr/anjalitomar" element={<Navigate to="/portfolio/html/index.html" replace />} /> */}
+
 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

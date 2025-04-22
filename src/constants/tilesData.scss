@@ -12,7 +12,7 @@
   
   /* Individual Tile Styling */
   .tile {
-    background: #ffffff; /* White background for clean look */
+    background: #ededed; /* White background for clean look */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     border-radius: 8px; /* Rounded corners */
     overflow: hidden;
@@ -49,10 +49,7 @@
     color: #666666; /* Slightly lighter text */
     margin-bottom: 15px;
   }
-  .ova2-etoken {
-    width: 300px; /* Ensure the same width as other tiles */
-    text-align: center;
-}
+
   
   /* Tile CTA (Button-like link) */
   .tile-cta {

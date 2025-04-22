@@ -19,17 +19,8 @@ export const postAdvertisement = async (advertisementData) => {
       throw error;
     }
   };
-  export const fetchAllDoctors = async () => {
-    try {
-      const response = await dotNetApiClient.get("/doctor/fetchAllDoctors");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching doctors");
-      throw error;
-    }
-  };
 
-  export const fetchActiveAdvertisements = async (doctor_id, clinic_id) => {
+export const fetchActiveAdvertisements = async (doctor_id, clinic_id) => {
     try {
       const response = await dotNetApiClient.get("/advertisement/fetchActiveAdvertisements", {
         params: { doctor_id, clinic_id },
@@ -74,6 +65,7 @@ export const fetchAdvertisements = async (doctor_id, clinic_id, filter_type = "A
       throw error;
     }
   };
+  
 
   export const updateAdvertisement = async (data) => {
     try {
@@ -115,6 +107,82 @@ export const fetchAdvertisements = async (doctor_id, clinic_id, filter_type = "A
         return response.data;
       } catch (error) {
         console.error("Error fetching exceptions");
+        throw error;
+      }
+    };
+
+    export const fetchAccounts = async () => {
+      try {
+        const response = await dotNetApiClient.get("/registration/accounts");
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching accounts");
+        throw error;
+      }
+    };
+    
+    export const fetchSpecializations = async (account_id) => {
+      try {
+        const response = await dotNetApiClient.get("/registration/specializations", {
+          params: { account_id }
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching specializations");
+        throw error;
+      }
+    };
+
+    export const insertDoctor = async (doctorData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/addDoctor", doctorData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting doctor:", error);
+        throw error;
+      }
+    };
+
+    export const insertDoctorClinicSchedule = async (scheduleData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/schedule", scheduleData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting doctor clinic schedule:", error);
+        throw error;
+      }
+    };
+
+    export const insertClinic = async (clinicData) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/addClinic", clinicData);
+        return response.data;
+      } catch (error) {
+        console.error("Error inserting clinic:", error);
+        throw error;
+      }
+    };
+
+    export const fetchAllDoctors = async (doctor_id = null) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/fetchAllDoctors", {
+          doctor_id: doctor_id || undefined 
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching doctors");
+        throw error;
+      }
+    };
+      
+    export const fetchDoctorById = async ({ doctor_id }) => {
+      try {
+        const response = await dotNetApiClient.post("/doctor/fetchAllDoctors", {
+          doctor_id,
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching doctor by ID");
         throw error;
       }
     };

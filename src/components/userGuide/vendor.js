@@ -6,7 +6,7 @@ const Vendor = () => {
     <div className="container mt-4">
       <h1 className="text-start mb-3">Vendor Registration Guide</h1>
       <p className="text-start">
-        Easily register as a vendor by following these simple steps. Here’s a comprehensive guide to help you through the process:
+        Easily register as a vendor by following these simple steps. Here's a comprehensive guide to help you through the process:
       </p>
       <ol className="list-group list-group-numbered">
         <li className="list-group-item">
@@ -16,7 +16,7 @@ const Vendor = () => {
           <div className="text-start mb-3">
     <img 
       src="/images/Sign-up-employee.png" 
-      alt="Sign Up Page Screenshot" 
+      alt="Sign Up Page" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />
@@ -27,7 +27,7 @@ const Vendor = () => {
           <div className="text-start mb-3">
     <img 
       src="/images/name-id-contact.png" 
-      alt="LogIn Page Image" 
+      alt="LogIn Page" 
       className="img-fluid rounded shadow"
       style={{ width: "400px", marginTop: "40px", borderRadius: "5px" }}
     />
@@ -49,18 +49,18 @@ const Vendor = () => {
           <div className="text-start mb-3">
     <img 
       src="/images/sign-up.png" 
-      alt="Employee LogIn" 
+      alt="Sign Up button" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />
   </div>
         </li>
         <li className="list-group-item">
-          <span className="fw-bold">5. Verify Your Details:</span> Double-check all the information you’ve submitted to avoid any delays in the process.
+          <span className="fw-bold">5. Verify Your Details:</span> Double-check all the information you've submitted to avoid any delays in the process.
           <div className="text-start mb-3">
     <img 
       src="/images/details-check.png" 
-      alt="Employee LogIn" 
+      alt="Details verification" 
       className="img-fluid rounded shadow"
       style={{ width: "300px", marginTop: "10px", borderRadius: "5px" }}
     />

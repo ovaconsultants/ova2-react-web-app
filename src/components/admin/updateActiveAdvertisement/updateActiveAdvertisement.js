@@ -10,7 +10,6 @@ import {
 import ToastMessage from "../../../constants/toastMessage";
 import { ToastContainer } from "react-toastify";
 
-
 const UpdateAdvertisement = () => {
   const { ad_id } = useParams();
   const [formData, setFormData] = useState({
@@ -28,7 +27,6 @@ const UpdateAdvertisement = () => {
   });
   const [doctors, setDoctors] = useState([]);
   const [clinics, setClinics] = useState([]);
-  const [advertisements, setAdvertisements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -76,7 +74,6 @@ const UpdateAdvertisement = () => {
             formData.doctor_id,
             formData.clinic_id
           );
-          setAdvertisements(response.advertisements || []);
 
           const selectedAd = response.advertisements.find(
             (ad) => ad.ad_id === parseInt(ad_id)
@@ -90,7 +87,7 @@ const UpdateAdvertisement = () => {
               end_date: selectedAd.end_date.split("T")[0],
             });
           } else {
-         alert.error("Advertisement not found.");
+            alert.error("Advertisement not found.");
           }
           setLoading(false);
         } catch (error) {
@@ -101,8 +98,6 @@ const UpdateAdvertisement = () => {
       };
 
       fetchAds();
-    } else {
-      setAdvertisements([]);
     }
   }, [formData.doctor_id, formData.clinic_id, ad_id]);
 

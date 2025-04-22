@@ -15,10 +15,10 @@ import logo from "../../assets/images/ova2_logo.jpg";
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth(); // Removed unused 'user' variable
   const username = useAtomValue(usernameAtom);
   console.log(username);
-  const initials = username.split(" ") .map((word) => word.charAt(0).toUpperCase()) .join(""); 
+  const initials = username.split(" ").map((word) => word.charAt(0).toUpperCase()).join(""); // Fixed whitespace issues
   const roleName = useAtomValue(roleNameAtom);
   const userId = useAtomValue(registrationIdAtom); // Get userId from registrationIdAtom
   const setUsername = useSetAtom(usernameAtom);

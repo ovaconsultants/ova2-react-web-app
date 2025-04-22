@@ -92,7 +92,7 @@ const VendorSignUp = () => {
 
       // URL validation
       if (field.type === "url" && value) {
-        const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\/?].*)?$/;
+        const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([/?].*)?$/;
         if (!urlRegex.test(value)) {
           errors[field.name] = `${field.label || formatFieldName(field.name)} must be a valid URL.`;
         }
@@ -132,7 +132,7 @@ const VendorSignUp = () => {
   };
 
   // Get form field configurations
-  const formFields = getFormFields().map((field) => ({
+  const formFields = getFormFields(companyTypes).map((field) => ({
     ...field,
     required: true, // Mark all fields as required
     ...(isNumericField(field.name) ? { type: "number", maxLength: 10 } : {}),
