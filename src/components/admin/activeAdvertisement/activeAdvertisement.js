@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import ToastMessage from "../../../constants/toastMessage";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -36,28 +37,24 @@ const ActiveAdvertisement = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-  // const { ad_id } = useParams(); // Keeping this line as it might be needed for future use
 
   // Fetch all doctors on component mount
   useEffect(() => {
-    const getDoctors = async () => {
+    const fetchDoctors = async () => {
       try {
+        setLoading(true);
         const response = await fetchAllDoctors();
-        if (response?.doctors?.length) {
-          setDoctors(response.doctors);
-        } else {
-          setDoctors([]);
-        }
-        setLoading(false);
+        setDoctors(response.doctors || []);
       } catch (error) {
         console.error("Error fetching doctors:", error);
-        toast.error("Error fetching doctors.");
+        ToastMessage.error("Error fetching doctors");
         setError("Error fetching doctors.");
+      } finally {
         setLoading(false);
       }
     };
 
-    getDoctors();
+    fetchDoctors();
   }, []);
 
   // Fetch clinics when a doctor is selected
@@ -65,18 +62,15 @@ const ActiveAdvertisement = () => {
     if (selectedDoctorId) {
       const getClinicsByDoctorId = async () => {
         try {
+          setLoading(true);
           const response = await fetchClinicsByDoctorId(selectedDoctorId);
-          if (response?.clinics?.length) {
-            setClinics(response.clinics);
-          } else {
-            setClinics([]);
-          }
+          setClinics(response?.clinics || []);
           setSelectedClinicId("");
-          setLoading(false);
         } catch (error) {
           console.error("Error fetching clinics by doctor ID:", error);
-          toast.error("Error fetching clinics by doctor ID.");
+          ToastMessage.error("Error fetching clinics by doctor ID.");
           setError("Error fetching clinics by doctor ID.");
+        } finally {
           setLoading(false);
         }
       };
@@ -92,20 +86,19 @@ const ActiveAdvertisement = () => {
     if (selectedDoctorId && selectedClinicId) {
       const getAdvertisements = async () => {
         try {
-          console.log("Fetching advertisements for doctor:", selectedDoctorId, "and clinic:", selectedClinicId);
+          setLoading(true);
           const response = await fetchAdvertisements(
             selectedDoctorId,
             selectedClinicId,
-            "ALL" // Using 'ALL' as filter_type to get all advertisements
+            "ALL"
           );
-          console.log("Response:", response);
           setAdvertisements(response.advertisements || []);
-          setLoading(false);
         } catch (error) {
           setError("Error fetching advertisements.");
-          setLoading(false);
-          toast.error("Error fetching advertisements.");
+          ToastMessage.error("Error fetching advertisements.");
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -131,9 +124,9 @@ const ActiveAdvertisement = () => {
         content_type: ad.content_type,
         content_url: ad.content_url,
         display_duration: ad.display_duration,
-        display_frequency: ad.display_frequency?.hours || "", // Handle empty object or null
-        start_date: ad.start_date?.split("T")[0] || "", // Extract date part safely
-        end_date: ad.end_date?.split("T")[0] || "", // Extract date part safely
+        display_frequency: ad.display_frequency?.hours || "",
+        start_date: ad.start_date?.split("T")[0] || "",
+        end_date: ad.end_date?.split("T")[0] || "",
         start_time: ad.start_time,
         end_time: ad.end_time,
         amount: ad.amount,
@@ -162,9 +155,9 @@ const ActiveAdvertisement = () => {
       };
 
       await updateAdvertisement(data);
-      toast.success("Advertisement updated successfully!");
+      ToastMessage.success("Advertisement updated successfully!");
       setIsEditing(false);
-      setExpandedRow(null); 
+      setExpandedRow(null);
       const updatedAdvertisements = await fetchAdvertisements(
         selectedDoctorId,
         selectedClinicId,
@@ -172,7 +165,7 @@ const ActiveAdvertisement = () => {
       );
       setAdvertisements(updatedAdvertisements.advertisements || []);
     } catch (error) {
-      toast.error("Error updating advertisement.");
+      ToastMessage.error("Error updating advertisement.");
     }
   };
 
@@ -208,18 +201,18 @@ const ActiveAdvertisement = () => {
           <select
             className="form-control"
             value={selectedDoctorId}
-            onChange={(e) => setSelectedDoctorId(e.target.value)}
+            onChange={(e) => {
+              setSelectedDoctorId(e.target.value);
+              setSelectedClinicId("");
+            }}
           >
             <option value="">Select Doctor</option>
-            {doctors.length > 0 ? (
-              doctors.map((doctor) => (
-                <option key={doctor.doctor_id} value={doctor.doctor_id}>
-                  {doctor.first_name} {doctor.last_name}
-                </option>
-              ))
-            ) : (
-              <option disabled>No Doctors Available</option>
-            )}
+            {doctors.map((doctor) => (
+              <option key={doctor.doctor_id} value={doctor.doctor_id}>
+                {doctor.first_name} {doctor.last_name}
+                {doctor.specialization_name && ` (${doctor.specialization_name})`}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -229,18 +222,14 @@ const ActiveAdvertisement = () => {
             className="form-control"
             value={selectedClinicId}
             onChange={(e) => setSelectedClinicId(e.target.value)}
-            disabled={!selectedDoctorId || clinics.length === 0}
+            disabled={!selectedDoctorId}
           >
             <option value="">Select Clinic</option>
-            {clinics.length > 0 ? (
-              clinics.map((clinic) => (
-                <option key={clinic.clinic_id} value={clinic.clinic_id}>
-                  {clinic.clinic_name}
-                </option>
-              ))
-            ) : (
-              <option disabled>No Clinics Available</option>
-            )}
+            {clinics.map((clinic) => (
+              <option key={clinic.clinic_id} value={clinic.clinic_id}>
+                {clinic.clinic_name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -288,7 +277,7 @@ const ActiveAdvertisement = () => {
           <tbody>
             {filteredAdvertisements.length > 0 ? (
               filteredAdvertisements.map((ad, index) => (
-                 <React.Fragment key={ad.ad_id}>
+                <React.Fragment key={ad.ad_id}>
                   <tr>
                     <td>
                       <span
@@ -486,7 +475,9 @@ const ActiveAdvertisement = () => {
             ) : (
               <tr>
                 <td colSpan="13" className="text-center">
-                  No Data Available
+                  {selectedDoctorId && selectedClinicId 
+                    ? "No advertisements found for selected doctor and clinic" 
+                    : "Please select a doctor and clinic to view advertisements"}
                 </td>
               </tr>
             )}

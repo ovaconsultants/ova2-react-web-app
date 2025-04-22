@@ -16,6 +16,7 @@ const ClinicDetails = () => {
   const [doctorsLoading, setDoctorsLoading] = useState(true);
   const [clinicsLoading, setClinicsLoading] = useState(false); 
   const [searchTerm, setSearchTerm] = useState("");
+  const [hasCheckedClinics, setHasCheckedClinics] = useState(false);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -36,24 +37,33 @@ const ClinicDetails = () => {
     if (!selectedDoctor) {
       setClinics([]);
       setFilteredClinics([]);
+      setHasCheckedClinics(false);
       return;
     }
 
     const fetchClinics = async () => {
-      setClinicsLoading(true); // Start loading
+      setClinicsLoading(true);
       try {
         const response = await fetchClinicsByDoctorId(selectedDoctor);
         setClinics(response.clinics);
         setFilteredClinics(response.clinics);
+        
+        if (hasCheckedClinics && response.clinics.length === 0) {
+          const selectedDoc = doctors.find(d => d.doctor_id === selectedDoctor);
+          const doctorName = selectedDoc ? `${selectedDoc.first_name} ${selectedDoc.last_name}` : "this doctor";
+          ToastMessage(`No clinic is registered on ${doctorName}'s name!`);
+        }
+        
+        setHasCheckedClinics(true);
       } catch (error) {
         ToastMessage("Error fetching clinics");
         console.error(error);
       } finally {
-        setClinicsLoading(false); // Stop loading
+        setClinicsLoading(false);
       }
     };
     fetchClinics();
-  }, [selectedDoctor]);
+  }, [selectedDoctor, doctors, hasCheckedClinics]);
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -72,7 +82,11 @@ const ClinicDetails = () => {
 
   const handleDoctorChange = (e) => {
     const doctorId = e.target.value;
+    // Clear previous clinics immediately
+    setClinics([]);
+    setFilteredClinics([]);
     setSelectedDoctor(doctorId);
+    setHasCheckedClinics(false);
     navigate(`/admin/ova2-etoken/clinic-details`);
   };
 
@@ -153,7 +167,7 @@ const ClinicDetails = () => {
             {filteredClinics.length === 0 ? (
               <tr>
                 <td colSpan="8" className="text-center">
-                  {selectedDoctor ? "No clinics found" : "Please select a doctor"}
+                  {selectedDoctor ? (clinicsLoading ? "Loading..." : "No clinics found") : "Please select a doctor"}
                 </td>
               </tr>
             ) : (
