@@ -4,15 +4,15 @@ import './PrivacyPolicy.scss'; // Ensure this line is present to apply your SCSS
 export const PrivacyPolicy = () => {
   return (
     <div className="privacy-policy">
-      <h1 className="privacy-policy__title">eToken Privacy Policy</h1>
+      <h1 className="privacy-policy__title">ova2 etoken Privacy Policy</h1>
       <p className="privacy-policy__paragraph">Effective Date: [Insert Date]</p>
 
       <h2 className="privacy-policy__section-title">1. Introduction</h2>
       <p className="privacy-policy__paragraph">
-        Welcome to eToken, a product of eToken India Pvt Ltd. Your privacy is of utmost importance to us. This Privacy Policy explains how we collect, use, share, and safeguard your information when you use our services. It also outlines your rights and choices with respect to your personal data.
+        Welcome to ova2 etoken, a product of Ova2 consultants India Pvt Ltd. Your privacy is of utmost importance to us. This Privacy Policy explains how we collect, use, share, and safeguard your information when you use our services. It also outlines your rights and choices with respect to your personal data.
       </p>
       <p className="privacy-policy__paragraph">
-        This policy applies only to eToken’s services and platforms, and does not apply to any third-party services, websites, or personnel that eToken does not own, employ, or manage.
+        This policy applies only to ova2 etoken’s services and platforms, and does not apply to any third-party services, websites, or personnel that ova2 etoken does not own, employ, or manage.
       </p>
 
       <h2 className="privacy-policy__section-title">2. Information We Collect</h2>
@@ -58,7 +58,7 @@ export const PrivacyPolicy = () => {
 
       <h2 className="privacy-policy__section-title">7. Deletion of Personal Data</h2>
       <p className="privacy-policy__paragraph">
-        You may request account deletion by emailing us at <span className="privacy-policy__highlight">deleteaccount@etoken.com</span>. We process requests within 7 days and remove all personal data unless retention is required by law.
+        You may request account deletion by emailing us at <span className="privacy-policy__highlight">deleteaccount@ova2 etoken.com</span>. We process requests within 7 days and remove all personal data unless retention is required by law.
       </p>
 
       <h2 className="privacy-policy__section-title">8. User Reports & Moderation</h2>
@@ -74,15 +74,15 @@ export const PrivacyPolicy = () => {
       <h2 className="privacy-policy__section-title">10. Contact Us</h2>
       <p className="privacy-policy__paragraph">For questions, reach us at:</p>
       <p className="privacy-policy__paragraph">
-        <strong>eToken India Pvt Ltd</strong><br />
+        <strong>ova2 etoken India Pvt Ltd</strong><br />
         4th Floor, JVR Towers, Near Omni Hospital,<br />
         Kothapet, Dilshuknagar, Hyderabad - 500035,<br />
         INDIA<br />
-        📧 <span className="privacy-policy__highlight">support@etoken.com</span>
+        📧 <span className="privacy-policy__highlight">support@ova2 etoken.com</span>
       </p>
 
       <p className="privacy-policy__paragraph" style={{ fontSize: "0.85rem", color: "#888", marginTop: "32px" }}>
-        © 2024 eToken.com – All Rights Reserved
+        © 2025 ova2 etoken.com – All Rights Reserved
       </p>
     </div>
   );
