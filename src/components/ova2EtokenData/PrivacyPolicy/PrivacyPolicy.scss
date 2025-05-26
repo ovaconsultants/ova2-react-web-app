@@ -1,0 +1,77 @@
+/* styles.scss */
+
+/* General Reset */
+.privacy-policy {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  background-color: #ffffff;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.7;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Header Styling */
+.privacy-policy__title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+/* Section Titles */
+.privacy-policy__section-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  color: #444;
+}
+
+/* Paragraphs */
+.privacy-policy__paragraph {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* List Styling */
+.privacy-policy__list {
+  padding-left: 20px;
+  margin-bottom: 24px;
+  color: #555;
+}
+
+.privacy-policy__list li {
+  margin-bottom: 10px;
+}
+
+/* Emphasis Text */
+.privacy-policy__highlight {
+  font-weight: 600;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .privacy-policy {
+    padding: 24px 16px;
+  }
+
+  .privacy-policy__title {
+    font-size: 1.8rem;
+  }
+
+  .privacy-policy__section-title {
+    font-size: 1.25rem;
+  }
+
+  .privacy-policy__paragraph {
+    font-size: 0.95rem;
+  }
+}

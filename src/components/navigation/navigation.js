@@ -51,6 +51,7 @@ import FetchPaymentAdvertisement from "../admin/fetchPaymentAdvertisement/fetchP
 import AddDoctor from "../admin/addDoctor/addDoctor";
 import SchedhuleDetails from "../clinicSchedhule/clinicSchedhuleDetails";
 import AddClinic from "../admin/addClinic/addClinic";
+import PrivacyPolicy from "../ova2EtokenData/PrivacyPolicy/PrivacyPolicy";
 
 
 const Navigation = () => {
@@ -414,6 +415,10 @@ const Navigation = () => {
         path="/admin/vendor/vendor-details"
         element={<CompanyEditableDetails />}
       />
+
+       {/* privacy policy route   */}
+      <Route path="/etoken/privacy-policy" element={<PrivacyPolicy />} />
+      
       {/* <Route path="/hr/anjalitomar" element={<Navigate to={<HrPortfolio/>} />} /> */}
       {/* <Route path="/hr/anjalitomar" element={<Navigate to="/portfolio/html/index.html" replace />} /> */}
 
