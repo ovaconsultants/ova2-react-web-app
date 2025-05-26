@@ -3,9 +3,9 @@ import './PrivacyPolicy.scss'; // Ensure this line is present to apply your SCSS
 
 export const PrivacyPolicy = () => {
   return (
-    <div className="privacy-policy">
+    <div className="privacy-policy text-start">
       <h1 className="privacy-policy__title">ova2 etoken Privacy Policy</h1>
-      <p className="privacy-policy__paragraph">Effective Date: [Insert Date]</p>
+      {/* <p className="privacy-policy__paragraph">Effective Date: [Insert Date]</p> */}
 
       <h2 className="privacy-policy__section-title">1. Introduction</h2>
       <p className="privacy-policy__paragraph">
@@ -21,7 +21,7 @@ export const PrivacyPolicy = () => {
         <li>Contact Upload & Connections (with permission)</li>
         <li>Communications and diagnostics</li>
         <li>Usage & Log Data</li>
-        <li>Location Data (if granted)</li>
+        {/* <li>Location Data (if granted)</li> */}
       </ul>
 
       <h2 className="privacy-policy__section-title">3. How We Use Your Information</h2>
@@ -35,14 +35,15 @@ export const PrivacyPolicy = () => {
 
       <h2 className="privacy-policy__section-title">4. Information Sharing</h2>
       <p className="privacy-policy__paragraph">
-        We do <span className="privacy-policy__highlight">not</span> sell or rent your data. We may share data:
+        We do <span className="privacy-policy__highlight">not</span> sell or rent your data. 
+        {/* We may share data: */}
       </p>
-      <ul className="privacy-policy__list">
+      {/* <ul className="privacy-policy__list">
         <li>With your consent</li>
         <li>With users/service providers for connecting purposes</li>
         <li>With third-party service vendors (e.g., analytics, cloud hosting)</li>
         <li>To comply with laws or protect rights/safety</li>
-      </ul>
+      </ul> */}
 
       <h2 className="privacy-policy__section-title">5. How We Protect Your Data</h2>
       <p className="privacy-policy__paragraph">
@@ -58,7 +59,7 @@ export const PrivacyPolicy = () => {
 
       <h2 className="privacy-policy__section-title">7. Deletion of Personal Data</h2>
       <p className="privacy-policy__paragraph">
-        You may request account deletion by emailing us at <span className="privacy-policy__highlight">deleteaccount@ova2 etoken.com</span>. We process requests within 7 days and remove all personal data unless retention is required by law.
+        You may request account deletion by emailing us at <span className="privacy-policy__highlight">hr@ova2consultancy.com</span>. We process requests within 7 days and remove all personal data unless retention is required by law.
       </p>
 
       <h2 className="privacy-policy__section-title">8. User Reports & Moderation</h2>
@@ -74,16 +75,16 @@ export const PrivacyPolicy = () => {
       <h2 className="privacy-policy__section-title">10. Contact Us</h2>
       <p className="privacy-policy__paragraph">For questions, reach us at:</p>
       <p className="privacy-policy__paragraph">
-        <strong>ova2 etoken India Pvt Ltd</strong><br />
+        {/* <strong>ova2 etoken India Pvt Ltd</strong><br />
         4th Floor, JVR Towers, Near Omni Hospital,<br />
         Kothapet, Dilshuknagar, Hyderabad - 500035,<br />
-        INDIA<br />
-        📧 <span className="privacy-policy__highlight">support@ova2 etoken.com</span>
+        INDIA<br /> */}
+        📧 <span className="privacy-policy__highlight">hr@ova2consultancy.com</span>
       </p>
 
-      <p className="privacy-policy__paragraph" style={{ fontSize: "0.85rem", color: "#888", marginTop: "32px" }}>
+      {/* <p className="privacy-policy__paragraph" style={{ fontSize: "0.85rem", color: "#888", marginTop: "32px" }}>
         © 2025 ova2 etoken.com – All Rights Reserved
-      </p>
+      </p> */}
     </div>
   );
 };
