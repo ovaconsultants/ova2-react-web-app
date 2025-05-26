@@ -107,6 +107,16 @@ const Header = () => {
                 >
                   Clients
                 </Link>
+                <NavDropdown title="eToken AI" id="jobs-dropdown">
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/etoken/privacy-policy"
+                    onClick={() => setExpanded(false)}
+                    className="capitalize-first"
+                  >
+                    Privacy Policy
+                  </NavDropdown.Item>                 
+                </NavDropdown>
 
                 <NavDropdown title="Jobs" id="jobs-dropdown">
                   <NavDropdown.Item
