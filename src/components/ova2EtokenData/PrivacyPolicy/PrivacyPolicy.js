@@ -4,7 +4,7 @@ import './PrivacyPolicy.scss'; // Ensure this line is present to apply your SCSS
 export const PrivacyPolicy = () => {
   return (
     <div className="privacy-policy text-start">
-      <h1 className="privacy-policy__title">ova2 etoken Privacy Policy</h1>
+      {/* <h1 className="privacy-policy__title">ova2 etoken Privacy Policy</h1> */}
       {/* <p className="privacy-policy__paragraph">Effective Date: [Insert Date]</p> */}
 
       <h2 className="privacy-policy__section-title">1. Introduction</h2>
