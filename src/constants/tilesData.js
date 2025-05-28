@@ -78,18 +78,24 @@ export const jobTilesData = [
         route: '/   ',
         roleName: 'admin',
     },
+     {
+      title: "eToken",
+      description: "Click Me!.",
+      route: "/admin/ova2-etoken",
+      roleName: "admin,sub-admin,manager,sales_team",
+    },
    
     // Add more tiles as needed
 ];
 
-export const ova2EtokenMainTile = [
-    {
-      title: "Ova2-Etoken Tiles",
-      description: "Clikc Me!.",
-      route: "/admin/ova2-etoken",
-      roleName: "admin,sub-admin,manager,sales_team",
-    },
-  ];
+// export const ova2EtokenMainTile = [
+//     {
+//       title: "Ova2-Etoken Tiles",
+//       description: "Clikc Me!.",
+//       route: "/admin/ova2-etoken",
+//       roleName: "admin,sub-admin,manager,sales_team",
+//     },
+//   ];
 
 export const trainingTilesData = [
     {
